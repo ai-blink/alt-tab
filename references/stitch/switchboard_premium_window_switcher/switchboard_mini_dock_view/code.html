@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Switchboard - Mini Dock</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#763300",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdbc9",
+                    "on-tertiary-container": "#ffe0d1",
+                    "on-surface-variant": "#414752",
+                    "surface-dim": "#dcd9d9",
+                    "primary-container": "#0067c0",
+                    "on-tertiary": "#ffffff",
+                    "background": "#fcf9f8",
+                    "on-primary-fixed-variant": "#004787",
+                    "surface": "#fcf9f8",
+                    "on-error-container": "#93000a",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb68d",
+                    "on-tertiary-fixed": "#331200",
+                    "on-surface": "#1c1b1b",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e5e2e1",
+                    "surface-container-high": "#eae7e7",
+                    "secondary-container": "#dcdddd",
+                    "surface-container-low": "#f6f3f2",
+                    "tertiary": "#833900",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#a84c00",
+                    "secondary": "#5d5f5f",
+                    "on-secondary-container": "#5f6161",
+                    "surface-variant": "#e5e2e1",
+                    "outline-variant": "#c1c6d4",
+                    "primary-fixed": "#d5e3ff",
+                    "on-secondary-fixed-variant": "#454747",
+                    "secondary-fixed": "#e2e2e2",
+                    "on-primary-fixed": "#001c3b",
+                    "primary": "#004f96",
+                    "outline": "#717783",
+                    "surface-bright": "#fcf9f8",
+                    "on-background": "#1c1b1b",
+                    "inverse-on-surface": "#f3f0ef",
+                    "surface-container": "#f0eded",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#313030",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#005eb1",
+                    "inverse-primary": "#a6c8ff",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "on-primary-container": "#dbe7ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "sidebar-width": "260px",
+                    "item-gap": "8px",
+                    "grid-gutter": "16px",
+                    "stack-gap": "12px",
+                    "container-padding": "24px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "display-sm": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-md": ["18px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f9f9f9;
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+        }
+        .mini-dock-blur {
+            backdrop-filter: blur(16px);
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        .active-indicator {
+            box-shadow: 0 0 8px 1px rgba(0, 103, 192, 0.3);
+        }
+        .dock-item:hover .dock-label {
+            opacity: 1;
+            transform: translateX(-8px);
+        }
+        .dock-label {
+            pointer-events: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .monitor-preview-aspect {
+            aspect-ratio: 16 / 9;
+        }
+    </style>
+</head>
+<body class="font-body-lg text-body-lg text-on-surface flex overflow-hidden">
+<!-- Content Canvas (Simulating Workspace) -->
+<main class="flex-grow h-full bg-surface-container-low p-grid-gutter relative">
+<!-- Abstract Background for Workspace -->
+<div class="absolute inset-0 opacity-20 pointer-events-none">
+
+</div>
+<div class="relative z-10 w-full h-full flex flex-col gap-stack-gap">
+<!-- Header for Context -->
+<header class="flex justify-between items-center mb-unit">
+<div class="flex flex-col">
+<h1 class="font-headline-md text-headline-md text-primary">Main Workspace</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">4 Active Windows Cluster</p>
+</div>
+<div class="flex items-center gap-stack-gap">
+<button class="bg-surface border border-outline-variant px-stack-gap py-unit rounded-lg flex items-center gap-unit font-label-md text-label-md hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>New Layout</span>
+</button>
+<div class="w-10 h-10 rounded-full border-2 border-primary-fixed overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional corporate headshot of a software engineer in a clean, high-key office environment. The image uses a soft, natural lighting palette with cool blue and white tones to match the modern tech aesthetic. Sharp focus on facial details with a blurred, minimalist background featuring a subtle glass partition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq02QSwTr6jv1GWP6o-81dJ7YLlBQ7hjgf1zmAJqrVnHLocfPwrh66MmKJfwZty1QET41xhBAJQLdk8mLssavqigIXAGYyGxVzEUvJexWFf3jIHM0VqFw_rh9nB80ky8CclWNQcj0dBRxK7Ydm8sDcstL5eZRKa9yuJxvfSl-MpuWnsDtyx8ZVf2_nAlTSykRb2WcyvOxinB6VJ4rCda3RhBlwiZBPFOXDxz-jZqUgRUo_O8MXhgIt"/>
+</div>
+</div>
+</header>
+<!-- Grid of 'Active Windows' Previews -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-grid-gutter flex-grow">
+<!-- Monitor 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all hover:shadow-lg">
+<div class="monitor-preview-aspect bg-surface-container-high relative overflow-hidden">
+<img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="A high-resolution interface mockup of a complex data analytics dashboard. The design is sleek and professional, featuring dark mode elements with vibrant neon blue and cyan accent charts. Crisp lines, dense information layout, and modern UI components like segmented controls and live graph feeds are visible in a 16:9 aspect ratio." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7kR60MLxn1K5XTMF3DXiyqHgjScOfXQp9rdJoQDOz1r7VotA6KjQkQ3qGyzqYPPfmNn-RMzvGDRAEk9mRcegARuMif1haisc1OCdGHsXU2Jq4Tsd1slhJgQ4j2RhPb-74oVwfeS2B3nqUZCYa3HgWOwDNX5jjVwVAL521zcGS5BpGHFGUuYud-H1SIS5IPlintipg6OKjRIJSjRM-RDvEn0J0yK3FXim6rHF2e77XtK1Kbl7Hjx2Y"/>
+<div class="absolute top-unit right-unit">
+<span class="bg-primary text-on-primary font-mono-sm text-mono-sm px-unit rounded shadow-sm">4K</span>
+</div>
+</div>
+<div class="p-stack-gap flex justify-between items-center bg-surface">
+<div class="flex items-center gap-item-gap">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">monitor</span>
+<span class="font-label-md text-label-md font-bold">Analytics Node 01</span>
+</div>
+<div class="flex items-center gap-unit">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">60 FPS</span>
+</div>
+</div>
+</div>
+<!-- Monitor 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all hover:shadow-lg">
+<div class="monitor-preview-aspect bg-surface-container-high relative overflow-hidden">
+<img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="A professional video editing software interface displayed on a high-end monitor. The workspace shows a detailed timeline, color grading panels, and a 4K preview window of a cinematic urban landscape at sunset. The UI style is corporate and efficient, using a tonal layering of deep grays and precise typography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNvz1je2QTA8YOgEA9G2iu1vIsTPEQgjujgEtrSq5PFf9LNhH5x3Jp0bwLozplRX1G5gfZJm2Zgi_3xIyXbiHd337jo5qo8Q7cgDN7xF_CLJ-zfz28MfMJCj4j3gr83Pbq2p2cgV2lPErg0kh41-xoXGksIUpX2-NbGkebcVlROvSrBxuUGMHR9xaWvANReR0kQ-GB7K2-jI6NiYuwX1IeIub8Wk6AXIX2z30xA9V2h7gEvnzd8pQp"/>
+<div class="absolute top-unit right-unit">
+<span class="bg-primary text-on-primary font-mono-sm text-mono-sm px-unit rounded shadow-sm">144Hz</span>
+</div>
+</div>
+<div class="p-stack-gap flex justify-between items-center bg-surface">
+<div class="flex items-center gap-item-gap">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">movie</span>
+<span class="font-label-md text-label-md font-bold">Render Pipeline</span>
+</div>
+<div class="flex items-center gap-unit">
+<div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">ACTIVE</span>
+</div>
+</div>
+</div>
+<!-- Monitor 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all hover:shadow-lg">
+<div class="monitor-preview-aspect bg-surface-container-high relative overflow-hidden">
+<img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="A minimalist IDE (Integrated Development Environment) featuring a clean, light-mode theme with high-contrast syntax highlighting. The workspace shows React component code and a terminal window at the bottom. The overall aesthetic is calm, organized, and professional, perfectly suited for a focused developer experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoBK26lvSd7BdgwNK8zyzSlJ2fCi0eM0jfrROXSOyDvD6BAQ7ZwKge562iIXPaS29caBufpQkayHmi_uguxiOY1vFR2_aup6bXgXtXPB0WoL9Acwfnrjz3iyt87ZRTiTk_DQXNeXKdGDSd6aEg-uO34jjoBvw3CKdIHHjdEsB3OHAOXTvxbRBz1yiFXSBEWk-ntZ57Xwi0CcclsH61nXEneB5abw-ZMjFZJjejSJG90nDVcPN2Uj95"/>
+</div>
+<div class="p-stack-gap flex justify-between items-center bg-surface">
+<div class="flex items-center gap-item-gap">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<span class="font-label-md text-label-md font-bold">Dev Instance B</span>
+</div>
+<div class="flex items-center gap-unit">
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">IDLE</span>
+</div>
+</div>
+</div>
+<!-- Monitor 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col group transition-all hover:shadow-lg">
+<div class="monitor-preview-aspect bg-surface-container-high relative overflow-hidden">
+<img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="A server monitoring dashboard showing live traffic metrics and geographical heatmaps. The map is centered on Europe with pulsating data points. The interface uses a sophisticated corporate palette of whites, light grays, and deep navy blues, maintaining a high-performance utility feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGBBYdbc1t_3FF9PyN1ToseyPZW5E040fWUP55aAmE8CXifWAstfpoM5JAyy9PyIVFj9caABVJ_8VOGYGexHriEqUSRKQJkAdVR9w7zKQCBcqWitMw7KKYLCIv5uDbdLj7KlHT7ZZU5725Jgrb8MBpDoW6wgGHOoszcFPmAYy2Vw3CpZ6ha48mkY6_en2_n9MqhJPr8rsdW4N5I7WbcGyTEyKxTOEk_mlsvIrSMBjh6PHM2SJKq8Up"/>
+</div>
+<div class="p-stack-gap flex justify-between items-center bg-surface">
+<div class="flex items-center gap-item-gap">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">dns</span>
+<span class="font-label-md text-label-md font-bold">Inbound Traffic</span>
+</div>
+<div class="flex items-center gap-unit">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">SYNCED</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- SideNavBar / Mini Dock -->
+<!-- The Mini Dock layout: right-aligned, extremely narrow, high density icons -->
+<aside class="w-16 h-full mini-dock-blur border-l border-outline-variant flex flex-col items-center py-stack-gap gap-stack-gap sticky right-0 z-50" id="mini-dock">
+<!-- Header / Logo Area -->
+<div class="mb-4 flex flex-col items-center gap-unit">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined font-bold">grid_view</span>
+</div>
+<div class="w-8 h-[1px] bg-outline-variant"></div>
+</div>
+<!-- Scrollable Active Apps Stack -->
+<nav class="flex-grow w-full flex flex-col items-center gap-unit px-unit overflow-y-auto no-scrollbar">
+<!-- Monitor (Active) -->
+<div class="dock-item relative group flex items-center justify-center w-12 h-12 rounded-lg bg-secondary-container text-on-secondary-container font-bold transition-all active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">monitor</span>
+<!-- Active Indicator Dot -->
+<div class="absolute bottom-1 w-1.5 h-1.5 bg-primary rounded-full active-indicator"></div>
+<!-- Hover Label -->
+<div class="dock-label absolute right-14 whitespace-nowrap bg-inverse-surface text-inverse-on-surface px-3 py-1.5 rounded-lg font-label-md text-label-md opacity-0 shadow-xl border border-outline/20">
+                    Monitors
+                </div>
+</div>
+<!-- History -->
+<div class="dock-item relative group flex items-center justify-center w-12 h-12 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined">history</span>
+<div class="dock-label absolute right-14 whitespace-nowrap bg-inverse-surface text-inverse-on-surface px-3 py-1.5 rounded-lg font-label-md text-label-md opacity-0 shadow-xl border border-outline/20">
+                    History
+                </div>
+</div>
+<!-- Mini Dock (Contextual Toggle) -->
+<div class="dock-item relative group flex items-center justify-center w-12 h-12 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined">dock_to_right</span>
+<div class="dock-label absolute right-14 whitespace-nowrap bg-inverse-surface text-inverse-on-surface px-3 py-1.5 rounded-lg font-label-md text-label-md opacity-0 shadow-xl border border-outline/20">
+                    Mini Dock
+                </div>
+</div>
+<!-- Pinned -->
+<div class="dock-item relative group flex items-center justify-center w-12 h-12 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined">keep</span>
+<div class="dock-label absolute right-14 whitespace-nowrap bg-inverse-surface text-inverse-on-surface px-3 py-1.5 rounded-lg font-label-md text-label-md opacity-0 shadow-xl border border-outline/20">
+                    Pinned
+                </div>
+</div>
+<div class="w-8 h-[1px] bg-outline-variant my-unit"></div>
+<!-- App Instance 1 -->
+<div class="dock-item relative group flex items-center justify-center w-12 h-12 rounded-lg hover:bg-surface-container-high transition-all cursor-pointer">
+<div class="w-8 h-8 rounded-full border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A small, crisp logo icon for a cloud storage application, featuring stylized geometric shapes in soft blue and white. Modern vector style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAC3TUM_4Kr50Xk0TUW3jgrCiMnGEbNjTMZmBa9B184kLUeQOpYbeH0mE_8TtsbV5mNauuoAuZIA_b3gzsKKximqzl6TQEgMuTNVOrwhLDj47lDBWYBjh46EFNdF8pntQCaiOvmLoIwScaDOXrWLMDrSGYRghrwPSrvYu0_PnySnAjpuaMzYrCLrMi-ffLsV3dOVlGACybptTlwajVSrCu3x3dahpBwUpDHKjGlzV9p-iVAWJSOftkk"/>
+</div>
+<div class="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full border-2 border-surface"></div>
+<div class="dock-label absolute right-14 whitespace-nowrap bg-inverse-surface text-inverse-on-surface px-3 py-1.5 rounded-lg font-label-md text-label-md opacity-0 shadow-xl">
+                    CloudSync Pro
+                </div>
+</div>
+<!-- App Instance 2 -->
+<div class="dock-item relative group flex items-center justify-center w-12 h-12 rounded-lg hover:bg-surface-container-high transition-all cursor-pointer">
+<div class="w-8 h-8 rounded-full border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist logo icon for a communication app like Slack or Teams, using a clean corporate palette of navy and white." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6VbqNXl2P8dbhMiWA5HSTZx5mM4VSABEsvmaIm9JxOjJ_j9qd-o0JVyYAsVNcJGibNqJ5UDBq29-nj9KO_4c8XhsqcWJtS-xsP5wfA1QxBjM_ezesN5aDDxNJXuVzKy2J7lJxehBC20YUjnVm0w0VrJcVmUzNW828fSOLs0QPoeSvLd-XoCPov0rjZzj5UERLO5jxxmM1DAuRfaQXl1A-cRtPmHw_Kqvu_0fpA47F9E1q56_ZUlcZ"/>
+</div>
+<div class="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full border-2 border-surface"></div>
+<div class="dock-label absolute right-14 whitespace-nowrap bg-inverse-surface text-inverse-on-surface px-3 py-1.5 rounded-lg font-label-md text-label-md opacity-0 shadow-xl">
+                    Internal Comms
+                </div>
+</div>
+<!-- App Instance 3 (Idle) -->
+<div class="dock-item relative group flex items-center justify-center w-12 h-12 rounded-lg hover:bg-surface-container-high transition-all cursor-pointer">
+<div class="w-8 h-8 rounded-full border border-outline-variant overflow-hidden grayscale opacity-60">
+<img class="w-full h-full object-cover" data-alt="A sleek corporate logo for a database management system, involving interconnected hexagonal nodes in cool gray." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp8oEEvt5KycLT98u6IDiuWXxYTc5whFVEtlABAjZ5LFBCdKNP8LJSryYuoeJBNA31ceYgFryWKkoQ-7vQbrMUR7kLvXNJQBHfkjLMyWnunBhQHA0lSpZB_86E5Xm-BQEe_t1QgWA-0z0v0lWRWV9fBMuYIN6JFqNO7Prk1gjurdnxXKlNh0V6qL1KoWHG7yJ3RnDPIIZMuNkruyVtUiyx2fcy2F4S02lC7I1v3z_-nterNwGwXx1P"/>
+</div>
+<div class="absolute top-2 right-2 w-2 h-2 bg-outline-variant rounded-full border-2 border-surface"></div>
+<div class="dock-label absolute right-14 whitespace-nowrap bg-inverse-surface text-inverse-on-surface px-3 py-1.5 rounded-lg font-label-md text-label-md opacity-0 shadow-xl">
+                    SQL Manager (Idle)
+                </div>
+</div>
+</nav>
+<!-- Footer Actions -->
+<div class="flex flex-col items-center gap-unit pb-stack-gap">
+<div class="dock-item relative group flex items-center justify-center w-12 h-12 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer">
+<span class="material-symbols-outlined">settings_input_component</span>
+<div class="dock-label absolute right-14 whitespace-nowrap bg-inverse-surface text-inverse-on-surface px-3 py-1.5 rounded-lg font-label-md text-label-md opacity-0 shadow-xl">
+                    Quick Settings
+                </div>
+</div>
+<div class="dock-item relative group flex items-center justify-center w-12 h-12 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer">
+<span class="material-symbols-outlined">notifications</span>
+<div class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></div>
+<div class="dock-label absolute right-14 whitespace-nowrap bg-inverse-surface text-inverse-on-surface px-3 py-1.5 rounded-lg font-label-md text-label-md opacity-0 shadow-xl">
+                    Alerts (2)
+                </div>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center cursor-pointer hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined">power_settings_new</span>
+</div>
+</div>
+</aside>
+<!-- Floating Hotkey Tooltip (Visual Enhancement) -->
+<div class="fixed bottom-container-padding left-container-padding z-40 bg-surface/80 backdrop-blur-md border border-outline-variant px-stack-gap py-unit rounded-full flex items-center gap-item-gap shadow-sm">
+<span class="font-mono-sm text-mono-sm bg-surface-container-high px-1.5 py-0.5 border-b-2 border-outline rounded">Ctrl</span>
+<span class="text-on-surface-variant font-label-md text-label-md">+</span>
+<span class="font-mono-sm text-mono-sm bg-surface-container-high px-1.5 py-0.5 border-b-2 border-outline rounded">K</span>
+<span class="text-on-surface-variant font-label-md text-label-md ml-unit">Quick Search</span>
+</div>
+<script>
+        // Simple Interaction: Click a dock item to simulate "switching"
+        const dockItems = document.querySelectorAll('.dock-item');
+        dockItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active indicator from others
+                document.querySelectorAll('.active-indicator').forEach(el => el.classList.remove('active-indicator', 'bg-primary'));
+                document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('bg-secondary-container', 'text-on-secondary-container'));
+                
+                // Add to current if it's a top nav item
+                if (item.classList.contains('group')) {
+                    const dot = item.querySelector('.bg-primary, .bg-emerald-500, .bg-outline-variant');
+                    if (dot) {
+                        dot.classList.add('active-indicator');
+                    }
+                    item.classList.add('bg-secondary-container', 'text-on-secondary-container');
+                }
+            });
+        });
+
+        // Atmospheric effect: Subtle pulse on active indicators
+        setInterval(() => {
+            const indicators = document.querySelectorAll('.active-indicator');
+            indicators.forEach(ind => {
+                ind.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    ind.style.transform = 'scale(1)';
+                }, 300);
+            });
+        }, 3000);
+    </script>
+</body></html>

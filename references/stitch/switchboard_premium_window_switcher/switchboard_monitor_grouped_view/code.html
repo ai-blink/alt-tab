@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Switchboard - Monitor Grouped View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#763300",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdbc9",
+                    "on-tertiary-container": "#ffe0d1",
+                    "on-surface-variant": "#414752",
+                    "surface-dim": "#dcd9d9",
+                    "primary-container": "#0067c0",
+                    "on-tertiary": "#ffffff",
+                    "background": "#fcf9f8",
+                    "on-primary-fixed-variant": "#004787",
+                    "surface": "#fcf9f8",
+                    "on-error-container": "#93000a",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb68d",
+                    "on-tertiary-fixed": "#331200",
+                    "on-surface": "#1c1b1b",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e5e2e1",
+                    "surface-container-high": "#eae7e7",
+                    "secondary-container": "#dcdddd",
+                    "surface-container-low": "#f6f3f2",
+                    "tertiary": "#833900",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#a84c00",
+                    "secondary": "#5d5f5f",
+                    "on-secondary-container": "#5f6161",
+                    "surface-variant": "#e5e2e1",
+                    "outline-variant": "#c1c6d4",
+                    "primary-fixed": "#d5e3ff",
+                    "on-secondary-fixed-variant": "#454747",
+                    "secondary-fixed": "#e2e2e2",
+                    "on-primary-fixed": "#001c3b",
+                    "primary": "#004f96",
+                    "outline": "#717783",
+                    "surface-bright": "#fcf9f8",
+                    "on-background": "#1c1b1b",
+                    "inverse-on-surface": "#f3f0ef",
+                    "surface-container": "#f0eded",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#313030",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#005eb1",
+                    "inverse-primary": "#a6c8ff",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "on-primary-container": "#dbe7ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "sidebar-width": "260px",
+                    "item-gap": "8px",
+                    "grid-gutter": "16px",
+                    "stack-gap": "12px",
+                    "container-padding": "24px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "mono-sm": ["JetBrains Mono"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "display-sm": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-md": ["18px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fcf9f8;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        /* Mica-like effect approximation */
+        .mica-surface {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kbd-style {
+            background: #f0f0f0;
+            border-bottom: 2px solid #d1d1d1;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        .scroll-hide::-webkit-scrollbar { display: none; }
+        .scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Side Navigation Bar -->
+<aside class="flex flex-col h-full w-sidebar-width fixed left-0 top-0 py-container-padding gap-stack-gap bg-surface-container-low dark:bg-surface-container-lowest border-r border-outline-variant dark:border-on-surface-variant z-[60]">
+<div class="px-container-padding mb-stack-gap">
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface dark:text-on-surface-variant">Switchboard</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">V2.4 Pro</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<!-- Active Tab: Monitors -->
+<a class="flex items-center gap-3 px-3 py-2 bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-lg font-bold transition-transform active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="monitor">monitor</span>
+<span class="font-label-md text-label-md">Monitors</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high rounded-lg transition-all active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high rounded-lg transition-all active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="dock_to_right">dock_to_right</span>
+<span class="font-label-md text-label-md">Mini Dock</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high rounded-lg transition-all active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="keep">keep</span>
+<span class="font-label-md text-label-md">Pinned</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high rounded-lg transition-all active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span class="font-label-md text-label-md">Quick Settings</span>
+</a>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="flex justify-between items-center px-container-padding w-[calc(100%-260px)] ml-sidebar-width h-14 sticky top-0 z-50 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-on-surface-variant mica-surface">
+<div class="flex items-center gap-8">
+<span class="font-display-sm text-display-sm text-primary dark:text-primary-fixed-dim font-bold">Switchboard</span>
+<nav class="hidden md:flex gap-6 items-center h-full">
+<a class="font-body-lg text-body-lg text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 transition-colors" href="#">Monitors</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high transition-colors" href="#">Timeline</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high transition-colors" href="#">Layouts</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high transition-colors" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-stack-gap">
+<div class="relative flex items-center bg-surface-container-low border border-outline-variant rounded-lg px-3 py-1.5 w-64">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-full py-0" placeholder="Search windows..." type="text"/>
+<span class="font-mono-sm text-mono-sm text-outline px-1 rounded bg-surface-container-highest">Ctrl+K</span>
+</div>
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors" data-icon="help_outline">help_outline</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-2 cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a software engineer with a clean, modern studio background. The subject is wearing a dark grey polo shirt, looking confidently at the camera. The lighting is bright and even, matching the clean corporate UI aesthetic with soft shadows and high clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLwvwHoHO_jgamKsnEpWS3KBX24ataAx7kzFWC8oLkTE-jwEnchb0iKIteqecjLxwJmYs8lwf93u8XRkm-eFa8IGopyKJ_2_rVeUM9XnTHrumpTLVgyirm4NMp46yjBEyfC5Fn0s_5iQTcvTa6nIZEQjbEGbkUkAcWfWDK7Qk2Lxg-cu3u9pTWOLmpUnrD-ZbOiWbshbu2fKvXvyDDc1gPwPl70ZpMChLOeNqBESY_vsd3A_prIEN6"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-sidebar-width p-container-padding min-h-screen">
+<!-- Dashboard Header -->
+<div class="flex items-end justify-between mb-8">
+<div>
+<h2 class="font-display-sm text-display-sm text-on-surface mb-1">Active View</h2>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Grouping by Hardware Monitor</p>
+</div>
+</div>
+<div class="flex bg-surface-container rounded-lg p-1">
+<button class="px-4 py-1.5 rounded-md bg-surface text-on-surface shadow-sm font-label-md text-label-md">Grid View</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md transition-all">List View</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md transition-all">Flow View</button>
+</div>
+</div>
+<!-- Monitor Group 1 -->
+<section class="mb-12">
+<header class="flex items-center gap-3 mb-4 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-primary" data-icon="desktop_windows">desktop_windows</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Monitor 1 (Primary)</h3>
+<span class="bg-primary-fixed text-on-primary-fixed text-xs px-2 py-0.5 rounded-full font-bold">4K • 144Hz</span>
+<div class="ml-auto flex gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface" data-icon="grid_view">grid_view</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface" data-icon="more_vert">more_vert</button>
+</div>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-grid-gutter">
+<!-- Window Card 1 -->
+<div class="group bg-surface border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 mica-surface cursor-pointer">
+<div class="aspect-video relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-fidelity screenshot of a professional code editor interface showing vibrant syntax-highlighted code in a dark theme. The window contains multiple tabs and a sidebar with a project file structure. The lighting is crisp, and the image is framed within a clean software utility interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIa5XkjVCq9t5EJCudInHP9iCCPIK-shIu4Kt33-0p9sGa4V7yFcLrc3EYZLfdpI4-M8ODiaSwFeLw34-ZyQqU1KcNITWzZ6Bw_V8cIo9qTRQ4v8WF072SMhr-eyOvIZ52MvVMCcxmtT3aOgwKc-JsD6p5KZkvSXwED6IX2C3ZNJyONPic03tG3WXr5_tFDcNcKewukK-mKD5YgP0YxmRcmnN_lHFdtpT3RtSr0I5NNvqxJCu6rtGD"/>
+<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+<div class="absolute top-2 right-2 flex gap-1">
+<span class="bg-black/60 backdrop-blur-md text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-bold">VS Code</span>
+</div>
+</div>
+<div class="p-3 border-t border-outline-variant flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-highest">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="terminal">terminal</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate">switchboard-core/src/main.ts</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Visual Studio Code</p>
+</div>
+</div>
+</div>
+<!-- Window Card 2 -->
+<div class="group bg-surface border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 mica-surface cursor-pointer">
+<div class="aspect-video relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A screenshot of a sleek modern browser window displaying a complex analytics dashboard with multiple colorful bar charts, line graphs, and data widgets. The interface is clean, predominantly white and light grey, with vibrant blue and teal accent colors for the data points." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVuSqL7MN74OwJ1XAVrNWVBNC8e8ne5U95-P-7FBdyUf09vxdGn_Dg7lnLQTHfxOUT2-D2mI3k-gBLyjhw70R2kTWh7YaAp-gxyP4_3D8U05T7LyYz_zlq3ZCXMtF_FWVpdWWclr_KSFUa9CmZ_JiWC2thuhaNDDii_7UX5L41GEKiB-py4ajU8UOqr7636b-MwB1YMxFq255VT9phcXUFut8yZdHM2MLqbNqGD-YwcAbapVOyhupv"/>
+<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+<div class="absolute top-2 right-2">
+<span class="bg-black/60 backdrop-blur-md text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-bold">Edge</span>
+</div>
+</div>
+<div class="p-3 border-t border-outline-variant flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-highest">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="globe">globe</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate">Vercel Dashboard - Analytics</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Microsoft Edge</p>
+</div>
+</div>
+</div>
+<!-- Window Card 3 -->
+<div class="group bg-surface border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 mica-surface cursor-pointer">
+<div class="aspect-video relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A clean desktop application window for a vector design tool, showing a complex architectural blueprint layout. The workspace is filled with precise geometric lines and annotations. The overall color scheme is neutral grey with thin black lines, exuding professional precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC7wcPOuKhRbGPKzqqSHGcHydWb_cea1L4IIwcdFZyztwjaiHqCq6wsGw4vzM30semztSb9BN_1teWEmgY5WP3xN1CwRyjRlO-R4TgDIshnyjq_whJCCelv8f4DrrqgsfkF51FAH20CLuXGk-AyvF65UufR62XyfDTSd2OKDcilML0ggUc-GG_BdY9JvPHKcSkiRNn6rQSZCo2hkzTQquh9ysCmdYYLnmk09S45wl_cdw8F7-pkjMS"/>
+<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+<div class="absolute top-2 right-2">
+<span class="bg-black/60 backdrop-blur-md text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-bold">Figma</span>
+</div>
+</div>
+<div class="p-3 border-t border-outline-variant flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-highest">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="format_shapes">format_shapes</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate">Switchboard Design - Iteration 2</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Figma Desktop</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Monitor Group 2 -->
+<section class="mb-12">
+<header class="flex items-center gap-3 mb-4 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-secondary" data-icon="desktop_windows">desktop_windows</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Monitor 2</h3>
+<span class="bg-secondary-container text-on-secondary-container text-xs px-2 py-0.5 rounded-full font-bold">1440p • 60Hz</span>
+<div class="ml-auto flex gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface" data-icon="grid_view">grid_view</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface" data-icon="more_vert">more_vert</button>
+</div>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-grid-gutter">
+<!-- Window Card 4 -->
+<div class="group bg-surface border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 mica-surface cursor-pointer">
+<div class="aspect-video relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A screenshot of a professional video conferencing app window in the middle of a call. It shows a gallery view of five participants with neutral backgrounds and professional attire. A chat sidebar is visible on the right, filled with text messages. The lighting is bright and communicative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHCQF7ZVb7pfAnXFPfs14XkDQZd5QxYYboXgSfGJRAa9SztUCjtjFhM_ll4HbiV_gVeKZubaI0LAUR4cl_5IpfOE7tZbvbzOOVBYLeQ7HQ4q42dyOXXFzEDD_QtvluV_402zSqK6mHLOqAxDJtIHGFIUc4IkJoYOff1_FyXuMZV-fMNcAXN1sHlwy_4M9TplkT1zPhpRCrQpcBju2QPHcEEnazveXm2nuwQh_WSTys8BV5MuLe37YB"/>
+<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+<div class="absolute top-2 right-2">
+<span class="bg-black/60 backdrop-blur-md text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-bold">Teams</span>
+</div>
+</div>
+<div class="p-3 border-t border-outline-variant flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-highest">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="groups">groups</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate">Engineering Sync (5 people)</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Microsoft Teams</p>
+</div>
+</div>
+</div>
+<!-- Window Card 5 -->
+<div class="group bg-surface border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 mica-surface cursor-pointer">
+<div class="aspect-video relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional spreadsheet application window showing complex financial projections with color-coded rows and columns. A small pie chart and a trend line graph are embedded within the sheet. The interface is clean, organized, and data-dense, fitting a high-performance corporate environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkhp5uplagGAzbZm9u_J1WepP7qf4hEnYucV4S4F3kOPGEkf35AeojzWdTT2zhRjEy_Uh4om2s0Jmq_4SRF2Tyia59Tl7pMuMFoKRJr_TyPvSAjcDZ5peO-e94SK6mV6XfBOmYdLvO4cytdsiW6CYc65Ctm3e79ziUgoNShogwaNgZ7UK4YFUdKJffgxGygllPB7_PrzCtEFHiPc8_R8khV-5fcjRcJQfJBNpZFDGqkFRvYseWsAIE"/>
+<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+<div class="absolute top-2 right-2">
+<span class="bg-black/60 backdrop-blur-md text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-bold">Excel</span>
+</div>
+</div>
+<div class="p-3 border-t border-outline-variant flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-highest">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="table_chart">table_chart</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate">Q3_Revenue_Projection.xlsx</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Microsoft Excel</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Monitor Group 3 (Portrait) -->
+<section class="mb-12">
+<header class="flex items-center gap-3 mb-4 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-secondary rotate-90" data-icon="desktop_windows">desktop_windows</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Monitor 3 (Portrait)</h3>
+<span class="bg-secondary-container text-on-secondary-container text-xs px-2 py-0.5 rounded-full font-bold">1080p • 60Hz</span>
+<div class="ml-auto flex gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface" data-icon="grid_view">grid_view</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface" data-icon="more_vert">more_vert</button>
+</div>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-grid-gutter">
+<!-- Window Card 6 -->
+<div class="group bg-surface border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 mica-surface cursor-pointer">
+<div class="aspect-video relative overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A screenshot of a team communication app showing a vertical channel list on the left and a long scrolling chat thread in the center. Multiple user avatars are visible, and several messages contain code snippets and emoji reactions. The theme is light and airy with a professional focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ6Bv3X8IzUXL4Vm-4q4gW5c1aqyMzfaYbB-aDBRLHnKB3MgubIXk9LKVbxaPs0Ct8KD22mpTG5pkEkDX2JvzSoBNiQ6Rcv_FbPdprieK3DwLDKGg4nXKocBkjEcEcSERHHIpXKdXT3dv6rkdTItz9FjNEnMDBgmXhrr8oWjJqma61vNs4rBcuBIL72Vj5kdtnNfP3Jhjg-RzLCzw2Oyv__iYpKkWPiyfwOg2CxUDu89RGjdZAiXrW"/>
+<div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+<div class="absolute top-2 right-2">
+<span class="bg-black/60 backdrop-blur-md text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-bold">Slack</span>
+</div>
+</div>
+<div class="p-3 border-t border-outline-variant flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-highest">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="forum">forum</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate">#development-core</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Slack Technologies</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Contextual Floating Action Button -->
+<div class="fixed bottom-container-padding right-container-padding z-[100]">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-[28px]" data-icon="add">add</span>
+<span class="absolute right-16 bg-surface border border-outline-variant text-on-surface px-3 py-1.5 rounded-lg font-label-md text-label-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-sm">Add New Workspace</span>
+</button>
+</div>
+<!-- Quick Status Bar (Bottom Right) -->
+<div class="fixed bottom-4 left-[274px] flex items-center gap-4 px-4 py-2 bg-surface-container-high/80 backdrop-blur-xl border border-outline-variant rounded-full text-on-surface-variant font-label-md text-label-md z-[55]">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span>System Online</span>
+</div>
+<div class="w-[1px] h-3 bg-outline-variant"></div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="memory">memory</span>
+<span>CPU 12%</span>
+</div>
+<div class="w-[1px] h-3 bg-outline-variant"></div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="speed">speed</span>
+<span>2.4 Gbps</span>
+</div>
+</div>
+<script>
+        // Simple micro-interaction for window cards
+        document.querySelectorAll('.mica-surface').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Toggle search focus highlight
+        const searchInput = document.querySelector('input[placeholder="Search windows..."]');
+        const searchContainer = searchInput.parentElement;
+        searchInput.addEventListener('focus', () => {
+            searchContainer.classList.add('border-primary', 'ring-2', 'ring-primary/20');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchContainer.classList.remove('border-primary', 'ring-2', 'ring-primary/20');
+        });
+    </script>
+</body></html>

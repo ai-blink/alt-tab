@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Switchboard - Thumbnail Grid</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#d5e3ff",
+                        "on-primary-container": "#dbe7ff",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-tertiary-container": "#ffe0d1",
+                        "surface": "#fcf9f8",
+                        "primary-container": "#0067c0",
+                        "on-secondary-container": "#5f6161",
+                        "secondary-fixed": "#e2e2e2",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "on-tertiary-fixed": "#331200",
+                        "primary-fixed-dim": "#a6c8ff",
+                        "outline-variant": "#c1c6d4",
+                        "secondary": "#5d5f5f",
+                        "on-secondary-fixed-variant": "#454747",
+                        "on-primary-fixed-variant": "#004787",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#fcf9f8",
+                        "surface-container": "#f0eded",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#dcd9d9",
+                        "tertiary-fixed": "#ffdbc9",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-surface-variant": "#414752",
+                        "tertiary-fixed-dim": "#ffb68d",
+                        "surface-tint": "#005eb1",
+                        "surface-container-low": "#f6f3f2",
+                        "on-background": "#1c1b1b",
+                        "outline": "#717783",
+                        "surface-variant": "#e5e2e1",
+                        "surface-container-high": "#eae7e7",
+                        "on-surface": "#1c1b1b",
+                        "secondary-container": "#dcdddd",
+                        "primary": "#004f96",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#313030",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#001c3b",
+                        "inverse-primary": "#a6c8ff",
+                        "tertiary-container": "#a84c00",
+                        "tertiary": "#833900",
+                        "background": "#fcf9f8",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-tertiary-fixed-variant": "#763300",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-padding": "24px",
+                        "grid-gutter": "16px",
+                        "item-gap": "8px",
+                        "unit": "4px",
+                        "stack-gap": "12px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "body-lg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-sm": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-md": ["18px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F9F9F9; }
+        .window-overlay { max-width: 1200px; margin: 40px auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border-radius: 0.5rem; overflow: hidden; background-color: white; border: 1px solid #E5E5E5; display: flex; flex-direction: column; height: 800px; }
+        .kbd-tag { padding: 2px 6px; background-color: #f0eded; border-bottom: 2px solid #dcd9d9; border-radius: 4px; }
+        
+        /* Custom Scrollbar for sleekness */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c1c6d4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #717783; }
+    </style>
+</head>
+<body class="font-body-sm text-body-sm text-on-surface antialiased h-screen w-screen flex items-center justify-center p-8">
+<div class="window-overlay w-full relative flex-row">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low text-primary docked h-full left-0 w-sidebar-width border-r border-outline-variant flat no shadows flex flex-col py-6 px-4 gap-stack-gap flex-shrink-0 z-10 relative">
+<div class="mb-8 px-2">
+<div class="font-headline-md text-headline-md text-primary mb-1">Navigation</div>
+<div class="text-on-surface-variant text-body-sm">Filter views</div>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-secondary hover:bg-surface-container-high transition-all duration-200 ease-in-out rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">history</span>
+<span class="font-label-md text-label-md">Recent</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-secondary-container text-on-secondary-container font-bold rounded-lg transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">apps</span>
+<span class="font-label-md text-label-md">App</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-secondary hover:bg-surface-container-high transition-all duration-200 ease-in-out rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">desktop_windows</span>
+<span class="font-label-md text-label-md">Monitor</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-secondary hover:bg-surface-container-high transition-all duration-200 ease-in-out rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">title</span>
+<span class="font-label-md text-label-md">Title</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-secondary hover:bg-surface-container-high transition-all duration-200 ease-in-out rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">star</span>
+<span class="font-label-md text-label-md">Favorites</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-full bg-surface relative min-w-0">
+<!-- TopAppBar -->
+<header class="bg-surface text-primary font-body-lg text-body-lg docked full-width top-0 border-b border-outline-variant flat no shadows flex items-center justify-between px-container-padding h-16 w-full flex-shrink-0 z-10 relative">
+<div class="flex items-center gap-6 flex-1">
+<span class="text-headline-md font-headline-md text-primary tracking-tight">Switchboard</span>
+<div class="relative w-96 flex items-center focus-within:ring-2 focus-within:ring-primary rounded-md bg-surface-container-low border border-outline-variant h-8 px-3 ml-4">
+<span class="material-symbols-outlined text-outline text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full font-body-sm text-body-sm p-0 placeholder:text-outline h-full" placeholder="Search windows, apps, or content..." type="text"/>
+<span class="font-mono-sm text-mono-sm text-outline ml-2 kbd-tag">Ctrl+K</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<!-- Segmented Control for View Mode -->
+<div class="flex p-1 bg-surface-container rounded-lg border border-outline-variant">
+<button class="px-3 py-1 flex items-center justify-center rounded-md text-secondary hover:text-primary transition-colors focus:outline-none">
+<span class="material-symbols-outlined text-sm">view_list</span>
+</button>
+<button class="px-3 py-1 bg-surface border border-outline-variant shadow-sm flex items-center justify-center rounded-md text-primary font-medium focus:outline-none">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+</button>
+</div>
+<div class="h-6 w-px bg-outline-variant mx-2"></div>
+<button class="text-secondary hover:bg-secondary-container transition-colors rounded p-1.5 focus:outline-none">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+<button class="text-secondary hover:bg-secondary-container transition-colors rounded p-1.5 focus:outline-none">
+<span class="material-symbols-outlined text-xl">help</span>
+</button>
+</div>
+</header>
+<!-- Grid Canvas -->
+<main class="flex-1 overflow-y-auto p-container-padding">
+<!-- Toolbar Area -->
+<div class="flex justify-between items-end mb-6">
+<div>
+<h1 class="font-display-sm text-display-sm text-on-surface mb-1">Applications</h1>
+<p class="text-secondary font-body-sm text-body-sm">Sorted by App Name • 12 Windows open</p>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 border border-outline-variant rounded bg-surface hover:bg-surface-container-low text-secondary font-label-md text-label-md flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+                            Filter
+                        </button>
+</div>
+</div>
+<!-- 3-Column Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-grid-gutter">
+<!-- Card 1: Browser -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col group hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:border-outline transition-all cursor-default">
+<div class="aspect-video relative bg-surface-container-low border-b border-outline-variant">
+<img class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" data-alt="A clean, modern web browser interface displaying an abstract design system documentation site with blue accents. The layout is structured and grid-based, fitting a professional workspace aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6_hpT_3a00D1ahVUkesvBI9quqlAs6W8mrcTGw-ueW9YF67BiSZVY0DLWmKLUXgVInCGCPps_dbbSufrzKt8IOXn91KfJ8YHGlkVkE-y1NzPRe5DNmL9Ky3envArUTEqRXe9dG0jFRgVhyGBDvrsN3ezPdl8twCnEmr13YATMIokU3zxmbh1HxUJx1pv_cutQ1Zz12Ng04rk49fTAKD-xTcHefmsPeHSkrcBwhQ9pAlA2WwRqpWk_fFCIXuk2BiRc4CMPfC0rDSQ"/>
+<div class="absolute top-2 right-2 bg-on-background/80 text-surface backdrop-blur-sm px-2 py-0.5 rounded font-mono-sm text-[10px] tracking-wider border border-white/10">1080p</div>
+<div class="absolute -bottom-4 left-4 w-8 h-8 bg-white rounded-md shadow-sm border border-outline-variant flex items-center justify-center z-10 p-1">
+<img alt="Chrome" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxaWYw1rAupoYoydYWslqFDd7_g1pKRI1MuStvW9DzaXf9wwJMFAgtPmidoVDkMRO25t5ADKQKLAIm5OuH4ZRPG8U5yKlP4H52ppFDY_rUxpsLxF_fb4ddJvz2gWF5pvi8KUy9boAfxG41-YOr3KddbpePJJKX4ld3b3BbHGYr5RTA9W1K7mc82myZelIDi1kZxwWPMy2OWCKPYTAERJozJi15KM4_2mOew-HzX2lgzc0ZAF7g2ug4tUAOd4oInlZYMYBHgjPcOLM"/>
+</div>
+</div>
+<div class="pt-6 px-4 pb-4 flex flex-col gap-1">
+<div class="font-label-md text-label-md text-secondary uppercase tracking-wider">Google Chrome</div>
+<div class="font-body-lg text-body-lg text-on-surface truncate font-medium">Figma - Dashboard UI Components</div>
+</div>
+</div>
+<!-- Card 2: Code Editor -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col group hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:border-outline transition-all cursor-default">
+<div class="aspect-video relative bg-[#1E1E1E] border-b border-outline-variant flex items-center justify-center overflow-hidden">
+<div class="w-full h-full p-4 font-mono-sm text-[10px] text-[#D4D4D4] opacity-80 overflow-hidden leading-relaxed whitespace-pre">
+<span class="text-[#569CD6]">function</span> <span class="text-[#DCDCAA]">renderGrid</span>() {
+  <span class="text-[#C586C0]">const</span> container <span class="text-[#D4D4D4]">=</span> document.<span class="text-[#DCDCAA]">getElementById</span>(<span class="text-[#CE9178]">'grid'</span>);
+  <span class="text-[#C586C0]">return</span> (
+    <span class="text-[#808080]">&lt;</span><span class="text-[#569CD6]">div</span> <span class="text-[#9CDCFE]">className</span><span class="text-[#D4D4D4]">=</span><span class="text-[#CE9178]">"flex grid-cols-3"</span><span class="text-[#808080]">&gt;</span>
+      {items.<span class="text-[#DCDCAA]">map</span>(item <span class="text-[#569CD6]">=&gt;</span> (
+        <span class="text-[#808080]">&lt;</span><span class="text-[#4EC9B0]">Card</span> <span class="text-[#9CDCFE]">key</span><span class="text-[#D4D4D4]">=</span>{item.<span class="text-[#9CDCFE]">id</span>} <span class="text-[#9CDCFE]">data</span><span class="text-[#D4D4D4]">=</span>{item} <span class="text-[#808080]">/&gt;</span>
+      ))}
+    <span class="text-[#808080]">&lt;/</span><span class="text-[#569CD6]">div</span><span class="text-[#808080]">&gt;</span>
+  );
+}</div>
+<div class="absolute top-2 right-2 bg-on-background/80 text-surface backdrop-blur-sm px-2 py-0.5 rounded font-mono-sm text-[10px] tracking-wider border border-white/10 flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></div> 4K • Dev Monitor</div>
+<div class="absolute -bottom-4 left-4 w-8 h-8 bg-white rounded-md shadow-sm border border-outline-variant flex items-center justify-center z-10 p-1">
+<img alt="VS Code" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxFPlU9P_DeRHnYUAhp84vz--ogdPwfBi-lld1gz3rwOEi7pD_Mdz5TGySz-bpfdR76K_eL0LneR8bRv3r74nOFtjQncwkXQZZg4NAbNSV1s0Y0vHYlfNIPwCPTHKuGxQJKODyW63YWnG6yeJNb5wZbz-49AAg0Q2HkkduTlqGrFX_T341hYrgURWJHT_SGLvJ02CK0iVZJ-04LDVdDXAS2KRq4Ezmc1NDGEVVwo-47rLmypjDTAej2KVtJ3yxVaIDjxUNgkM7QaI"/>
+</div>
+</div>
+<div class="pt-6 px-4 pb-4 flex flex-col gap-1">
+<div class="font-label-md text-label-md text-secondary uppercase tracking-wider">VS Code</div>
+<div class="font-body-lg text-body-lg text-on-surface truncate font-medium">app.tsx - Switchboard Project</div>
+</div>
+</div>
+<!-- Card 3: Terminal -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col group hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:border-outline transition-all cursor-default ring-2 ring-primary ring-offset-1">
+<div class="aspect-video relative bg-black border-b border-outline-variant flex flex-col p-4">
+<div class="font-mono-sm text-[11px] text-green-400 mb-2">user@dev-machine:~/projects$ yarn start</div>
+<div class="font-mono-sm text-[11px] text-gray-300">Starting development server...</div>
+<div class="font-mono-sm text-[11px] text-blue-400">Compiled successfully!</div>
+<div class="font-mono-sm text-[11px] text-gray-300 mt-2">You can now view the app in the browser.</div>
+<div class="absolute top-2 right-2 bg-on-background/80 text-surface backdrop-blur-sm px-2 py-0.5 rounded font-mono-sm text-[10px] tracking-wider border border-white/10">1080p</div>
+<div class="absolute -bottom-4 left-4 w-8 h-8 bg-white rounded-md shadow-sm border border-outline-variant flex items-center justify-center z-10 p-1">
+<span class="material-symbols-outlined text-on-surface">terminal</span>
+</div>
+</div>
+<div class="pt-6 px-4 pb-4 flex flex-col gap-1">
+<div class="font-label-md text-label-md text-secondary uppercase tracking-wider flex justify-between items-center">
+<span>Terminal</span>
+<span class="bg-primary/10 text-primary px-1.5 py-0.5 rounded text-[10px]">Active</span>
+</div>
+<div class="font-body-lg text-body-lg text-on-surface truncate font-medium">yarn start - build process</div>
+</div>
+</div>
+<!-- Card 4: Design Tool -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col group hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:border-outline transition-all cursor-default">
+<div class="aspect-video relative bg-surface-container-low border-b border-outline-variant">
+<img class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" data-alt="A professional vector design software interface showing wireframes for a complex dashboard application. The UI is dark gray with neon pink and blue selection accents. Clean geometric shapes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdU_no5w09dFFs8-yeLDZcg_BUo08xoK_5Iq1PHrwDgWj5sfoi33EA2YtPGLsH3i8Ku1V3rJSDbvsqpL5Uk9GGhauKO-YW5gFHYXd1myFoULStAZlwm8yerykbwnFkaWcOVZJV-c8Cx0OHJCSguST-oUW__bkWEs1GHejTu7k4YUNZKRBv6ueYElmjk-gCONzeJNbRGThISgkCWBMOS6GvfJLvZmq7J8FkBWphq9HpRJPdAvzYYhaeY1g-hZaFbAcfN1gQ2TMze-I"/>
+<div class="absolute top-2 right-2 bg-on-background/80 text-surface backdrop-blur-sm px-2 py-0.5 rounded font-mono-sm text-[10px] tracking-wider border border-white/10">1440p</div>
+<div class="absolute -bottom-4 left-4 w-8 h-8 bg-white rounded-md shadow-sm border border-outline-variant flex items-center justify-center z-10 p-1">
+<img alt="Figma" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwAcClmtTtQ7EKWoCdgnGJIplgvRtFOOmSC1LZL20IHOgyLiWmTQMV9gtcm5Ojvne1aqCwo7argg7PVyACOBhLpTDAV4Mwin4qry7agzpqOnD1Krz_Habe04soWLEWMu49IqGNTRst8pak0XI8fmHJ4Ec2R1gBWdBYiVg6rDkRgrcrGnqzo-ILojxuLpgtm3HRI8ZsT6ueH67xLauBCnxe9StmzZ06BAmgozCq9fTFzmktmNlfilhwOUNfzJQ8F6f9Vdy0PcfZbGU"/>
+</div>
+</div>
+<div class="pt-6 px-4 pb-4 flex flex-col gap-1">
+<div class="font-label-md text-label-md text-secondary uppercase tracking-wider">Figma</div>
+<div class="font-body-lg text-body-lg text-on-surface truncate font-medium">V2 Design System Library</div>
+</div>
+</div>
+<!-- Card 5: Slack -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col group hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:border-outline transition-all cursor-default opacity-60">
+<div class="aspect-video relative bg-surface-container-low border-b border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant">forum</span>
+<div class="absolute top-2 right-2 bg-surface-variant text-secondary backdrop-blur-sm px-2 py-0.5 rounded font-mono-sm text-[10px] tracking-wider border border-outline-variant flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-secondary"></div> Offline Monitor</div>
+<div class="absolute -bottom-4 left-4 w-8 h-8 bg-white rounded-md shadow-sm border border-outline-variant flex items-center justify-center z-10 p-1 grayscale">
+<img alt="Slack" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbIy-RksMzmSpuOZckf6Hd7gcYMc2A8oxpZIJ_WhIe-PG3DzUjY4O1SkUnisc38p9mfwFYo7ysRSybaoU5ru5pG0VYmyy5FKrDFyyKahGrYYOzKTV2_P0SBuCk5wPwoAFmfIX9ChJaC6-P_Kc10YBRfBhmjVhoRGI-WvCX7qda9x0xTHiAsjg9RChzF6VMxxVWsmbSaSLLfhuk2eoRul9cyXJSHIuR__4ndWnepu0w8srXX6g95lwTLhsaCUxhWhqJmtr8x17Bcdo"/>
+</div>
+</div>
+<div class="pt-6 px-4 pb-4 flex flex-col gap-1">
+<div class="font-label-md text-label-md text-secondary uppercase tracking-wider">Slack</div>
+<div class="font-body-lg text-body-lg text-on-surface truncate font-medium text-secondary">#engineering-team</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container text-secondary font-mono-sm text-mono-sm docked full-width bottom-0 border-t border-outline-variant flat no shadows fixed bottom-0 w-full h-10 flex items-center justify-between px-container-padding z-50 absolute">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md hidden">Brand Logo Placeholder</span>
+<span>v1.0.4 • Windows 11 Overlay</span>
+</div>
+<div class="flex gap-6 items-center">
+<div class="flex gap-3">
+<span class="flex items-center gap-1.5"><span class="kbd-tag">Tab</span> Cycle Apps</span>
+<span class="flex items-center gap-1.5"><span class="kbd-tag">Enter</span> Focus</span>
+<span class="flex items-center gap-1.5"><span class="kbd-tag">Esc</span> Close</span>
+</div>
+<div class="h-4 w-px bg-outline-variant"></div>
+<div class="flex gap-4">
+<a class="text-primary underline hover:text-primary transition-colors cursor-default" href="#">Keyboard Shortcuts</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors cursor-default" href="#">Documentation</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

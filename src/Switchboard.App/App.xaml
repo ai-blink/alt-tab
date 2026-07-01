@@ -1,0 +1,14 @@
+<Application x:Class="Switchboard.App.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <SolidColorBrush x:Key="SwitchboardPrimaryBrush" Color="#0067C0" />
+        <SolidColorBrush x:Key="SwitchboardPrimarySoftBrush" Color="#D5E3FF" />
+        <SolidColorBrush x:Key="SwitchboardSurfaceBrush" Color="#FCF9F8" />
+        <SolidColorBrush x:Key="SwitchboardCardBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="SwitchboardPanelBrush" Color="#F6F3F2" />
+        <SolidColorBrush x:Key="SwitchboardBorderBrush" Color="#C1C6D4" />
+        <SolidColorBrush x:Key="SwitchboardTextBrush" Color="#1C1B1B" />
+        <SolidColorBrush x:Key="SwitchboardMutedTextBrush" Color="#414752" />
+    </Application.Resources>
+</Application>

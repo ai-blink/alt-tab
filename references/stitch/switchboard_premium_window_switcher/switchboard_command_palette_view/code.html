@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Switchboard Command Palette</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed": "#d5e3ff",
+                      "on-primary-container": "#dbe7ff",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#f3f0ef",
+                      "on-tertiary-container": "#ffe0d1",
+                      "surface": "#fcf9f8",
+                      "primary-container": "#0067c0",
+                      "on-secondary-container": "#5f6161",
+                      "secondary-fixed": "#e2e2e2",
+                      "secondary-fixed-dim": "#c6c6c7",
+                      "on-tertiary-fixed": "#331200",
+                      "primary-fixed-dim": "#a6c8ff",
+                      "outline-variant": "#c1c6d4",
+                      "secondary": "#5d5f5f",
+                      "on-secondary-fixed-variant": "#454747",
+                      "on-primary-fixed-variant": "#004787",
+                      "on-error": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "surface-bright": "#fcf9f8",
+                      "surface-container": "#f0eded",
+                      "on-primary": "#ffffff",
+                      "surface-dim": "#dcd9d9",
+                      "tertiary-fixed": "#ffdbc9",
+                      "surface-container-highest": "#e5e2e1",
+                      "on-surface-variant": "#414752",
+                      "tertiary-fixed-dim": "#ffb68d",
+                      "surface-tint": "#005eb1",
+                      "surface-container-low": "#f6f3f2",
+                      "on-background": "#1c1b1b",
+                      "outline": "#717783",
+                      "surface-variant": "#e5e2e1",
+                      "surface-container-high": "#eae7e7",
+                      "on-surface": "#1c1b1b",
+                      "secondary-container": "#dcdddd",
+                      "primary": "#004f96",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "inverse-surface": "#313030",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed": "#001c3b",
+                      "inverse-primary": "#a6c8ff",
+                      "tertiary-container": "#a84c00",
+                      "tertiary": "#833900",
+                      "background": "#fcf9f8",
+                      "on-secondary-fixed": "#1a1c1c",
+                      "on-tertiary-fixed-variant": "#763300",
+                      "on-error-container": "#93000a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container-padding": "24px",
+                      "grid-gutter": "16px",
+                      "item-gap": "8px",
+                      "unit": "4px",
+                      "stack-gap": "12px",
+                      "sidebar-width": "260px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "display-sm": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "mono-sm": [
+                              "JetBrains Mono"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-sm": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "mono-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: rgba(28, 27, 27, 0.4); /* backdrop simulation */
+            backdrop-filter: blur(4px);
+        }
+        
+        .thumbnail-peek {
+            display: none;
+            position: absolute;
+            right: -260px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 240px;
+            height: 135px; /* 16:9 */
+            z-index: 100;
+        }
+
+        .list-row:hover .thumbnail-peek {
+            display: block;
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-10px, -50%); }
+            to { opacity: 1; transform: translate(0, -50%); }
+        }
+
+        /* Hide scrollbar for cleaner look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex items-center justify-center p-4 m-0 overflow-hidden font-body-sm text-body-sm text-on-surface">
+<!-- Overlay Container -->
+<div class="w-[900px] max-h-[819px] flex flex-col bg-surface-container-lowest rounded-xl shadow-2xl overflow-visible border border-outline-variant relative z-50">
+<!-- Search Header -->
+<div class="flex items-center px-container-padding h-16 w-full border-b border-outline-variant shrink-0 relative bg-surface">
+<span aria-hidden="true" class="material-symbols-outlined text-outline mr-item-gap text-[20px]">search</span>
+<input autofocus="" class="flex-1 bg-transparent border-none outline-none font-headline-md text-headline-md text-on-surface placeholder:text-outline focus:ring-0 p-0" placeholder="Search windows, apps, or commands..." type="text"/>
+<!-- Segmented Control (View Mode) -->
+<div class="flex items-center bg-surface-container p-unit rounded ml-container-padding border border-outline-variant">
+<button class="px-3 py-1 rounded bg-surface-container-lowest shadow-sm border border-outline-variant text-primary font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">view_list</span>
+                    Compact
+                </button>
+<button class="px-3 py-1 rounded text-secondary hover:text-on-surface font-label-md text-label-md flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">grid_view</span>
+                    Grid
+                </button>
+</div>
+<div class="ml-stack-gap font-mono-sm text-mono-sm text-outline border border-outline-variant rounded px-2 py-0.5 bg-surface-container">Ctrl+K</div>
+</div>
+<!-- List Area -->
+<div class="flex-1 overflow-y-auto no-scrollbar p-item-gap bg-surface-container-lowest relative">
+<div class="font-label-md text-label-md text-secondary px-3 py-2 uppercase tracking-wider">Recent Windows</div>
+<div class="flex flex-col gap-[2px]">
+<!-- Row 1 (Active) -->
+<div class="list-row group flex items-center h-[36px] px-3 rounded cursor-default border border-primary bg-primary-fixed-dim/20 relative">
+<img alt="VS Code" class="w-[16px] h-[16px] mr-item-gap object-contain" data-alt="A small, crisp logo for a code editor application in a modern UI context. Light background, high contrast, clean vector style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSxyFVd_wn7XvUZhRMD8kOvjCGYvEBAEdBeeH8WI9tj8OJkVz-9xH8EddpHU8OdKyuqsIiijbMhVF7Ad0HaOYPmEnWhU0aiodCTOmG2kqoMp3OwFBj6OftMtLBpFK46BeNVdW88GyLaDIwwNYlTejwO6jGmXoIV4c8jOpzj7qW7emmhsridEiMPUsXF6tUK_-JbLBdNgqy6NkifaKi040IAofKPPpevVdleRFb0tgOnHBrCzas0ojYuepIUy6zmMJUdJQN2S7fH94"/>
+<span class="font-label-md text-label-md text-on-surface w-32 truncate">VS Code</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex-1 truncate">project-alpha - src/main.rs</span>
+<!-- Thumbnail Peek -->
+<div class="thumbnail-peek bg-surface-container-lowest rounded-lg border border-outline-variant shadow-lg p-unit">
+<img alt="Window Preview" class="w-full h-full object-cover rounded bg-surface-container-high" data-alt="A realistic screenshot of a code editor showing rust programming language code with syntax highlighting, dark theme, modern development environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuARyEmaMFQlXHxAEMS0lzWfnSJa-4NCoaxIHTlYp4fOG87g_RIk5e0-pJepe-h05g41jThSi_18kp8xKJq-TEpuGFhCq1SCkNbqdr6MLVeBN6MJvbo-IP9XIFIj-ANNtioX5UJmZSYmZlkpRFYT1-637qHy9DgrxE8z8DqU3x4_V9TzLTk7Y4wRd0xz4qajvhc21GBY7bQLw1Tw3I0cvgU53dcgBQ-RYPWfTu_4XVag3YgWtKQbmSDXLELen5QAhsIgqszQ0gEt5TQ"/>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="list-row group flex items-center h-[36px] px-3 rounded cursor-default border border-transparent hover:bg-surface-container-low relative">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px] mr-item-gap text-primary">language</span>
+<span class="font-label-md text-label-md text-on-surface w-32 truncate">Chrome</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex-1 truncate">Switchboard Design Specs - Google Docs</span>
+<div class="thumbnail-peek bg-surface-container-lowest rounded-lg border border-outline-variant shadow-lg p-unit">
+<img alt="Window Preview" class="w-full h-full object-cover rounded bg-surface-container-high" data-alt="A clean screenshot of a web browser showing a document editor with a modern layout, text-heavy, light mode, corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAemwrVUKf4h8A_P7vdCsxhTUJiRY39RMVWrON7wVOGrZS1OKJMMyAigKlkwab55MDICLMHHTbm6BAnFCg3l4SdT6sXUM75sHpgNJ4hoOsPr8m4h2GSH7RjhxloDMxUj-ecPY3Hln9emFXu8xHzGza-J7Ol0OanUF52MLIIlvukqechgYuiFSn3sZJDbgsc3Ews3e_P1tE9YNQcLSjfZMWLcj2JNagzc3xO50hH9aQhgpTMfjU3kJVMsqQZwSerNmDSxgn3sVEe3w"/>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="list-row group flex items-center h-[36px] px-3 rounded cursor-default border border-transparent hover:bg-surface-container-low relative">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px] mr-item-gap text-[#00a1f1]">terminal</span>
+<span class="font-label-md text-label-md text-on-surface w-32 truncate">Terminal</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex-1 truncate">user@server: ~/var/log/syslog</span>
+<div class="thumbnail-peek bg-surface-container-lowest rounded-lg border border-outline-variant shadow-lg p-unit">
+<div class="w-full h-full rounded bg-inverse-surface p-2 font-mono-sm text-mono-sm text-on-error">
+                            &gt; tail -f syslog<br/>&gt; error mounting drive...
+                        </div>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="list-row group flex items-center h-[36px] px-3 rounded cursor-default border border-transparent hover:bg-surface-container-low relative">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px] mr-item-gap text-[#00a1f1]">terminal</span>
+<span class="font-label-md text-label-md text-on-surface w-32 truncate">Terminal</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex-1 truncate">npm run dev (localhost:3000)</span>
+</div>
+</div>
+<div class="font-label-md text-label-md text-secondary px-3 py-2 mt-4 uppercase tracking-wider">Other Applications</div>
+<div class="flex flex-col gap-[2px]">
+<!-- Row 5 -->
+<div class="list-row group flex items-center h-[36px] px-3 rounded cursor-default border border-transparent hover:bg-surface-container-low relative">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px] mr-item-gap text-secondary">folder</span>
+<span class="font-label-md text-label-md text-on-surface w-32 truncate">File Explorer</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex-1 truncate">C:\Users\Admin\Downloads\Assets</span>
+</div>
+<!-- Row 6 -->
+<div class="list-row group flex items-center h-[36px] px-3 rounded cursor-default border border-transparent hover:bg-surface-container-low relative">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px] mr-item-gap text-secondary">chat</span>
+<span class="font-label-md text-label-md text-on-surface w-32 truncate">Slack</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex-1 truncate">#design-system-updates</span>
+</div>
+<!-- Row 7 -->
+<div class="list-row group flex items-center h-[36px] px-3 rounded cursor-default border border-transparent hover:bg-surface-container-low relative">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px] mr-item-gap text-secondary">mail</span>
+<span class="font-label-md text-label-md text-on-surface w-32 truncate">Outlook</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex-1 truncate">Inbox - user@company.com</span>
+</div>
+<!-- Row 8 -->
+<div class="list-row group flex items-center h-[36px] px-3 rounded cursor-default border border-transparent hover:bg-surface-container-low relative">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px] mr-item-gap text-secondary">settings</span>
+<span class="font-label-md text-label-md text-on-surface w-32 truncate">Settings</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex-1 truncate">Display &gt; Resolution</span>
+</div>
+</div>
+</div>
+<!-- Footer / Shortcuts -->
+<div class="h-10 border-t border-outline-variant bg-surface-container-lowest shrink-0 flex items-center justify-between px-container-padding z-50">
+<span class="font-body-sm text-body-sm text-secondary">Switchboard v1.0.4</span>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<span class="font-mono-sm text-mono-sm text-on-surface bg-surface-container border border-outline-variant rounded px-1 min-w-[20px] text-center border-b-2 shadow-sm">↑</span>
+<span class="font-mono-sm text-mono-sm text-on-surface bg-surface-container border border-outline-variant rounded px-1 min-w-[20px] text-center border-b-2 shadow-sm">↓</span>
+</div>
+<span class="font-body-sm text-body-sm text-secondary">Navigate</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-mono-sm text-mono-sm text-on-surface bg-surface-container border border-outline-variant rounded px-1 min-w-[20px] text-center border-b-2 shadow-sm">↵</span>
+<span class="font-body-sm text-body-sm text-secondary">Switch</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-mono-sm text-mono-sm text-on-surface bg-surface-container border border-outline-variant rounded px-1 min-w-[32px] text-center border-b-2 shadow-sm">Esc</span>
+<span class="font-body-sm text-body-sm text-secondary">Close</span>
+</div>
+</div>
+</div>
+</div>
+</body></html>

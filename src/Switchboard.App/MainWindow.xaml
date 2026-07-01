@@ -1,0 +1,332 @@
+<Window x:Class="Switchboard.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Switchboard"
+        Width="1180"
+        Height="760"
+        MinWidth="900"
+        MinHeight="620"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource SwitchboardPanelBrush}"
+        FontFamily="Segoe UI Variable Text, Segoe UI"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True">
+    <Window.Resources>
+        <Style x:Key="ToolbarButtonStyle" TargetType="Button">
+            <Setter Property="MinHeight" Value="32" />
+            <Setter Property="Padding" Value="12,4" />
+            <Setter Property="Background" Value="{StaticResource SwitchboardCardBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource SwitchboardBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="{StaticResource SwitchboardMutedTextBrush}" />
+        </Style>
+
+        <Style x:Key="WindowCardItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0,0,16,16" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="SelectionFrame"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="2"
+                                CornerRadius="8"
+                                Padding="2">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="SelectionFrame" Property="BorderBrush" Value="{StaticResource SwitchboardBorderBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="SelectionFrame" Property="BorderBrush" Value="{StaticResource SwitchboardPrimaryBrush}" />
+                                <Setter TargetName="SelectionFrame" Property="Background" Value="{StaticResource SwitchboardPrimarySoftBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="SelectionFrame" Property="BorderBrush" Value="{StaticResource SwitchboardPrimaryBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="24">
+        <Border Background="{StaticResource SwitchboardCardBrush}"
+                BorderBrush="{StaticResource SwitchboardBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="64" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="42" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="24,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="180" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="20"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource SwitchboardPrimaryBrush}"
+                               Text="Switchboard" />
+
+                    <Border Grid.Column="1"
+                            Height="36"
+                            MaxWidth="520"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Background="{StaticResource SwitchboardPanelBrush}"
+                            BorderBrush="{StaticResource SwitchboardBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0"
+                                     VerticalContentAlignment="Center"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     FontSize="14"
+                                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                            <Border Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Background="#EAE7E7"
+                                    BorderBrush="{StaticResource SwitchboardBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="6,2">
+                                <TextBlock FontFamily="Cascadia Mono, Consolas"
+                                           FontSize="12"
+                                           Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                           Text="Ctrl+K" />
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <StackPanel Grid.Column="2"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <ComboBox Width="112"
+                                  Margin="0,0,8,0"
+                                  ItemsSource="{Binding ViewModes}"
+                                  SelectedItem="{Binding SelectedViewMode}" />
+                        <ComboBox Width="124"
+                                  Margin="0,0,8,0"
+                                  ItemsSource="{Binding SortModes}"
+                                  SelectedItem="{Binding SelectedSortMode}" />
+                        <Button Command="{Binding RefreshCommand}"
+                                Content="Refresh"
+                                Style="{StaticResource ToolbarButtonStyle}" />
+                    </StackPanel>
+                </Grid>
+
+                <Border Grid.Row="0"
+                        VerticalAlignment="Bottom"
+                        BorderBrush="{StaticResource SwitchboardBorderBrush}"
+                        BorderThickness="0,0,0,1" />
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="180" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0"
+                            BorderBrush="{StaticResource SwitchboardBorderBrush}"
+                            BorderThickness="0,0,1,0"
+                            Background="{StaticResource SwitchboardSurfaceBrush}"
+                            Padding="20,24">
+                        <StackPanel>
+                            <TextBlock FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource SwitchboardPrimaryBrush}"
+                                       Text="Views" />
+                            <TextBlock Margin="0,4,0,24"
+                                       Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                       Text="Filter windows" />
+                            <TextBlock Margin="0,0,0,18" Text="Recent" />
+                            <TextBlock Margin="0,0,0,18" Text="App" />
+                            <TextBlock Margin="0,0,0,18" Text="Monitor" />
+                            <TextBlock Margin="0,0,0,18" Text="Title" />
+                            <TextBlock Margin="0,0,0,18" Text="Favorites" />
+                        </StackPanel>
+                    </Border>
+
+                    <Grid Grid.Column="1" Margin="24">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <DockPanel Grid.Row="0" Margin="0,0,0,18">
+                            <StackPanel DockPanel.Dock="Left">
+                                <TextBlock FontSize="24"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource SwitchboardTextBrush}"
+                                           Text="Open Windows" />
+                                <TextBlock Margin="0,4,0,0"
+                                           Foreground="{StaticResource SwitchboardMutedTextBrush}">
+                                    <Run Text="Sorted by " />
+                                    <Run Text="{Binding SelectedSortMode}" />
+                                    <Run Text=" - " />
+                                    <Run Text="{Binding WindowCountLabel}" />
+                                </TextBlock>
+                            </StackPanel>
+                            <TextBlock DockPanel.Dock="Right"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Bottom"
+                                       FontFamily="Cascadia Mono, Consolas"
+                                       Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                       Text="{Binding SelectedViewMode}" />
+                        </DockPanel>
+
+                        <ListBox Grid.Row="1"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 ItemContainerStyle="{StaticResource WindowCardItemStyle}"
+                                 ItemsSource="{Binding VisibleWindows}"
+                                 SelectedItem="{Binding SelectedWindow}">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Width="292"
+                                            Height="226"
+                                            Background="{StaticResource SwitchboardCardBrush}"
+                                            BorderBrush="{StaticResource SwitchboardBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="8"
+                                            ClipToBounds="True">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="132" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+
+                                            <Grid Grid.Row="0" Background="{Binding ThumbnailBrush}">
+                                                <TextBlock HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           FontFamily="Cascadia Mono, Consolas"
+                                                           FontSize="22"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource SwitchboardCardBrush}"
+                                                           Text="{Binding ThumbnailLabel}" />
+                                                <Border HorizontalAlignment="Right"
+                                                        VerticalAlignment="Top"
+                                                        Margin="0,10,10,0"
+                                                        Background="#CC1C1B1B"
+                                                        CornerRadius="4"
+                                                        Padding="8,3">
+                                                    <TextBlock FontFamily="Cascadia Mono, Consolas"
+                                                               FontSize="11"
+                                                               Foreground="White"
+                                                               Text="{Binding MonitorName}" />
+                                                </Border>
+                                            </Grid>
+
+                                            <Grid Grid.Row="1" Margin="14,12">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="34" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Border Grid.Column="0"
+                                                        Width="28"
+                                                        Height="28"
+                                                        VerticalAlignment="Top"
+                                                        Background="{StaticResource SwitchboardPanelBrush}"
+                                                        BorderBrush="{StaticResource SwitchboardBorderBrush}"
+                                                        BorderThickness="1"
+                                                        CornerRadius="4">
+                                                    <TextBlock HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               FontSize="10"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{StaticResource SwitchboardPrimaryBrush}"
+                                                               Text="{Binding ThumbnailLabel}" />
+                                                </Border>
+
+                                                <StackPanel Grid.Column="1">
+                                                    <DockPanel>
+                                                        <TextBlock DockPanel.Dock="Left"
+                                                                   FontSize="12"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                                                   Text="{Binding AppName}"
+                                                                   TextTrimming="CharacterEllipsis" />
+                                                        <TextBlock DockPanel.Dock="Right"
+                                                                   Margin="8,0,0,0"
+                                                                   FontSize="11"
+                                                                   Foreground="{StaticResource SwitchboardPrimaryBrush}"
+                                                                   Text="ACTIVE">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                                            <Setter Property="Visibility" Value="Visible" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </DockPanel>
+                                                    <TextBlock Margin="0,6,0,0"
+                                                               FontSize="15"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{StaticResource SwitchboardTextBrush}"
+                                                               Text="{Binding Title}"
+                                                               TextTrimming="CharacterEllipsis" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+
+                <Border Grid.Row="2"
+                        Background="{StaticResource SwitchboardPanelBrush}"
+                        BorderBrush="{StaticResource SwitchboardBorderBrush}"
+                        BorderThickness="0,1,0,0"
+                        Padding="24,0">
+                    <DockPanel VerticalAlignment="Center">
+                        <TextBlock DockPanel.Dock="Left"
+                                   FontFamily="Cascadia Mono, Consolas"
+                                   Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                   Text="v0.1.0 - Windows 11 overlay" />
+                        <StackPanel DockPanel.Dock="Right"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                            <TextBlock Margin="0,0,18,0" Text="Tab Cycle" />
+                            <TextBlock Margin="0,0,18,0" Text="Enter Focus" />
+                            <TextBlock Text="Esc Close" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
