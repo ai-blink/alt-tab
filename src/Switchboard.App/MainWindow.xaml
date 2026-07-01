@@ -10,6 +10,8 @@
         MinWidth="900"
         MinHeight="620"
         WindowStartupLocation="CenterScreen"
+        ShowActivated="True"
+        Topmost="True"
         Background="{StaticResource SwitchboardPanelBrush}"
         FontFamily="Segoe UI Variable Text, Segoe UI"
         SnapsToDevicePixels="True"

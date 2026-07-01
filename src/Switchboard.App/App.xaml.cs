@@ -11,15 +11,18 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        base.OnStartup(e);
+
         var services = new ServiceCollection();
         services.AddSingleton<IWindowCatalog, DemoWindowCatalog>();
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<MainWindow>();
 
         serviceProvider = services.BuildServiceProvider();
-        serviceProvider.GetRequiredService<MainWindow>().Show();
 
-        base.OnStartup(e);
+        ShutdownMode = ShutdownMode.OnMainWindowClose;
+        MainWindow = serviceProvider.GetRequiredService<MainWindow>();
+        MainWindow.Show();
     }
 
     protected override void OnExit(ExitEventArgs e)

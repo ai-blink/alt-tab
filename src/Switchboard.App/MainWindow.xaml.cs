@@ -1,4 +1,6 @@
 using System.Windows;
+using System.Windows.Input;
+using System.Windows.Threading;
 using Switchboard.App.ViewModels;
 
 namespace Switchboard.App;
@@ -9,5 +11,33 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = viewModel;
+
+        Loaded += OnLoaded;
+        PreviewKeyDown += OnPreviewKeyDown;
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState.Normal;
+        ShowInTaskbar = true;
+
+        Dispatcher.BeginInvoke(
+            new Action(() =>
+            {
+                Activate();
+                Focus();
+            }),
+            DispatcherPriority.ApplicationIdle);
+    }
+
+    private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Escape)
+        {
+            return;
+        }
+
+        Close();
+        e.Handled = true;
     }
 }
