@@ -3,6 +3,7 @@ using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Switchboard.App.ViewModels;
 using Switchboard.Core.Services;
+using Switchboard.Native;
 
 namespace Switchboard.App;
 
@@ -17,7 +18,7 @@ public partial class App : Application
         base.OnStartup(e);
 
         var services = new ServiceCollection();
-        services.AddSingleton<IWindowCatalog, DemoWindowCatalog>();
+        services.AddSingleton<IWindowCatalog, Win32NativeWindowProvider>();
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<MainWindow>();
 

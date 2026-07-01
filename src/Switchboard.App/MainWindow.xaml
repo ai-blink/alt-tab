@@ -284,7 +284,7 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Border Width="238"
+                                <Border Width="258"
                                         Height="108"
                                         Background="{Binding DataContext.CardBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                                         BorderBrush="{Binding DataContext.BorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
@@ -293,18 +293,20 @@
                                         ClipToBounds="True">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="82" />
+                                            <ColumnDefinition Width="128" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
                                         <Grid Grid.Column="0"
                                               Background="{Binding ThumbnailBrush}">
                                             <Rectangle Fill="{Binding DataContext.PreviewShadeBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                            <app:DwmThumbnailPreview SourceHandle="{Binding Handle}" />
                                             <Border Margin="10"
                                                     Background="#28FFFFFF"
                                                     BorderBrush="#45FFFFFF"
                                                     BorderThickness="1"
                                                     CornerRadius="5"
+                                                    Opacity="0.28"
                                                     Padding="8">
                                                 <Grid>
                                                     <Grid.RowDefinitions>
@@ -348,7 +350,7 @@
                                             </Border>
                                         </Grid>
 
-                                        <Grid Grid.Column="1" Margin="10,9">
+                                        <Grid Grid.Column="1" Margin="10,9,9,9">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="*" />
@@ -357,7 +359,7 @@
 
                                             <DockPanel Grid.Row="0" LastChildFill="False">
                                                 <TextBlock DockPanel.Dock="Left"
-                                                           Width="74"
+                                                           Width="64"
                                                            FontSize="12"
                                                            FontWeight="SemiBold"
                                                            Foreground="{Binding DataContext.MutedTextBrush, RelativeSource={RelativeSource AncestorType=Window}}"

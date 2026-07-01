@@ -67,7 +67,7 @@ public partial class MainWindowViewModel : ObservableObject
     private OverlayThemeMode selectedAppearanceMode = OverlayThemeMode.Transparent;
 
     public IReadOnlyList<WindowSnapshot> VisibleWindows =>
-        WindowQuery.Apply(allWindows, SearchText, SelectedSortMode);
+        WindowQuery.Apply(allWindows, SearchText, SelectedSortMode).Take(6).ToList();
 
     public string WindowCountLabel => $"{VisibleWindows.Count} windows";
 
