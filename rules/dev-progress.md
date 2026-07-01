@@ -12,12 +12,14 @@
 - 2026-07-02: Reworked the mock shell toward the Stitch thumbnail-grid reference: full-height navigation, separated top bar/content/footer, clearer card previews, icon controls, and active-window selection by default.
 - 2026-07-02: Fixed a non-interactive launcher crash where WPF FontCache needs process-local `windir` before the first `Window` is created.
 - 2026-07-02: Completed launch visibility visual smoke. Artifact: `notes/runs/2026-07-02_switchboard_visible_smoke.png`.
+- 2026-07-02: Replaced the oversized management-style shell with a compact transparent overlay: no sidebar, no large footer, 3x2 mock window cards, top search, draggable custom chrome, and in-overlay `투명` / `다크` / `라이트` appearance modes.
 
 ## Verification
 
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors.
 - `dotnet test Switchboard.slnx --nologo`: passed, 2 tests.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_visible_smoke.png`, and confirmed visible nav, top bar, 3-column mock cards, active selection ring, and footer.
+- Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_compact_transparent_smoke.png`, and confirmed compact transparent overlay layout with 3x2 cards and appearance mode controls.
 
 ## Blockers
 
@@ -27,9 +29,10 @@
 
 - Then implement Native window enumeration.
 - Add DWM thumbnail host plan/prototype.
-- Add real view-specific templates for Compact and List modes.
+- Add real view-specific templates for Compact and List modes after the overlay interaction model is stable.
 
 ## Follow-Up
 
 - FOLLOW_UP: Replace mock thumbnail surfaces with real DWM thumbnails after Native enumeration is available.
+- FOLLOW_UP: Persist the selected appearance mode once settings persistence exists.
 - IGNORE_FOR_V1: Mini dock, timeline, advanced virtual desktop management, and automatic window placement remain out of scope.

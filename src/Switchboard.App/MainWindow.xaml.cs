@@ -40,4 +40,16 @@ public partial class MainWindow : Window
         Close();
         e.Handled = true;
     }
+
+    private void OnChromeMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ButtonState != MouseButtonState.Pressed)
+        {
+            return;
+        }
+
+        DragMove();
+    }
+
+    private void OnCloseClick(object sender, RoutedEventArgs e) => Close();
 }
