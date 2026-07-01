@@ -4,11 +4,15 @@
     <Application.Resources>
         <SolidColorBrush x:Key="SwitchboardPrimaryBrush" Color="#0067C0" />
         <SolidColorBrush x:Key="SwitchboardPrimarySoftBrush" Color="#D5E3FF" />
+        <SolidColorBrush x:Key="SwitchboardBackdropBrush" Color="#EEF1F5" />
         <SolidColorBrush x:Key="SwitchboardSurfaceBrush" Color="#FCF9F8" />
         <SolidColorBrush x:Key="SwitchboardCardBrush" Color="#FFFFFF" />
         <SolidColorBrush x:Key="SwitchboardPanelBrush" Color="#F6F3F2" />
+        <SolidColorBrush x:Key="SwitchboardRaisedPanelBrush" Color="#EAE7E7" />
         <SolidColorBrush x:Key="SwitchboardBorderBrush" Color="#C1C6D4" />
         <SolidColorBrush x:Key="SwitchboardTextBrush" Color="#1C1B1B" />
         <SolidColorBrush x:Key="SwitchboardMutedTextBrush" Color="#414752" />
+        <SolidColorBrush x:Key="SwitchboardInverseBrush" Color="#313030" />
+        <SolidColorBrush x:Key="SwitchboardSuccessBrush" Color="#0F8A5F" />
     </Application.Resources>
 </Application>

@@ -14,7 +14,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         this.windowCatalog = windowCatalog;
         allWindows = windowCatalog.GetOpenWindows();
-        SelectedWindow = VisibleWindows.FirstOrDefault();
+        SelectedWindow = PickDefaultWindow();
     }
 
     public IReadOnlyList<SwitcherViewMode> ViewModes { get; } =
@@ -57,8 +57,11 @@ public partial class MainWindowViewModel : ObservableObject
     private void Refresh()
     {
         allWindows = windowCatalog.GetOpenWindows();
-        SelectedWindow = VisibleWindows.FirstOrDefault();
+        SelectedWindow = PickDefaultWindow();
         OnPropertyChanged(nameof(VisibleWindows));
         OnPropertyChanged(nameof(WindowCountLabel));
     }
+
+    private WindowSnapshot? PickDefaultWindow() =>
+        VisibleWindows.FirstOrDefault(window => window.IsActive) ?? VisibleWindows.FirstOrDefault();
 }

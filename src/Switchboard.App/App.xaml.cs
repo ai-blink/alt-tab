@@ -1,3 +1,4 @@
+using System.IO;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Switchboard.App.ViewModels;
@@ -11,6 +12,8 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        EnsureWindowsEnvironmentVariables();
+
         base.OnStartup(e);
 
         var services = new ServiceCollection();
@@ -29,5 +32,28 @@ public partial class App : Application
     {
         serviceProvider?.Dispose();
         base.OnExit(e);
+    }
+
+    private static void EnsureWindowsEnvironmentVariables()
+    {
+        if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("windir")))
+        {
+            return;
+        }
+
+        var windowsDirectory = Environment.GetEnvironmentVariable("SystemRoot");
+
+        if (string.IsNullOrWhiteSpace(windowsDirectory))
+        {
+            var systemDirectory = Environment.SystemDirectory;
+            windowsDirectory = string.IsNullOrWhiteSpace(systemDirectory)
+                ? null
+                : Directory.GetParent(systemDirectory)?.FullName;
+        }
+
+        if (!string.IsNullOrWhiteSpace(windowsDirectory))
+        {
+            Environment.SetEnvironmentVariable("windir", windowsDirectory);
+        }
     }
 }

@@ -4,8 +4,8 @@
 |---|---|---|
 | done | Initialize `.NET 10 + WPF` solution and project structure. | `dotnet build`, `dotnet test` pass |
 | done | Preserve Stitch design references inside project. | `references/stitch/switchboard_premium_window_switcher` |
-| in-progress | Build visibly polished mock-data switcher shell. | Launch activation code added; visual polish and smoke pending |
-| in-progress | Fix launch visibility and run manual visual smoke. | User feedback: UI not yet apparent |
+| done | Build visibly polished mock-data switcher shell. | `dotnet build`, `dotnet test`, visual smoke PNG |
+| done | Fix launch visibility and run manual visual smoke. | `notes/runs/2026-07-02_switchboard_visible_smoke.png` |
 | next | Native top-level window enumeration. | `Switchboard.Native` provider |
 | next | DWM thumbnail rendering path. | Native thumbnail host/prototype |
 | later | Compact/List mode-specific templates. | App view template work |

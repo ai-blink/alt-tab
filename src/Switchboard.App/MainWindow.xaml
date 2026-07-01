@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Switchboard"
-        Width="1180"
-        Height="760"
-        MinWidth="900"
-        MinHeight="620"
+        Width="1240"
+        Height="820"
+        MinWidth="940"
+        MinHeight="640"
         WindowStartupLocation="CenterScreen"
         ShowActivated="True"
         Topmost="True"
-        Background="{StaticResource SwitchboardPanelBrush}"
+        Background="{StaticResource SwitchboardBackdropBrush}"
         FontFamily="Segoe UI Variable Text, Segoe UI"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True">
@@ -23,6 +23,33 @@
             <Setter Property="Background" Value="{StaticResource SwitchboardCardBrush}" />
             <Setter Property="BorderBrush" Value="{StaticResource SwitchboardBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="{StaticResource SwitchboardMutedTextBrush}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <Style x:Key="IconButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="36" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+            <Setter Property="Background" Value="{StaticResource SwitchboardCardBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource SwitchboardBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="{StaticResource SwitchboardMutedTextBrush}" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="15" />
+        </Style>
+
+        <Style x:Key="NavIconStyle" TargetType="TextBlock">
+            <Setter Property="Width" Value="24" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="{StaticResource SwitchboardMutedTextBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="KbdTextStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Cascadia Mono, Consolas" />
+            <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="{StaticResource SwitchboardMutedTextBrush}" />
         </Style>
 
@@ -64,114 +91,232 @@
         <Border Background="{StaticResource SwitchboardCardBrush}"
                 BorderBrush="{StaticResource SwitchboardBorderBrush}"
                 BorderThickness="1"
-                CornerRadius="8">
+                CornerRadius="8"
+                ClipToBounds="True">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="32"
+                                  Direction="270"
+                                  Opacity="0.18"
+                                  ShadowDepth="8"
+                                  Color="#1C1B1B" />
+            </Border.Effect>
+
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="64" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="42" />
-                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="240" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                <Grid Grid.Row="0" Margin="24,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="180" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Border Grid.Column="0"
+                        Background="{StaticResource SwitchboardPanelBrush}"
+                        BorderBrush="{StaticResource SwitchboardBorderBrush}"
+                        BorderThickness="0,0,1,0"
+                        Padding="20,24">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Column="0"
-                               VerticalAlignment="Center"
-                               FontSize="20"
-                               FontWeight="SemiBold"
-                               Foreground="{StaticResource SwitchboardPrimaryBrush}"
-                               Text="Switchboard" />
+                        <StackPanel Grid.Row="0" Margin="0,0,0,36">
+                            <TextBlock FontSize="23"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource SwitchboardPrimaryBrush}"
+                                       Text="Navigation" />
+                            <TextBlock Margin="0,6,0,0"
+                                       FontSize="14"
+                                       Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                       Text="Filter views" />
+                        </StackPanel>
 
-                    <Border Grid.Column="1"
-                            Height="36"
-                            MaxWidth="520"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Background="{StaticResource SwitchboardPanelBrush}"
+                        <StackPanel Grid.Row="1">
+                            <Border Height="44" Margin="0,0,0,8" CornerRadius="6" Padding="12,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="32" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Style="{StaticResource NavIconStyle}" Text="&#xE823;" />
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                               Text="Recent" />
+                                </Grid>
+                            </Border>
+
+                            <Border Height="44"
+                                    Margin="0,0,0,8"
+                                    Background="{StaticResource SwitchboardRaisedPanelBrush}"
+                                    CornerRadius="6"
+                                    Padding="12,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="32" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Style="{StaticResource NavIconStyle}" Text="&#xE71D;" />
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource SwitchboardTextBrush}"
+                                               Text="App" />
+                                </Grid>
+                            </Border>
+
+                            <Border Height="44" Margin="0,0,0,8" CornerRadius="6" Padding="12,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="32" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Style="{StaticResource NavIconStyle}" Text="&#xE7F4;" />
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                               Text="Monitor" />
+                                </Grid>
+                            </Border>
+
+                            <Border Height="44" Margin="0,0,0,8" CornerRadius="6" Padding="12,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="32" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Style="{StaticResource NavIconStyle}" Text="&#xE8D2;" />
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                               Text="Title" />
+                                </Grid>
+                            </Border>
+
+                            <Border Height="44" CornerRadius="6" Padding="12,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="32" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Style="{StaticResource NavIconStyle}" Text="&#xE734;" />
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                               Text="Favorites" />
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+
+                        <TextBlock Grid.Row="2"
+                                   FontFamily="Cascadia Mono, Consolas"
+                                   FontSize="12"
+                                   Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                   Text="mock catalog" />
+                    </Grid>
+                </Border>
+
+                <Grid Grid.Column="1" Background="{StaticResource SwitchboardSurfaceBrush}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="64" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="42" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0"
+                            Background="{StaticResource SwitchboardSurfaceBrush}"
                             BorderBrush="{StaticResource SwitchboardBorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="6"
-                            Padding="12,0">
+                            BorderThickness="0,0,0,1"
+                            Padding="24,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="0"
-                                     VerticalContentAlignment="Center"
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     FontSize="14"
-                                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       FontSize="22"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource SwitchboardPrimaryBrush}"
+                                       Text="Switchboard" />
+
                             <Border Grid.Column="1"
+                                    Width="420"
+                                    Height="36"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Background="#EAE7E7"
+                                    Background="{StaticResource SwitchboardCardBrush}"
                                     BorderBrush="{StaticResource SwitchboardBorderBrush}"
                                     BorderThickness="1"
-                                    CornerRadius="4"
-                                    Padding="6,2">
-                                <TextBlock FontFamily="Cascadia Mono, Consolas"
-                                           FontSize="12"
-                                           Foreground="{StaticResource SwitchboardMutedTextBrush}"
-                                           Text="Ctrl+K" />
+                                    CornerRadius="6"
+                                    Padding="12,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="24" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               VerticalAlignment="Center"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                               Text="&#xE721;" />
+                                    <TextBox Grid.Column="1"
+                                             VerticalContentAlignment="Center"
+                                             Background="Transparent"
+                                             BorderThickness="0"
+                                             FontSize="14"
+                                             Foreground="{StaticResource SwitchboardTextBrush}"
+                                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Border Grid.Column="2"
+                                            Width="68"
+                                            VerticalAlignment="Center"
+                                            Background="{StaticResource SwitchboardRaisedPanelBrush}"
+                                            BorderBrush="{StaticResource SwitchboardBorderBrush}"
+                                            BorderThickness="0,0,0,2"
+                                            CornerRadius="4"
+                                            Padding="7,2">
+                                        <TextBlock Style="{StaticResource KbdTextStyle}" Text="Ctrl+K" />
+                                    </Border>
+                                </Grid>
                             </Border>
+
+                            <StackPanel Grid.Column="2"
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center">
+                                <Button Content="&#xE8FD;"
+                                        Style="{StaticResource IconButtonStyle}"
+                                        ToolTip="List view" />
+                                <Button Background="{StaticResource SwitchboardPrimarySoftBrush}"
+                                        BorderBrush="{StaticResource SwitchboardPrimaryBrush}"
+                                        Content="&#xE8A9;"
+                                        Foreground="{StaticResource SwitchboardPrimaryBrush}"
+                                        Style="{StaticResource IconButtonStyle}"
+                                        ToolTip="Grid view" />
+                                <Border Width="1"
+                                        Height="28"
+                                        Margin="4,0,14,0"
+                                        Background="{StaticResource SwitchboardBorderBrush}" />
+                                <ComboBox Width="126"
+                                          Height="32"
+                                          Margin="0,0,8,0"
+                                          ItemsSource="{Binding SortModes}"
+                                          SelectedItem="{Binding SelectedSortMode}" />
+                                <Button Content="&#xE72C;"
+                                        Command="{Binding RefreshCommand}"
+                                        Style="{StaticResource IconButtonStyle}"
+                                        ToolTip="Refresh" />
+                            </StackPanel>
                         </Grid>
                     </Border>
 
-                    <StackPanel Grid.Column="2"
-                                Orientation="Horizontal"
-                                VerticalAlignment="Center">
-                        <ComboBox Width="112"
-                                  Margin="0,0,8,0"
-                                  ItemsSource="{Binding ViewModes}"
-                                  SelectedItem="{Binding SelectedViewMode}" />
-                        <ComboBox Width="124"
-                                  Margin="0,0,8,0"
-                                  ItemsSource="{Binding SortModes}"
-                                  SelectedItem="{Binding SelectedSortMode}" />
-                        <Button Command="{Binding RefreshCommand}"
-                                Content="Refresh"
-                                Style="{StaticResource ToolbarButtonStyle}" />
-                    </StackPanel>
-                </Grid>
-
-                <Border Grid.Row="0"
-                        VerticalAlignment="Bottom"
-                        BorderBrush="{StaticResource SwitchboardBorderBrush}"
-                        BorderThickness="0,0,0,1" />
-
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="180" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Border Grid.Column="0"
-                            BorderBrush="{StaticResource SwitchboardBorderBrush}"
-                            BorderThickness="0,0,1,0"
-                            Background="{StaticResource SwitchboardSurfaceBrush}"
-                            Padding="20,24">
-                        <StackPanel>
-                            <TextBlock FontSize="16"
-                                       FontWeight="SemiBold"
-                                       Foreground="{StaticResource SwitchboardPrimaryBrush}"
-                                       Text="Views" />
-                            <TextBlock Margin="0,4,0,24"
-                                       Foreground="{StaticResource SwitchboardMutedTextBrush}"
-                                       Text="Filter windows" />
-                            <TextBlock Margin="0,0,0,18" Text="Recent" />
-                            <TextBlock Margin="0,0,0,18" Text="App" />
-                            <TextBlock Margin="0,0,0,18" Text="Monitor" />
-                            <TextBlock Margin="0,0,0,18" Text="Title" />
-                            <TextBlock Margin="0,0,0,18" Text="Favorites" />
-                        </StackPanel>
-                    </Border>
-
-                    <Grid Grid.Column="1" Margin="24">
+                    <Grid Grid.Row="1" Margin="24">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -179,24 +324,30 @@
 
                         <DockPanel Grid.Row="0" Margin="0,0,0,18">
                             <StackPanel DockPanel.Dock="Left">
-                                <TextBlock FontSize="24"
+                                <TextBlock FontSize="28"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource SwitchboardTextBrush}"
                                            Text="Open Windows" />
                                 <TextBlock Margin="0,4,0,0"
+                                           FontSize="14"
                                            Foreground="{StaticResource SwitchboardMutedTextBrush}">
                                     <Run Text="Sorted by " />
-                                    <Run Text="{Binding SelectedSortMode}" />
+                                    <Run Text="{Binding SelectedSortMode, Mode=OneWay}" />
                                     <Run Text=" - " />
-                                    <Run Text="{Binding WindowCountLabel}" />
+                                    <Run Text="{Binding WindowCountLabel, Mode=OneWay}" />
                                 </TextBlock>
                             </StackPanel>
-                            <TextBlock DockPanel.Dock="Right"
-                                       HorizontalAlignment="Right"
-                                       VerticalAlignment="Bottom"
-                                       FontFamily="Cascadia Mono, Consolas"
-                                       Foreground="{StaticResource SwitchboardMutedTextBrush}"
-                                       Text="{Binding SelectedViewMode}" />
+                            <Button DockPanel.Dock="Right"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    Style="{StaticResource ToolbarButtonStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="0,0,6,0"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               Text="&#xE71C;" />
+                                    <TextBlock Text="Filter" />
+                                </StackPanel>
+                            </Button>
                         </DockPanel>
 
                         <ListBox Grid.Row="1"
@@ -204,6 +355,8 @@
                                  BorderThickness="0"
                                  ItemContainerStyle="{StaticResource WindowCardItemStyle}"
                                  ItemsSource="{Binding VisibleWindows}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                                  SelectedItem="{Binding SelectedWindow}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -212,31 +365,91 @@
                             </ListBox.ItemsPanel>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Width="292"
-                                            Height="226"
+                                    <Border Width="260"
+                                            Height="220"
                                             Background="{StaticResource SwitchboardCardBrush}"
-                                            BorderBrush="{StaticResource SwitchboardBorderBrush}"
-                                            BorderThickness="1"
                                             CornerRadius="8"
                                             ClipToBounds="True">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="BorderBrush" Value="{StaticResource SwitchboardBorderBrush}" />
+                                                <Setter Property="BorderThickness" Value="1" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                        <Setter Property="BorderBrush" Value="{StaticResource SwitchboardPrimaryBrush}" />
+                                                        <Setter Property="BorderThickness" Value="2" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+
                                         <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="132" />
+                                                <RowDefinition Height="126" />
                                                 <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
 
                                             <Grid Grid.Row="0" Background="{Binding ThumbnailBrush}">
-                                                <TextBlock HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center"
-                                                           FontFamily="Cascadia Mono, Consolas"
-                                                           FontSize="22"
-                                                           FontWeight="SemiBold"
-                                                           Foreground="{StaticResource SwitchboardCardBrush}"
-                                                           Text="{Binding ThumbnailLabel}" />
+                                                <Rectangle Fill="#1C1B1B" Opacity="0.08" />
+                                                <Border Margin="14"
+                                                        Background="#26FFFFFF"
+                                                        BorderBrush="#55FFFFFF"
+                                                        BorderThickness="1"
+                                                        CornerRadius="5"
+                                                        Padding="12">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="14" />
+                                                            <RowDefinition Height="*" />
+                                                        </Grid.RowDefinitions>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Ellipse Width="6" Height="6" Margin="0,0,5,0" Fill="#D95B59" />
+                                                            <Ellipse Width="6" Height="6" Margin="0,0,5,0" Fill="#E6B84F" />
+                                                            <Ellipse Width="6" Height="6" Fill="#4EBE77" />
+                                                        </StackPanel>
+                                                        <Grid Grid.Row="1" Margin="0,10,0,0">
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="10" />
+                                                                <RowDefinition Height="10" />
+                                                                <RowDefinition Height="10" />
+                                                                <RowDefinition Height="*" />
+                                                            </Grid.RowDefinitions>
+                                                            <Border Grid.Row="0"
+                                                                    Width="156"
+                                                                    HorizontalAlignment="Left"
+                                                                    Background="#DDF3F0EF"
+                                                                    CornerRadius="3" />
+                                                            <Border Grid.Row="1"
+                                                                    Width="205"
+                                                                    Margin="0,8,0,0"
+                                                                    HorizontalAlignment="Left"
+                                                                    Background="#99FFFFFF"
+                                                                    CornerRadius="3" />
+                                                            <Border Grid.Row="2"
+                                                                    Width="124"
+                                                                    Margin="0,16,0,0"
+                                                                    HorizontalAlignment="Left"
+                                                                    Background="#661C1B1B"
+                                                                    CornerRadius="3" />
+                                                            <TextBlock Grid.Row="3"
+                                                                       HorizontalAlignment="Right"
+                                                                       VerticalAlignment="Bottom"
+                                                                       FontFamily="Cascadia Mono, Consolas"
+                                                                       FontSize="24"
+                                                                       FontWeight="SemiBold"
+                                                                       Foreground="White"
+                                                                       Opacity="0.9"
+                                                                       Text="{Binding ThumbnailLabel}" />
+                                                        </Grid>
+                                                    </Grid>
+                                                </Border>
+
                                                 <Border HorizontalAlignment="Right"
                                                         VerticalAlignment="Top"
                                                         Margin="0,10,10,0"
                                                         Background="#CC1C1B1B"
+                                                        BorderBrush="#33FFFFFF"
+                                                        BorderThickness="1"
                                                         CornerRadius="4"
                                                         Padding="8,3">
                                                     <TextBlock FontFamily="Cascadia Mono, Consolas"
@@ -248,18 +461,18 @@
 
                                             <Grid Grid.Row="1" Margin="14,12">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="34" />
+                                                    <ColumnDefinition Width="38" />
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
 
                                                 <Border Grid.Column="0"
-                                                        Width="28"
-                                                        Height="28"
+                                                        Width="30"
+                                                        Height="30"
                                                         VerticalAlignment="Top"
                                                         Background="{StaticResource SwitchboardPanelBrush}"
                                                         BorderBrush="{StaticResource SwitchboardBorderBrush}"
                                                         BorderThickness="1"
-                                                        CornerRadius="4">
+                                                        CornerRadius="5">
                                                     <TextBlock HorizontalAlignment="Center"
                                                                VerticalAlignment="Center"
                                                                FontSize="10"
@@ -269,20 +482,20 @@
                                                 </Border>
 
                                                 <StackPanel Grid.Column="1">
-                                                    <DockPanel>
+                                                    <DockPanel LastChildFill="False">
                                                         <TextBlock DockPanel.Dock="Left"
+                                                                   Width="118"
                                                                    FontSize="12"
                                                                    FontWeight="SemiBold"
                                                                    Foreground="{StaticResource SwitchboardMutedTextBrush}"
                                                                    Text="{Binding AppName}"
                                                                    TextTrimming="CharacterEllipsis" />
-                                                        <TextBlock DockPanel.Dock="Right"
-                                                                   Margin="8,0,0,0"
-                                                                   FontSize="11"
-                                                                   Foreground="{StaticResource SwitchboardPrimaryBrush}"
-                                                                   Text="ACTIVE">
-                                                            <TextBlock.Style>
-                                                                <Style TargetType="TextBlock">
+                                                        <Border DockPanel.Dock="Right"
+                                                                Background="{StaticResource SwitchboardPrimarySoftBrush}"
+                                                                CornerRadius="4"
+                                                                Padding="6,2">
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
                                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                                     <Style.Triggers>
                                                                         <DataTrigger Binding="{Binding IsActive}" Value="True">
@@ -290,10 +503,15 @@
                                                                         </DataTrigger>
                                                                     </Style.Triggers>
                                                                 </Style>
-                                                            </TextBlock.Style>
-                                                        </TextBlock>
+                                                            </Border.Style>
+                                                            <TextBlock FontFamily="Cascadia Mono, Consolas"
+                                                                       FontSize="10"
+                                                                       FontWeight="SemiBold"
+                                                                       Foreground="{StaticResource SwitchboardPrimaryBrush}"
+                                                                       Text="ACTIVE" />
+                                                        </Border>
                                                     </DockPanel>
-                                                    <TextBlock Margin="0,6,0,0"
+                                                    <TextBlock Margin="0,7,0,0"
                                                                FontSize="15"
                                                                FontWeight="SemiBold"
                                                                Foreground="{StaticResource SwitchboardTextBrush}"
@@ -307,27 +525,27 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </Grid>
-                </Grid>
 
-                <Border Grid.Row="2"
-                        Background="{StaticResource SwitchboardPanelBrush}"
-                        BorderBrush="{StaticResource SwitchboardBorderBrush}"
-                        BorderThickness="0,1,0,0"
-                        Padding="24,0">
-                    <DockPanel VerticalAlignment="Center">
-                        <TextBlock DockPanel.Dock="Left"
-                                   FontFamily="Cascadia Mono, Consolas"
-                                   Foreground="{StaticResource SwitchboardMutedTextBrush}"
-                                   Text="v0.1.0 - Windows 11 overlay" />
-                        <StackPanel DockPanel.Dock="Right"
-                                    HorizontalAlignment="Right"
-                                    Orientation="Horizontal">
-                            <TextBlock Margin="0,0,18,0" Text="Tab Cycle" />
-                            <TextBlock Margin="0,0,18,0" Text="Enter Focus" />
-                            <TextBlock Text="Esc Close" />
-                        </StackPanel>
-                    </DockPanel>
-                </Border>
+                    <Border Grid.Row="2"
+                            Background="{StaticResource SwitchboardPanelBrush}"
+                            BorderBrush="{StaticResource SwitchboardBorderBrush}"
+                            BorderThickness="0,1,0,0"
+                            Padding="24,0">
+                        <DockPanel VerticalAlignment="Center">
+                            <TextBlock DockPanel.Dock="Left"
+                                       FontFamily="Cascadia Mono, Consolas"
+                                       Foreground="{StaticResource SwitchboardMutedTextBrush}"
+                                       Text="v0.1.0 - Windows 11 Overlay" />
+                            <StackPanel DockPanel.Dock="Right"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+                                <TextBlock Margin="0,0,18,0" Foreground="{StaticResource SwitchboardMutedTextBrush}" Text="Tab Cycle Apps" />
+                                <TextBlock Margin="0,0,18,0" Foreground="{StaticResource SwitchboardMutedTextBrush}" Text="Enter Focus" />
+                                <TextBlock Foreground="{StaticResource SwitchboardMutedTextBrush}" Text="Esc Close" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </Grid>
             </Grid>
         </Border>
     </Grid>
