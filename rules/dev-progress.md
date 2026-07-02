@@ -14,6 +14,7 @@
 - 2026-07-02: Completed launch visibility visual smoke. Artifact: `notes/runs/2026-07-02_switchboard_visible_smoke.png`.
 - 2026-07-02: Replaced the oversized management-style shell with a compact transparent overlay: no sidebar, no large footer, 3x2 mock window cards, top search, draggable custom chrome, and in-overlay `투명` / `다크` / `라이트` appearance modes.
 - 2026-07-02: Connected the overlay to real Win32 top-level window enumeration and DWM thumbnails. The compact overlay now shows live window titles/process names and DWM-rendered previews for the first 6 windows.
+- 2026-07-02: Rebalanced cards so thumbnails are the primary surface. Titles are now a single-line bottom caption instead of taking half the card.
 
 ## Verification
 
@@ -22,6 +23,7 @@
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_visible_smoke.png`, and confirmed visible nav, top bar, 3-column mock cards, active selection ring, and footer.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_compact_transparent_smoke.png`, and confirmed compact transparent overlay layout with 3x2 cards and appearance mode controls.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_dwm_thumbnail_smoke.png`, and confirmed real window enumeration plus DWM thumbnail previews.
+- Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_thumbnail_first_smoke.png`, and confirmed thumbnail-first cards with compact bottom captions.
 
 ## Blockers
 
