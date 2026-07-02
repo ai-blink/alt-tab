@@ -24,6 +24,7 @@
 - 2026-07-03: Completed view refinement slice. Compact mode now separates thumbnail and caption rows so titles do not overlap previews, List mode renders real two-column rows, and the header includes an `Always on top` toggle bound to overlay topmost behavior.
 - 2026-07-03: Completed opacity and hotkey settings slice. The settings popover now includes overlay opacity presets (`25%`, `50%`, `75%`, `90%`) and three hotkey combo boxes for first modifier, second modifier, and key, backed by Core model enums for later persistence. DWM thumbnails are temporarily unregistered while settings is open so native thumbnail composition does not draw above the popover.
 - 2026-07-03: Added tray residency groundwork for global hotkeys. Closing the overlay now hides it instead of shutting down the process, the app owns a tray icon with Open and Exit actions, and only tray Exit requests application shutdown.
+- 2026-07-03: Expanded the hotkey key combo box from a small test set to `Space`, `Tab`, `Enter`, `A-Z`, `0-9`, and `F1-F12`, with display labels separated from enum storage values.
 
 ## Verification
 
@@ -57,6 +58,9 @@
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after tray residency changes.
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after tray residency changes.
 - Runtime smoke: launched `Switchboard.App.exe`, confirmed the process starts and remains resident for tray/hotkey groundwork, then stopped the test process.
+- Initial `dotnet build Switchboard.slnx --nologo` after expanding hotkey keys was blocked by a resident `Switchboard.App` process locking outputs; stopped that process and reran successfully.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after expanding hotkey keys.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after expanding hotkey keys.
 
 ## Blockers
 

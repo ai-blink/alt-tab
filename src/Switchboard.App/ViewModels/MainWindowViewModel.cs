@@ -17,6 +17,8 @@ public enum OverlayThemeMode
     Light
 }
 
+public sealed record HotkeyKeyOption(SwitcherHotkeyKey Value, string Label);
+
 public partial class MainWindowViewModel : ObservableObject
 {
     private const double BaseGridCardWidth = 274;
@@ -93,13 +95,7 @@ public partial class MainWindowViewModel : ObservableObject
         SwitcherHotkeyModifier.Win
     ];
 
-    public IReadOnlyList<SwitcherHotkeyKey> HotkeyKeys { get; } =
-    [
-        SwitcherHotkeyKey.Space,
-        SwitcherHotkeyKey.Tab,
-        SwitcherHotkeyKey.S,
-        SwitcherHotkeyKey.W
-    ];
+    public IReadOnlyList<HotkeyKeyOption> HotkeyKeyOptions { get; } = CreateHotkeyKeyOptions();
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(VisibleWindows))]
@@ -368,12 +364,19 @@ public partial class MainWindowViewModel : ObservableObject
         _ => "Win"
     };
 
+    private static IReadOnlyList<HotkeyKeyOption> CreateHotkeyKeyOptions()
+    {
+        var keys = Enum.GetValues<SwitcherHotkeyKey>();
+        return keys.Select(key => new HotkeyKeyOption(key, FormatHotkeyPart(key))).ToList();
+    }
+
     private static string FormatHotkeyPart(SwitcherHotkeyKey key) => key switch
     {
         SwitcherHotkeyKey.Space => "Space",
         SwitcherHotkeyKey.Tab => "Tab",
-        SwitcherHotkeyKey.S => "S",
-        _ => "W"
+        SwitcherHotkeyKey.Enter => "Enter",
+        >= SwitcherHotkeyKey.D0 and <= SwitcherHotkeyKey.D9 => ((int)key - (int)SwitcherHotkeyKey.D0).ToString(),
+        _ => key.ToString()
     };
 
     private void RefreshOverlayBrushes()

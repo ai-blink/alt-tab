@@ -1005,8 +1005,10 @@
                                       Height="22"
                                       Margin="5,0,0,0"
                                       FontSize="10"
-                                      ItemsSource="{Binding HotkeyKeys}"
-                                      SelectedItem="{Binding SelectedHotkeyKey}" />
+                                      DisplayMemberPath="Label"
+                                      ItemsSource="{Binding HotkeyKeyOptions}"
+                                      SelectedValue="{Binding SelectedHotkeyKey}"
+                                      SelectedValuePath="Value" />
                         </Grid>
                     </Border>
                 </Grid>
