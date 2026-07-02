@@ -28,6 +28,7 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly IWindowCatalog windowCatalog;
     private readonly IWindowActivator windowActivator;
     private IReadOnlyList<WindowSnapshot> allWindows;
+    private bool isUpdatingHotkeyModifiers;
 
     public MainWindowViewModel(IWindowCatalog windowCatalog, IWindowActivator windowActivator)
     {
@@ -81,14 +82,20 @@ public partial class MainWindowViewModel : ObservableObject
         SwitcherSizingPolicy.Dense
     ];
 
-    public IReadOnlyList<SwitcherHotkeyPreset> HotkeyPresets { get; } =
+    public IReadOnlyList<SwitcherHotkeyModifier> HotkeyModifiers { get; } =
     [
-        SwitcherHotkeyPreset.CtrlAltSpace,
-        SwitcherHotkeyPreset.CtrlShiftSpace,
-        SwitcherHotkeyPreset.CtrlAltTab,
-        SwitcherHotkeyPreset.CtrlAltS,
-        SwitcherHotkeyPreset.CtrlShiftS,
-        SwitcherHotkeyPreset.CtrlAltW
+        SwitcherHotkeyModifier.Ctrl,
+        SwitcherHotkeyModifier.Alt,
+        SwitcherHotkeyModifier.Shift,
+        SwitcherHotkeyModifier.Win
+    ];
+
+    public IReadOnlyList<SwitcherHotkeyKey> HotkeyKeys { get; } =
+    [
+        SwitcherHotkeyKey.Space,
+        SwitcherHotkeyKey.Tab,
+        SwitcherHotkeyKey.S,
+        SwitcherHotkeyKey.W
     ];
 
     [ObservableProperty]
@@ -134,7 +141,16 @@ public partial class MainWindowViewModel : ObservableObject
     private SwitcherViewMode defaultViewMode = SwitcherViewMode.Grid;
 
     [ObservableProperty]
-    private SwitcherHotkeyPreset selectedHotkeyPreset = SwitcherHotkeyPreset.CtrlAltSpace;
+    [NotifyPropertyChangedFor(nameof(SelectedHotkeyLabel))]
+    private SwitcherHotkeyModifier selectedFirstHotkeyModifier = SwitcherHotkeyModifier.Ctrl;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SelectedHotkeyLabel))]
+    private SwitcherHotkeyModifier selectedSecondHotkeyModifier = SwitcherHotkeyModifier.Alt;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SelectedHotkeyLabel))]
+    private SwitcherHotkeyKey selectedHotkeyKey = SwitcherHotkeyKey.Space;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AreDwmThumbnailsVisible))]
@@ -247,6 +263,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     public bool AreDwmThumbnailsVisible => !IsSettingsOpen;
 
+    public string SelectedHotkeyLabel =>
+        $"{FormatHotkeyPart(SelectedFirstHotkeyModifier)}+{FormatHotkeyPart(SelectedSecondHotkeyModifier)}+{FormatHotkeyPart(SelectedHotkeyKey)}";
+
     public void SelectNextWindow() => MoveSelection(1);
 
     public void SelectPreviousWindow() => MoveSelection(-1);
@@ -300,6 +319,59 @@ public partial class MainWindowViewModel : ObservableObject
     {
         RefreshOverlayBrushes();
     }
+
+    partial void OnSelectedFirstHotkeyModifierChanged(SwitcherHotkeyModifier value) =>
+        EnsureDistinctHotkeyModifiers(changedFirstModifier: true);
+
+    partial void OnSelectedSecondHotkeyModifierChanged(SwitcherHotkeyModifier value) =>
+        EnsureDistinctHotkeyModifiers(changedFirstModifier: false);
+
+    private void EnsureDistinctHotkeyModifiers(bool changedFirstModifier)
+    {
+        if (isUpdatingHotkeyModifiers || SelectedFirstHotkeyModifier != SelectedSecondHotkeyModifier)
+        {
+            return;
+        }
+
+        isUpdatingHotkeyModifiers = true;
+
+        try
+        {
+            if (changedFirstModifier)
+            {
+                SelectedSecondHotkeyModifier = GetFallbackModifier(SelectedFirstHotkeyModifier);
+            }
+            else
+            {
+                SelectedFirstHotkeyModifier = GetFallbackModifier(SelectedSecondHotkeyModifier);
+            }
+        }
+        finally
+        {
+            isUpdatingHotkeyModifiers = false;
+        }
+    }
+
+    private static SwitcherHotkeyModifier GetFallbackModifier(SwitcherHotkeyModifier selected) =>
+        selected == SwitcherHotkeyModifier.Ctrl
+            ? SwitcherHotkeyModifier.Alt
+            : SwitcherHotkeyModifier.Ctrl;
+
+    private static string FormatHotkeyPart(SwitcherHotkeyModifier modifier) => modifier switch
+    {
+        SwitcherHotkeyModifier.Ctrl => "Ctrl",
+        SwitcherHotkeyModifier.Alt => "Alt",
+        SwitcherHotkeyModifier.Shift => "Shift",
+        _ => "Win"
+    };
+
+    private static string FormatHotkeyPart(SwitcherHotkeyKey key) => key switch
+    {
+        SwitcherHotkeyKey.Space => "Space",
+        SwitcherHotkeyKey.Tab => "Tab",
+        SwitcherHotkeyKey.S => "S",
+        _ => "W"
+    };
 
     private void RefreshOverlayBrushes()
     {
