@@ -25,6 +25,7 @@
 - 2026-07-03: Completed opacity and hotkey settings slice. The settings popover now includes overlay opacity presets (`25%`, `50%`, `75%`, `90%`) and three hotkey combo boxes for first modifier, second modifier, and key, backed by Core model enums for later persistence. DWM thumbnails are temporarily unregistered while settings is open so native thumbnail composition does not draw above the popover.
 - 2026-07-03: Added tray residency groundwork for global hotkeys. Closing the overlay now hides it instead of shutting down the process, the app owns a tray icon with Open and Exit actions, and only tray Exit requests application shutdown.
 - 2026-07-03: Expanded the hotkey key combo box from a small test set to `Space`, `Tab`, `Enter`, `A-Z`, `0-9`, and `F1-F12`, with display labels separated from enum storage values.
+- 2026-07-03: Connected selected hotkey settings to Win32 `RegisterHotKey`. The app now registers the current modifier/key combo on startup, refreshes registration when combo boxes change, and handles `WM_HOTKEY` by showing the overlay while the process remains resident in the tray.
 
 ## Verification
 
@@ -61,6 +62,8 @@
 - Initial `dotnet build Switchboard.slnx --nologo` after expanding hotkey keys was blocked by a resident `Switchboard.App` process locking outputs; stopped that process and reran successfully.
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after expanding hotkey keys.
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after expanding hotkey keys.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after global hotkey registration.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after global hotkey registration.
 
 ## Blockers
 
@@ -68,7 +71,7 @@
 
 ## Next
 
-- Connect selected hotkey modifier/key settings to Native global hotkey registration, begin settings persistence, or design the activation fallback UX for Windows foreground-lock failures.
+- Begin settings persistence for hotkey and overlay settings, or design the activation fallback UX for Windows foreground-lock failures.
 
 ## Follow-Up
 
@@ -76,5 +79,5 @@
 - FOLLOW_UP: Persist the selected appearance mode once settings persistence exists.
 - FOLLOW_UP: Add a user-visible fallback for Windows foreground-lock cases where `SetForegroundWindow` refuses activation even after the overlay requests it.
 - FOLLOW_UP: Persist overlay settings once the settings surface stabilizes.
-- FOLLOW_UP: Connect selected hotkey modifier/key settings to a Native global hotkey registration boundary, including collision/failure fallback UX.
+- FOLLOW_UP: Add user-visible feedback when a selected global hotkey cannot be registered because it is reserved or already in use.
 - IGNORE_FOR_V1: Mini dock, timeline, advanced virtual desktop management, and automatic window placement remain out of scope.

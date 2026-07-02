@@ -20,5 +20,6 @@
 | done | Add compact opacity and hotkey candidate settings. | `notes/runs/2026-07-03_switchboard_opacity_hotkey_settings_open_smoke.png` |
 | done | Keep the app resident in the tray when the overlay is closed. | `dotnet build`, `dotnet test`, runtime process smoke |
 | later | Foreground activation fallback UX. | Handle Windows foreground-lock failures gracefully |
-| later | Native global hotkey registration. | Connect selected hotkey modifier/key settings to Win32 registration with collision/failure UX |
+| done | Native global hotkey registration. | Selected hotkey modifier/key settings are registered with Win32 `RegisterHotKey` |
+| later | Global hotkey collision feedback. | Show a user-visible warning when Win32 registration fails because a combo is reserved or already in use |
 | later | Settings persistence and favorite windows. | JSON or LiteDB decision |

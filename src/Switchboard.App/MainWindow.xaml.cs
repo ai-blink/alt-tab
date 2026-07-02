@@ -3,15 +3,19 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Switchboard.Core.Models;
 using Switchboard.App.ViewModels;
+using Switchboard.Native;
 
 namespace Switchboard.App;
 
 public partial class MainWindow : Window
 {
+    private const int WmHotkey = 0x0312;
+    private const int SwitchboardHotkeyId = 0x5342;
     private const double OuterMargin = 18;
     private const double ContentHorizontalMargin = 28;
     private const double ContentVerticalMargin = 20;
@@ -24,6 +28,8 @@ public partial class MainWindow : Window
     private const double LayoutSafetyPadding = 24;
 
     private readonly MainWindowViewModel viewModel;
+    private HwndSource? hwndSource;
+    private GlobalHotkeyRegistration? hotkeyRegistration;
 
     public MainWindow(MainWindowViewModel viewModel)
     {
@@ -43,6 +49,7 @@ public partial class MainWindow : Window
     {
         ApplyContentSizedBounds();
         ShowInTaskbar = true;
+        InitializeGlobalHotkey();
 
         Dispatcher.BeginInvoke(
             new Action(() =>
@@ -76,8 +83,14 @@ public partial class MainWindow : Window
         Hide();
     }
 
-    private void OnClosed(object? sender, EventArgs e) =>
+    private void OnClosed(object? sender, EventArgs e)
+    {
+        hotkeyRegistration?.Dispose();
+        hotkeyRegistration = null;
+        hwndSource?.RemoveHook(WndProc);
+        hwndSource = null;
         viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+    }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -93,6 +106,56 @@ public partial class MainWindow : Window
         {
             Topmost = viewModel.IsAlwaysOnTop;
         }
+
+        if (e.PropertyName is nameof(MainWindowViewModel.SelectedFirstHotkeyModifier) or
+            nameof(MainWindowViewModel.SelectedSecondHotkeyModifier) or
+            nameof(MainWindowViewModel.SelectedHotkeyKey))
+        {
+            RegisterGlobalHotkey();
+        }
+    }
+
+    private void InitializeGlobalHotkey()
+    {
+        if (hwndSource is not null)
+        {
+            return;
+        }
+
+        hwndSource = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
+        hwndSource?.AddHook(WndProc);
+        RegisterGlobalHotkey();
+    }
+
+    private void RegisterGlobalHotkey()
+    {
+        hotkeyRegistration?.Dispose();
+        hotkeyRegistration = null;
+
+        var hwnd = new WindowInteropHelper(this).Handle;
+
+        if (hwnd == 0)
+        {
+            return;
+        }
+
+        hotkeyRegistration = GlobalHotkeyRegistration.TryRegister(
+            hwnd,
+            SwitchboardHotkeyId,
+            viewModel.SelectedFirstHotkeyModifier,
+            viewModel.SelectedSecondHotkeyModifier,
+            viewModel.SelectedHotkeyKey);
+    }
+
+    private nint WndProc(nint hwnd, int msg, nint wParam, nint lParam, ref bool handled)
+    {
+        if (msg == WmHotkey && wParam.ToInt32() == SwitchboardHotkeyId)
+        {
+            ShowOverlay();
+            handled = true;
+        }
+
+        return 0;
     }
 
     private void ApplyContentSizedBounds()
