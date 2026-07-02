@@ -7,9 +7,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Switchboard"
-        Width="860"
+        Width="955"
         Height="540"
-        MinWidth="780"
+        MinWidth="875"
         MinHeight="500"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -25,7 +25,7 @@
         <app:EnumEqualsConverter x:Key="EnumEqualsConverter" />
 
         <DataTemplate x:Key="GridWindowTemplate">
-            <Border Width="250"
+            <Border Width="279"
                     Height="188"
                     Background="{Binding DataContext.CardBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderBrush="{Binding DataContext.BorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
@@ -126,7 +126,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="CompactWindowTemplate">
-            <Border Width="250"
+            <Border Width="279"
                     Height="82"
                     Background="{Binding DataContext.CardBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderBrush="{Binding DataContext.BorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
