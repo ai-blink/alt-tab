@@ -857,17 +857,21 @@
                             CornerRadius="7"
                             Padding="1">
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton Content="80%"
+                            <RadioButton Content="25%"
                                          GroupName="OverlayOpacity"
-                                         IsChecked="{Binding SelectedOverlayOpacityPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Soft}"
+                                         IsChecked="{Binding SelectedOverlayOpacityPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=TwentyFive}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="50%"
+                                         GroupName="OverlayOpacity"
+                                         IsChecked="{Binding SelectedOverlayOpacityPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Fifty}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="75%"
+                                         GroupName="OverlayOpacity"
+                                         IsChecked="{Binding SelectedOverlayOpacityPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=SeventyFive}"
                                          Style="{StaticResource ModeRadioStyle}" />
                             <RadioButton Content="90%"
                                          GroupName="OverlayOpacity"
-                                         IsChecked="{Binding SelectedOverlayOpacityPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Balanced}"
-                                         Style="{StaticResource ModeRadioStyle}" />
-                            <RadioButton Content="100%"
-                                         GroupName="OverlayOpacity"
-                                         IsChecked="{Binding SelectedOverlayOpacityPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Solid}"
+                                         IsChecked="{Binding SelectedOverlayOpacityPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Ninety}"
                                          Style="{StaticResource ModeRadioStyle}" />
                         </StackPanel>
                     </Border>

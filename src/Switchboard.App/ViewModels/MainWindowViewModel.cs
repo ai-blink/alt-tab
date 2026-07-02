@@ -69,9 +69,10 @@ public partial class MainWindowViewModel : ObservableObject
 
     public IReadOnlyList<OverlayOpacityPreset> OverlayOpacityPresets { get; } =
     [
-        OverlayOpacityPreset.Soft,
-        OverlayOpacityPreset.Balanced,
-        OverlayOpacityPreset.Solid
+        OverlayOpacityPreset.TwentyFive,
+        OverlayOpacityPreset.Fifty,
+        OverlayOpacityPreset.SeventyFive,
+        OverlayOpacityPreset.Ninety
     ];
 
     public IReadOnlyList<SwitcherSizingPolicy> SizingPolicies { get; } =
@@ -106,7 +107,7 @@ public partial class MainWindowViewModel : ObservableObject
     private OverlayThemeMode selectedAppearanceMode = OverlayThemeMode.Transparent;
 
     [ObservableProperty]
-    private OverlayOpacityPreset selectedOverlayOpacityPreset = OverlayOpacityPreset.Solid;
+    private OverlayOpacityPreset selectedOverlayOpacityPreset = OverlayOpacityPreset.Ninety;
 
     [ObservableProperty]
     private int gridColumnCount = 3;
@@ -317,9 +318,10 @@ public partial class MainWindowViewModel : ObservableObject
 
     private double OpacityScale => SelectedOverlayOpacityPreset switch
     {
-        OverlayOpacityPreset.Soft => 0.8,
-        OverlayOpacityPreset.Balanced => 0.9,
-        _ => 1.0
+        OverlayOpacityPreset.TwentyFive => 0.25,
+        OverlayOpacityPreset.Fifty => 0.5,
+        OverlayOpacityPreset.SeventyFive => 0.75,
+        _ => 0.9
     };
 
     private byte ScaledAlpha(byte alpha) =>
