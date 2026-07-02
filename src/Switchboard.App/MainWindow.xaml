@@ -16,7 +16,7 @@
         AllowsTransparency="True"
         ResizeMode="NoResize"
         ShowActivated="True"
-        Topmost="True"
+        Topmost="{Binding IsAlwaysOnTop}"
         Background="Transparent"
         FontFamily="Segoe UI Variable Text, Segoe UI"
         SnapsToDevicePixels="True"
@@ -138,44 +138,53 @@
                     CornerRadius="8"
                     ClipToBounds="True">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{Binding DataContext.CompactPreviewColumnWidth, RelativeSource={RelativeSource AncestorType=Window}}" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="26" />
+                    </Grid.RowDefinitions>
 
-                    <Grid Grid.Column="0"
+                    <Grid Grid.Row="0"
                           Background="{Binding DataContext.SearchBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                           ClipToBounds="True">
                         <Rectangle Fill="{Binding ThumbnailBrush}"
                                    Opacity="0.32" />
                         <Rectangle Fill="{Binding DataContext.PreviewShadeBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
-                        <TextBlock HorizontalAlignment="Right"
-                                   VerticalAlignment="Bottom"
-                                   Margin="0,0,8,6"
-                                   FontFamily="Cascadia Mono, Consolas"
-                                   FontSize="13"
-                                   FontWeight="SemiBold"
-                                   Foreground="White"
-                                   Opacity="0.72"
-                                   Text="{Binding ThumbnailLabel}" />
                         <app:DwmThumbnailPreview SourceHandle="{Binding Handle}" />
                     </Grid>
 
-                    <Grid Grid.Column="1"
-                          Margin="10,8,10,8">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+                    <Border Grid.Row="1"
+                            Background="#E20B0F16"
+                            BorderBrush="#336C7A90"
+                            BorderThickness="0,1,0,0"
+                            Padding="7,3"
+                            ClipToBounds="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="54" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <DockPanel Grid.Row="0"
-                                   LastChildFill="True">
-                            <Border DockPanel.Dock="Right"
-                                    Margin="8,0,0,0"
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       FontSize="9"
+                                       FontWeight="SemiBold"
+                                       Foreground="#B8C2D3"
+                                       Text="{Binding AppName}"
+                                       TextTrimming="CharacterEllipsis" />
+                            <TextBlock Grid.Column="1"
+                                       VerticalAlignment="Center"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       Foreground="White"
+                                       Text="{Binding Title}"
+                                       TextTrimming="CharacterEllipsis" />
+                            <Border Grid.Column="2"
+                                    Margin="6,0,0,0"
+                                    VerticalAlignment="Center"
                                     Background="#554AA3FF"
                                     CornerRadius="4"
-                                    Padding="5,1">
+                                    Padding="4,1">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Setter Property="Visibility" Value="Collapsed" />
@@ -192,38 +201,15 @@
                                            Foreground="#84C0FF"
                                            Text="ACTIVE" />
                             </Border>
-                            <TextBlock VerticalAlignment="Center"
-                                       FontSize="10"
-                                       FontWeight="SemiBold"
-                                       Foreground="{Binding DataContext.MutedTextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
-                                       Text="{Binding AppName}"
-                                       TextTrimming="CharacterEllipsis" />
-                        </DockPanel>
-
-                        <TextBlock Grid.Row="1"
-                                   VerticalAlignment="Center"
-                                   FontSize="12"
-                                   FontWeight="SemiBold"
-                                   Foreground="{Binding DataContext.TextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
-                                   LineHeight="15"
-                                   MaxHeight="34"
-                                   Text="{Binding Title}"
-                                   TextTrimming="CharacterEllipsis"
-                                   TextWrapping="Wrap" />
-
-                        <TextBlock Grid.Row="2"
-                                   FontFamily="Cascadia Mono, Consolas"
-                                   FontSize="9"
-                                   Foreground="{Binding DataContext.MutedTextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
-                                   Text="{Binding MonitorName}"
-                                   TextTrimming="CharacterEllipsis" />
-                    </Grid>
+                        </Grid>
+                    </Border>
                 </Grid>
             </Border>
         </DataTemplate>
 
         <DataTemplate x:Key="ListWindowTemplate">
-            <Border Height="{Binding DataContext.ListRowHeight, RelativeSource={RelativeSource AncestorType=Window}}"
+            <Border Width="{Binding DataContext.ListWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Height="{Binding DataContext.ListRowHeight, RelativeSource={RelativeSource AncestorType=Window}}"
                     Background="{Binding DataContext.CardBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderBrush="{Binding DataContext.BorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderThickness="1"
@@ -231,51 +217,73 @@
                     ClipToBounds="True">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{Binding DataContext.ListPreviewColumnWidth, RelativeSource={RelativeSource AncestorType=Window}}" />
-                        <ColumnDefinition Width="128" />
+                        <ColumnDefinition Width="260" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="112" />
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Column="0"
-                          Margin="7"
-                          Background="{Binding DataContext.SearchBackground, RelativeSource={RelativeSource AncestorType=Window}}"
-                          ClipToBounds="True">
-                        <Rectangle Fill="{Binding ThumbnailBrush}"
-                                   Opacity="0.32" />
-                        <Rectangle Fill="{Binding DataContext.PreviewShadeBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
-                        <app:DwmThumbnailPreview SourceHandle="{Binding Handle}" />
+                          Margin="7,6,16,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{Binding DataContext.ListPreviewColumnWidth, RelativeSource={RelativeSource AncestorType=Window}}" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0"
+                              Background="{Binding DataContext.SearchBackground, RelativeSource={RelativeSource AncestorType=Window}}"
+                              ClipToBounds="True">
+                            <Rectangle Fill="{Binding ThumbnailBrush}"
+                                       Opacity="0.32" />
+                            <Rectangle Fill="{Binding DataContext.PreviewShadeBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+                            <app:DwmThumbnailPreview SourceHandle="{Binding Handle}" />
+                        </Grid>
+
+                        <Grid Grid.Column="1"
+                              Margin="12,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0"
+                                       VerticalAlignment="Center"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="{Binding DataContext.TextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+                                       Text="{Binding AppName}"
+                                       TextTrimming="CharacterEllipsis" />
+                            <TextBlock Grid.Row="1"
+                                       FontFamily="Cascadia Mono, Consolas"
+                                       FontSize="9"
+                                       Foreground="{Binding DataContext.MutedTextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+                                       Text="{Binding Id}"
+                                       TextTrimming="CharacterEllipsis" />
+                        </Grid>
                     </Grid>
 
-                    <TextBlock Grid.Column="1"
-                               VerticalAlignment="Center"
-                               Margin="6,0,12,0"
-                               FontSize="12"
-                               FontWeight="SemiBold"
-                               Foreground="{Binding DataContext.TextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
-                               Text="{Binding AppName}"
-                               TextTrimming="CharacterEllipsis" />
+                    <Grid Grid.Column="1"
+                          Margin="0,0,18,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="2"
-                               VerticalAlignment="Center"
-                               Margin="0,0,12,0"
-                               FontSize="12"
-                               Foreground="{Binding DataContext.MutedTextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
-                               Text="{Binding Title}"
-                               TextTrimming="CharacterEllipsis" />
+                        <TextBlock Grid.Column="0"
+                                   VerticalAlignment="Center"
+                                   FontSize="12"
+                                   Foreground="{Binding DataContext.MutedTextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+                                   Text="{Binding Title}"
+                                   TextTrimming="CharacterEllipsis" />
 
-                    <StackPanel Grid.Column="3"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Right"
+                        <Border Grid.Column="1"
+                                Width="54"
+                                Height="18"
+                                Margin="12,0,0,0"
                                 VerticalAlignment="Center"
-                                Margin="0,0,10,0">
-                        <Border Margin="0,0,7,0"
                                 Background="#554AA3FF"
                                 CornerRadius="4"
                                 Padding="5,1">
                             <Border.Style>
                                 <Style TargetType="Border">
-                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Setter Property="Visibility" Value="Hidden" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsActive}" Value="True">
                                             <Setter Property="Visibility" Value="Visible" />
@@ -283,19 +291,14 @@
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>
-                            <TextBlock FontFamily="Cascadia Mono, Consolas"
+                            <TextBlock HorizontalAlignment="Center"
+                                       FontFamily="Cascadia Mono, Consolas"
                                        FontSize="8"
                                        FontWeight="SemiBold"
                                        Foreground="#84C0FF"
                                        Text="ACTIVE" />
                         </Border>
-                        <TextBlock VerticalAlignment="Center"
-                                   FontFamily="Cascadia Mono, Consolas"
-                                   FontSize="10"
-                                   Foreground="{Binding DataContext.MutedTextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
-                                   Text="{Binding MonitorName}"
-                                   TextTrimming="CharacterEllipsis" />
-                    </StackPanel>
+                    </Grid>
                 </Grid>
             </Border>
         </DataTemplate>
@@ -321,13 +324,6 @@
                 </DataTrigger>
                 <DataTrigger Binding="{Binding SelectedViewMode}" Value="{x:Static models:SwitcherViewMode.List}">
                     <Setter Property="ItemTemplate" Value="{StaticResource ListWindowTemplate}" />
-                    <Setter Property="ItemsPanel">
-                        <Setter.Value>
-                            <ItemsPanelTemplate>
-                                <StackPanel />
-                            </ItemsPanelTemplate>
-                        </Setter.Value>
-                    </Setter>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -354,6 +350,44 @@
                                               VerticalAlignment="Center" />
                         </Border>
                         <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#2454A3FF" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#3A54A3FF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ChromeToggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="{Binding BorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="{Binding MutedTextBrush}" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="Root"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#4A54A3FF" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Root" Property="Background" Value="#2454A3FF" />
                             </Trigger>
@@ -594,6 +628,12 @@
                                     Margin="0,0,8,0"
                                     Style="{StaticResource ChromeButtonStyle}"
                                     ToolTip="Settings" />
+                            <ToggleButton Content="&#xE718;"
+                                          AutomationProperties.Name="Always on top"
+                                          IsChecked="{Binding IsAlwaysOnTop}"
+                                          Margin="0,0,8,0"
+                                          Style="{StaticResource ChromeToggleButtonStyle}"
+                                          ToolTip="Always on top" />
                             <Button Content="&#xE72C;"
                                     Command="{Binding RefreshCommand}"
                                     Margin="0,0,8,0"
@@ -608,7 +648,62 @@
                 </Border>
 
                 <Grid Grid.Row="1" Margin="14,12,14,8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0"
+                            Height="24"
+                            Margin="4,0,4,6"
+                            Background="{Binding SegmentBackground}"
+                            BorderBrush="{Binding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="8,0">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedViewMode}" Value="{x:Static models:SwitcherViewMode.List}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="300" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="300" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       Foreground="{Binding MutedTextBrush}"
+                                       Text="앱 1" />
+                            <TextBlock Grid.Column="1"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       Foreground="{Binding MutedTextBrush}"
+                                       Text="창 제목 1" />
+                            <TextBlock Grid.Column="2"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       Foreground="{Binding MutedTextBrush}"
+                                       Text="앱 2" />
+                            <TextBlock Grid.Column="3"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       Foreground="{Binding MutedTextBrush}"
+                                       Text="창 제목 2" />
+                        </Grid>
+                    </Border>
+
                     <ListBox x:Name="WindowList"
+                             Grid.Row="1"
                              ItemsSource="{Binding VisibleWindows}"
                              MouseDoubleClick="OnWindowListMouseDoubleClick"
                              SelectedItem="{Binding SelectedWindow}"

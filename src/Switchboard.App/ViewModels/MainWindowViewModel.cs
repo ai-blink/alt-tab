@@ -19,10 +19,9 @@ public partial class MainWindowViewModel : ObservableObject
     private const double BaseGridCardWidth = 274;
     private const double BaseGridPreviewHeight = 160;
     private const double GridCaptionHeight = 28;
-    private const double BaseCompactPreviewWidth = 126;
-    private const double BaseCompactTextWidth = 148;
-    private const double BaseCompactCardHeight = 82;
-    private const double BaseListWidth = 1120;
+    private const double BaseCompactCardWidth = 224;
+    private const double BaseCompactCardHeight = 96;
+    private const double BaseListWidth = 600;
     private const double BaseListPreviewWidth = 82;
     private const double BaseListRowHeight = 54;
 
@@ -102,7 +101,6 @@ public partial class MainWindowViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(GridCardHeight))]
     [NotifyPropertyChangedFor(nameof(CompactCardWidth))]
     [NotifyPropertyChangedFor(nameof(CompactCardHeight))]
-    [NotifyPropertyChangedFor(nameof(CompactPreviewColumnWidth))]
     [NotifyPropertyChangedFor(nameof(ListWidth))]
     [NotifyPropertyChangedFor(nameof(ListRowHeight))]
     [NotifyPropertyChangedFor(nameof(ListPreviewColumnWidth))]
@@ -116,6 +114,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private bool isSettingsOpen;
+
+    [ObservableProperty]
+    private bool isAlwaysOnTop = true;
 
     public IReadOnlyList<WindowSnapshot> VisibleWindows =>
         WindowQuery.Apply(allWindows, SearchText, SelectedSortMode).ToList();
@@ -135,13 +136,11 @@ public partial class MainWindowViewModel : ObservableObject
 
     public double GridCardHeight => GridCaptionHeight + Math.Round(BaseGridPreviewHeight * ThumbnailScale);
 
-    public double CompactCardWidth => BaseCompactTextWidth + Math.Round(BaseCompactPreviewWidth * ThumbnailScale);
+    public double CompactCardWidth => Math.Round(BaseCompactCardWidth * ThumbnailScale);
 
     public double CompactCardHeight => Math.Round(BaseCompactCardHeight * ThumbnailScale);
 
-    public GridLength CompactPreviewColumnWidth => new(Math.Round(BaseCompactPreviewWidth * ThumbnailScale));
-
-    public double ListWidth => BaseListWidth + Math.Round(BaseListPreviewWidth * (ThumbnailScale - 1));
+    public double ListWidth => Math.Round(BaseListWidth * ThumbnailScale);
 
     public double ListRowHeight => Math.Round(BaseListRowHeight * ThumbnailScale);
 
@@ -245,7 +244,7 @@ public partial class MainWindowViewModel : ObservableObject
     private WindowSnapshot? PickDefaultWindow() =>
         VisibleWindows.FirstOrDefault(window => window.IsActive) ?? VisibleWindows.FirstOrDefault();
 
-    private int VerticalSelectionStep => SelectedViewMode == SwitcherViewMode.List ? 1 : GridColumnCount;
+    private int VerticalSelectionStep => GridColumnCount;
 
     private void MoveSelection(int offset) =>
         SelectedWindow = WindowSelection.Move(VisibleWindows, SelectedWindow, offset);

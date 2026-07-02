@@ -17,6 +17,7 @@ public partial class MainWindow : Window
     private const double ContentVerticalMargin = 20;
     private const double HeaderHeight = 52;
     private const double FooterHeight = 30;
+    private const double ListDetailsHeaderHeight = 30;
     private const double ItemHorizontalGap = 6;
     private const double ItemVerticalGap = 8;
     private const double SelectionFramePadding = 4;
@@ -64,6 +65,11 @@ public partial class MainWindow : Window
         {
             Dispatcher.BeginInvoke(ApplyContentSizedBounds, DispatcherPriority.Loaded);
         }
+
+        if (e.PropertyName == nameof(MainWindowViewModel.IsAlwaysOnTop))
+        {
+            Topmost = viewModel.IsAlwaysOnTop;
+        }
     }
 
     private void ApplyContentSizedBounds()
@@ -96,26 +102,28 @@ public partial class MainWindow : Window
             SwitcherViewMode.List => viewModel.ListRowHeight,
             _ => viewModel.GridCardHeight
         };
+        var detailsHeaderHeight = mode == SwitcherViewMode.List ? ListDetailsHeaderHeight : 0;
 
         var itemWidth = cardWidth + ItemHorizontalGap + SelectionFramePadding;
+        var availableColumns = Math.Max(1, (int)Math.Floor((screenWidth - (OuterMargin * 2) - ContentHorizontalMargin - LayoutSafetyPadding) / itemWidth));
         var maxColumns = mode == SwitcherViewMode.List
-            ? 1
-            : Math.Max(1, (int)Math.Floor((screenWidth - (OuterMargin * 2) - ContentHorizontalMargin - LayoutSafetyPadding) / itemWidth));
+            ? Math.Min(2, availableColumns)
+            : availableColumns;
         var preferredColumns = mode == SwitcherViewMode.List
-            ? 1
+            ? 2
             : viewModel.SelectedSizingPolicy == SwitcherSizingPolicy.Dense
                 ? maxColumns
                 : GetPreferredGridColumns(windowCount);
         var columns = Math.Clamp(preferredColumns, 1, Math.Min(windowCount, maxColumns));
 
         while (columns < Math.Min(windowCount, maxColumns) &&
-               CalculateDesiredHeight(windowCount, columns, cardHeight) > screenHeight)
+               CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight) > screenHeight)
         {
             columns++;
         }
 
         var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + LayoutSafetyPadding;
-        var desiredHeight = CalculateDesiredHeight(windowCount, columns, cardHeight);
+        var desiredHeight = CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight);
 
         return new SwitcherLayout(
             columns,
@@ -132,13 +140,14 @@ public partial class MainWindow : Window
         _ => (int)Math.Ceiling(Math.Sqrt(windowCount * 1.35))
     };
 
-    private static double CalculateDesiredHeight(int windowCount, int columns, double cardHeight)
+    private static double CalculateDesiredHeight(int windowCount, int columns, double cardHeight, double detailsHeaderHeight)
     {
         var rows = (int)Math.Ceiling(windowCount / (double)columns);
         return (OuterMargin * 2) +
             HeaderHeight +
             FooterHeight +
             ContentVerticalMargin +
+            detailsHeaderHeight +
             (rows * (cardHeight + ItemVerticalGap + SelectionFramePadding)) +
             LayoutSafetyPadding;
     }

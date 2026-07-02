@@ -21,6 +21,7 @@
 - 2026-07-02: Completed all-windows and double-click activation slice. The overlay no longer caps visible windows at 6, grid/compact/list modes scroll inside the fixed shell, cards/rows double-click through the existing foreground activation path, and DWM thumbnails use a soft contain crop plus toned letterbox background instead of aggressive cover cropping.
 - 2026-07-03: Completed count-sized overlay slice. The overlay now starts with manual centered bounds, grows to fit the current filtered window count when possible, hides the in-overlay scrollbar, and keeps the grid column count synchronized with the calculated shell size.
 - 2026-07-03: Completed compact settings panel slice. The header now has a small settings button that opens an in-overlay popover for thumbnail scale presets (`1.0x`, `1.1x`, `1.2x`), sizing policy (`Auto`, `Dense`), and default view mode candidates. Thumbnail scale enlarges card/preview dimensions while keeping the existing DWM soft contain/crop logic.
+- 2026-07-03: Completed view refinement slice. Compact mode now separates thumbnail and caption rows so titles do not overlap previews, List mode renders real two-column rows, and the header includes an `Always on top` toggle bound to overlay topmost behavior.
 
 ## Verification
 
@@ -44,6 +45,9 @@
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after settings panel and thumbnail scale changes.
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after settings panel and thumbnail scale changes.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, opened the settings panel and selected `1.2x` via UI Automation, then selected `격자` / `압축` / `목록`. Captured `notes/runs/2026-07-03_switchboard_settings_panel_smoke.png`, `notes/runs/2026-07-03_switchboard_settings_scale_1_2_smoke.png`, `notes/runs/2026-07-03_switchboard_settings_compact_smoke.png`, and `notes/runs/2026-07-03_switchboard_settings_list_smoke.png`.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after compact/list/topmost view refinements.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after compact/list/topmost view refinements.
+- Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, selected Compact and List modes via UI Automation, and captured `notes/runs/2026-07-03_switchboard_view_refinements_compact_smoke.png` plus `notes/runs/2026-07-03_switchboard_view_refinements_list_two_column_smoke.png`.
 
 ## Blockers
 

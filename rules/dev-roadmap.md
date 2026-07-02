@@ -16,5 +16,6 @@
 | done | Show all windows with in-overlay scrolling, soft DWM thumbnail fit, and double-click activation. | `notes/runs/2026-07-02_switchboard_all_windows_list_smoke.png` |
 | done | Size the overlay and grid columns to the current window count instead of relying on visible scrolling. | `notes/runs/2026-07-02_switchboard_count_sized_desktop_smoke.png` |
 | done | Add compact in-overlay settings for thumbnail scale, sizing policy, and default view mode candidates. | `notes/runs/2026-07-03_switchboard_settings_panel_smoke.png` |
+| done | Refine Compact/List modes and add an Always on top toggle. | `notes/runs/2026-07-03_switchboard_view_refinements_list_two_column_smoke.png` |
 | later | Foreground activation fallback UX. | Handle Windows foreground-lock failures gracefully |
 | later | Settings persistence and favorite windows. | JSON or LiteDB decision |
