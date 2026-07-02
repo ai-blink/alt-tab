@@ -7,8 +7,12 @@ namespace Switchboard.App;
 
 public partial class MainWindow : Window
 {
+    private readonly MainWindowViewModel viewModel;
+
     public MainWindow(MainWindowViewModel viewModel)
     {
+        this.viewModel = viewModel;
+
         InitializeComponent();
         DataContext = viewModel;
 
@@ -26,19 +30,66 @@ public partial class MainWindow : Window
             {
                 Activate();
                 Focus();
+                WindowList.Focus();
             }),
             DispatcherPriority.ApplicationIdle);
     }
 
     private void OnPreviewKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Escape)
+        switch (e.Key)
         {
-            return;
-        }
+            case Key.Escape:
+                Close();
+                e.Handled = true;
+                return;
 
-        Close();
-        e.Handled = true;
+            case Key.Tab:
+                MoveSelection((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift
+                    ? viewModel.SelectPreviousWindow
+                    : viewModel.SelectNextWindow);
+                e.Handled = true;
+                return;
+
+            case Key.Left:
+                MoveSelection(viewModel.SelectPreviousWindow);
+                e.Handled = true;
+                return;
+
+            case Key.Right:
+                MoveSelection(viewModel.SelectNextWindow);
+                e.Handled = true;
+                return;
+
+            case Key.Up:
+                MoveSelection(viewModel.SelectWindowAbove);
+                e.Handled = true;
+                return;
+
+            case Key.Down:
+                MoveSelection(viewModel.SelectWindowBelow);
+                e.Handled = true;
+                return;
+
+            case Key.Return:
+                if (viewModel.TryActivateSelectedWindow())
+                {
+                    Close();
+                }
+
+                e.Handled = true;
+                return;
+        }
+    }
+
+    private void MoveSelection(Action select)
+    {
+        select();
+
+        if (viewModel.SelectedWindow is not null)
+        {
+            WindowList.ScrollIntoView(viewModel.SelectedWindow);
+        }
     }
 
     private void OnChromeMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

@@ -15,12 +15,16 @@ public enum OverlayThemeMode
 
 public partial class MainWindowViewModel : ObservableObject
 {
+    private const int GridColumnCount = 3;
+
     private readonly IWindowCatalog windowCatalog;
+    private readonly IWindowActivator windowActivator;
     private IReadOnlyList<WindowSnapshot> allWindows;
 
-    public MainWindowViewModel(IWindowCatalog windowCatalog)
+    public MainWindowViewModel(IWindowCatalog windowCatalog, IWindowActivator windowActivator)
     {
         this.windowCatalog = windowCatalog;
+        this.windowActivator = windowActivator;
         allWindows = windowCatalog.GetOpenWindows();
         SelectedWindow = PickDefaultWindow();
     }
@@ -137,6 +141,17 @@ public partial class MainWindowViewModel : ObservableObject
 
     public double ShellShadowOpacity => SelectedAppearanceMode == OverlayThemeMode.Transparent ? 0.45 : 0.28;
 
+    public void SelectNextWindow() => MoveSelection(1);
+
+    public void SelectPreviousWindow() => MoveSelection(-1);
+
+    public void SelectWindowAbove() => MoveSelection(-GridColumnCount);
+
+    public void SelectWindowBelow() => MoveSelection(GridColumnCount);
+
+    public bool TryActivateSelectedWindow() =>
+        SelectedWindow is not null && windowActivator.TryActivate(SelectedWindow);
+
     [RelayCommand]
     private void Refresh()
     {
@@ -148,6 +163,16 @@ public partial class MainWindowViewModel : ObservableObject
 
     private WindowSnapshot? PickDefaultWindow() =>
         VisibleWindows.FirstOrDefault(window => window.IsActive) ?? VisibleWindows.FirstOrDefault();
+
+    private void MoveSelection(int offset) =>
+        SelectedWindow = WindowSelection.Move(VisibleWindows, SelectedWindow, offset);
+
+    private void EnsureSelectedWindowIsVisible() =>
+        SelectedWindow = WindowSelection.EnsureVisible(VisibleWindows, SelectedWindow);
+
+    partial void OnSearchTextChanged(string? value) => EnsureSelectedWindowIsVisible();
+
+    partial void OnSelectedSortModeChanged(WindowSortMode value) => EnsureSelectedWindowIsVisible();
 
     partial void OnSelectedAppearanceModeChanged(OverlayThemeMode value)
     {

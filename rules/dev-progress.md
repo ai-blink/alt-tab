@@ -16,16 +16,20 @@
 - 2026-07-02: Connected the overlay to real Win32 top-level window enumeration and DWM thumbnails. The compact overlay now shows live window titles/process names and DWM-rendered previews for the first 6 windows.
 - 2026-07-02: Rebalanced cards so thumbnails are the primary surface. Titles are now a single-line bottom caption instead of taking half the card.
 - 2026-07-02: Doubled the thumbnail-first card height while preserving the 3x2 switcher layout. The DWM preview area is now the dominant surface, with titles kept as compact captions.
+- 2026-07-02: Completed keyboard selection and foreground activation slice. Tab/Shift+Tab and arrow keys move the selected card, Enter requests foreground activation for the selected real window, and Esc still closes the overlay.
 
 ## Verification
 
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors.
 - `dotnet test Switchboard.slnx --nologo`: passed, 2 tests.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after keyboard activation changes.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after adding selection helper coverage.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_visible_smoke.png`, and confirmed visible nav, top bar, 3-column mock cards, active selection ring, and footer.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_compact_transparent_smoke.png`, and confirmed compact transparent overlay layout with 3x2 cards and appearance mode controls.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_dwm_thumbnail_smoke.png`, and confirmed real window enumeration plus DWM thumbnail previews.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_thumbnail_first_smoke.png`, and confirmed thumbnail-first cards with compact bottom captions.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_thumbnail_double_height_smoke.png`, and confirmed roughly doubled thumbnail height with compact captions.
+- Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_keyboard_activation_smoke.png`, and confirmed the compact overlay still opens with real windows and visible selected-card focus.
 
 ## Blockers
 
@@ -33,11 +37,11 @@
 
 ## Next
 
-- Add keyboard selection/focus behavior: Tab/arrows cycle, Enter activates selected window.
 - Add real view-specific templates for Compact and List modes after the overlay interaction model is stable.
 
 ## Follow-Up
 
 - FOLLOW_UP: Improve thumbnail polish for transparent mode once real activation/hotkey behavior is in place.
 - FOLLOW_UP: Persist the selected appearance mode once settings persistence exists.
+- FOLLOW_UP: Add a user-visible fallback for Windows foreground-lock cases where `SetForegroundWindow` refuses activation even after the overlay requests it.
 - IGNORE_FOR_V1: Mini dock, timeline, advanced virtual desktop management, and automatic window placement remain out of scope.

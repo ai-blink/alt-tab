@@ -6,15 +6,34 @@ using Switchboard.Core.Services;
 
 namespace Switchboard.Native;
 
-public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCatalog
+public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCatalog, IWindowActivator
 {
     private const int GwlExStyle = -20;
     private const uint GwOwner = 4;
     private const long WsExToolWindow = 0x00000080L;
     private const long WsExAppWindow = 0x00040000L;
     private const int DwmwaCloaked = 14;
+    private const int SwRestore = 9;
 
     public IReadOnlyList<WindowSnapshot> GetOpenWindows() => GetTopLevelWindows();
+
+    public bool TryActivate(WindowSnapshot window)
+    {
+        if (window.Handle == 0 || !IsWindow(window.Handle))
+        {
+            return false;
+        }
+
+        if (IsIconic(window.Handle))
+        {
+            _ = ShowWindow(window.Handle, SwRestore);
+        }
+
+        _ = BringWindowToTop(window.Handle);
+        var foregroundRequested = SetForegroundWindow(window.Handle);
+
+        return foregroundRequested || GetForegroundWindow() == window.Handle;
+    }
 
     public IReadOnlyList<WindowSnapshot> GetTopLevelWindows()
     {
@@ -190,6 +209,21 @@ public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCa
 
     [DllImport("user32.dll")]
     private static extern bool IsWindowVisible(nint hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool IsWindow(nint hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool IsIconic(nint hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(nint hWnd, int nCmdShow);
+
+    [DllImport("user32.dll")]
+    private static extern bool BringWindowToTop(nint hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(nint hWnd);
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern int GetWindowText(nint hWnd, StringBuilder lpString, int nMaxCount);

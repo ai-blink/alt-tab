@@ -270,7 +270,8 @@
                 </Border>
 
                 <Grid Grid.Row="1" Margin="14,12,14,8">
-                    <ListBox Background="Transparent"
+                    <ListBox x:Name="WindowList"
+                             Background="Transparent"
                              BorderThickness="0"
                              ItemContainerStyle="{StaticResource WindowCardItemStyle}"
                              ItemsSource="{Binding VisibleWindows}"
