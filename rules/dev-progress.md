@@ -20,6 +20,7 @@
 - 2026-07-02: Completed view mode templates slice. The header now exposes `격자` / `압축` / `목록` view modes, each backed by a distinct WPF `DataTemplate` while keeping the same compact overlay size and real DWM thumbnail source.
 - 2026-07-02: Completed all-windows and double-click activation slice. The overlay no longer caps visible windows at 6, grid/compact/list modes scroll inside the fixed shell, cards/rows double-click through the existing foreground activation path, and DWM thumbnails use a soft contain crop plus toned letterbox background instead of aggressive cover cropping.
 - 2026-07-03: Completed count-sized overlay slice. The overlay now starts with manual centered bounds, grows to fit the current filtered window count when possible, hides the in-overlay scrollbar, and keeps the grid column count synchronized with the calculated shell size.
+- 2026-07-03: Completed compact settings panel slice. The header now has a small settings button that opens an in-overlay popover for thumbnail scale presets (`1.0x`, `1.1x`, `1.2x`), sizing policy (`Auto`, `Dense`), and default view mode candidates. Thumbnail scale enlarges card/preview dimensions while keeping the existing DWM soft contain/crop logic.
 
 ## Verification
 
@@ -40,14 +41,17 @@
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after all-windows/double-click/thumbnail changes.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, selected `격자` / `압축` / `목록` via UI Automation, captured `notes/runs/2026-07-02_switchboard_all_windows_grid_smoke.png`, `notes/runs/2026-07-02_switchboard_all_windows_compact_smoke.png`, and `notes/runs/2026-07-02_switchboard_all_windows_list_smoke.png`, and confirmed the overlay showed 12 windows on the current desktop with fixed shell size, scrolling, live DWM thumbnails, and 3-column grid/compact layouts.
 - Manual visual smoke: captured `notes/runs/2026-07-02_switchboard_count_sized_desktop_smoke.png` after `0a15adf` and confirmed the overlay expands with the available desktop bounds instead of depending on a visible scrollbar.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after settings panel and thumbnail scale changes.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after settings panel and thumbnail scale changes.
+- Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, opened the settings panel and selected `1.2x` via UI Automation, then selected `격자` / `압축` / `목록`. Captured `notes/runs/2026-07-03_switchboard_settings_panel_smoke.png`, `notes/runs/2026-07-03_switchboard_settings_scale_1_2_smoke.png`, `notes/runs/2026-07-03_switchboard_settings_compact_smoke.png`, and `notes/runs/2026-07-03_switchboard_settings_list_smoke.png`.
 
 ## Blockers
 
-- None for the current mock shell visibility slice.
+- None for the current settings panel slice.
 
 ## Next
 
-- Add a small in-overlay settings button/panel for thumbnail scale, grid or auto sizing policy, and default view mode candidates.
+- Begin settings persistence for appearance, thumbnail scale, sizing policy, and default view mode, or design the activation fallback UX for Windows foreground-lock failures.
 
 ## Follow-Up
 

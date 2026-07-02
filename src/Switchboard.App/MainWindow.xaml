@@ -23,10 +23,11 @@
         UseLayoutRounding="True">
     <Window.Resources>
         <app:EnumEqualsConverter x:Key="EnumEqualsConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
         <DataTemplate x:Key="GridWindowTemplate">
-            <Border Width="274"
-                    Height="188"
+            <Border Width="{Binding DataContext.GridCardWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Height="{Binding DataContext.GridCardHeight, RelativeSource={RelativeSource AncestorType=Window}}"
                     Background="{Binding DataContext.CardBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderBrush="{Binding DataContext.BorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderThickness="1"
@@ -129,8 +130,8 @@
         </DataTemplate>
 
         <DataTemplate x:Key="CompactWindowTemplate">
-            <Border Width="274"
-                    Height="82"
+            <Border Width="{Binding DataContext.CompactCardWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Height="{Binding DataContext.CompactCardHeight, RelativeSource={RelativeSource AncestorType=Window}}"
                     Background="{Binding DataContext.CardBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderBrush="{Binding DataContext.BorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderThickness="1"
@@ -138,7 +139,7 @@
                     ClipToBounds="True">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="126" />
+                        <ColumnDefinition Width="{Binding DataContext.CompactPreviewColumnWidth, RelativeSource={RelativeSource AncestorType=Window}}" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
@@ -222,7 +223,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="ListWindowTemplate">
-            <Border Height="54"
+            <Border Height="{Binding DataContext.ListRowHeight, RelativeSource={RelativeSource AncestorType=Window}}"
                     Background="{Binding DataContext.CardBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderBrush="{Binding DataContext.BorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderThickness="1"
@@ -230,7 +231,7 @@
                     ClipToBounds="True">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="82" />
+                        <ColumnDefinition Width="{Binding DataContext.ListPreviewColumnWidth, RelativeSource={RelativeSource AncestorType=Window}}" />
                         <ColumnDefinition Width="128" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="112" />
@@ -457,7 +458,6 @@
                         Background="{Binding HeaderBackground}"
                         BorderBrush="{Binding BorderBrush}"
                         BorderThickness="0,0,0,1"
-                        MouseLeftButtonDown="OnChromeMouseLeftButtonDown"
                         Padding="14,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -467,7 +467,8 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0"
-                                    VerticalAlignment="Center">
+                                    VerticalAlignment="Center"
+                                    MouseLeftButtonDown="OnChromeMouseLeftButtonDown">
                             <TextBlock FontSize="16"
                                        FontWeight="SemiBold"
                                        Foreground="{Binding TextBrush}"
@@ -587,6 +588,12 @@
                                            Text="{Binding SelectedSortMode}" />
                             </Border>
 
+                            <Button Content="&#xE713;"
+                                    AutomationProperties.Name="Settings"
+                                    Command="{Binding ToggleSettingsCommand}"
+                                    Margin="0,0,8,0"
+                                    Style="{StaticResource ChromeButtonStyle}"
+                                    ToolTip="Settings" />
                             <Button Content="&#xE72C;"
                                     Command="{Binding RefreshCommand}"
                                     Margin="0,0,8,0"
@@ -635,6 +642,158 @@
                         </StackPanel>
                     </DockPanel>
                 </Border>
+            </Grid>
+        </Border>
+
+        <Border Width="334"
+                Margin="0,48,46,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Panel.ZIndex="10"
+                Background="{Binding HeaderBackground}"
+                BorderBrush="{Binding BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="9"
+                Padding="12"
+                Visibility="{Binding IsSettingsOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="24"
+                                  Direction="270"
+                                  Opacity="0.34"
+                                  ShadowDepth="8"
+                                  Color="#05070A" />
+            </Border.Effect>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="12" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="12" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="12" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0"
+                           LastChildFill="True">
+                    <Button DockPanel.Dock="Right"
+                            Width="26"
+                            Height="26"
+                            Command="{Binding CloseSettingsCommand}"
+                            Content="&#xE711;"
+                            Style="{StaticResource ChromeButtonStyle}"
+                            ToolTip="Close settings" />
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Foreground="{Binding TextBrush}"
+                               Text="설정" />
+                </DockPanel>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="76" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="{Binding MutedTextBrush}"
+                               Text="섬네일" />
+                    <Border Grid.Column="1"
+                            Height="30"
+                            Background="{Binding SegmentBackground}"
+                            BorderBrush="{Binding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="7"
+                            Padding="1">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="1.0x"
+                                         GroupName="ThumbnailScale"
+                                         IsChecked="{Binding SelectedThumbnailScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Normal}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="1.1x"
+                                         GroupName="ThumbnailScale"
+                                         IsChecked="{Binding SelectedThumbnailScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Large}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="1.2x"
+                                         GroupName="ThumbnailScale"
+                                         IsChecked="{Binding SelectedThumbnailScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=ExtraLarge}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="76" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="{Binding MutedTextBrush}"
+                               Text="크기 정책" />
+                    <Border Grid.Column="1"
+                            Height="30"
+                            Background="{Binding SegmentBackground}"
+                            BorderBrush="{Binding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="7"
+                            Padding="1">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="자동"
+                                         GroupName="SizingPolicy"
+                                         IsChecked="{Binding SelectedSizingPolicy, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Auto}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="조밀"
+                                         GroupName="SizingPolicy"
+                                         IsChecked="{Binding SelectedSizingPolicy, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Dense}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="76" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="{Binding MutedTextBrush}"
+                               Text="기본 보기" />
+                    <Border Grid.Column="1"
+                            Height="30"
+                            Background="{Binding SegmentBackground}"
+                            BorderBrush="{Binding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="7"
+                            Padding="1">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="격자"
+                                         GroupName="DefaultViewMode"
+                                         IsChecked="{Binding DefaultViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Grid}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="압축"
+                                         GroupName="DefaultViewMode"
+                                         IsChecked="{Binding DefaultViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Compact}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="목록"
+                                         GroupName="DefaultViewMode"
+                                         IsChecked="{Binding DefaultViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=List}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
             </Grid>
         </Border>
     </Grid>

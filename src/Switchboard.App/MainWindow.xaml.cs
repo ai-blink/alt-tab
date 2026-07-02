@@ -1,7 +1,9 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Switchboard.Core.Models;
 using Switchboard.App.ViewModels;
@@ -15,12 +17,6 @@ public partial class MainWindow : Window
     private const double ContentVerticalMargin = 20;
     private const double HeaderHeight = 52;
     private const double FooterHeight = 30;
-    private const double GridCardWidth = 274;
-    private const double GridCardHeight = 188;
-    private const double CompactCardWidth = 274;
-    private const double CompactCardHeight = 82;
-    private const double ListWidth = 1120;
-    private const double ListRowHeight = 54;
     private const double ItemHorizontalGap = 6;
     private const double ItemVerticalGap = 8;
     private const double SelectionFramePadding = 4;
@@ -61,7 +57,10 @@ public partial class MainWindow : Window
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is nameof(MainWindowViewModel.VisibleWindows) or nameof(MainWindowViewModel.SelectedViewMode))
+        if (e.PropertyName is nameof(MainWindowViewModel.VisibleWindows) or
+            nameof(MainWindowViewModel.SelectedViewMode) or
+            nameof(MainWindowViewModel.SelectedThumbnailScalePreset) or
+            nameof(MainWindowViewModel.SelectedSizingPolicy))
         {
             Dispatcher.BeginInvoke(ApplyContentSizedBounds, DispatcherPriority.Loaded);
         }
@@ -87,15 +86,15 @@ public partial class MainWindow : Window
         var mode = viewModel.SelectedViewMode;
         var cardWidth = mode switch
         {
-            SwitcherViewMode.Compact => CompactCardWidth,
-            SwitcherViewMode.List => ListWidth,
-            _ => GridCardWidth
+            SwitcherViewMode.Compact => viewModel.CompactCardWidth,
+            SwitcherViewMode.List => viewModel.ListWidth,
+            _ => viewModel.GridCardWidth
         };
         var cardHeight = mode switch
         {
-            SwitcherViewMode.Compact => CompactCardHeight,
-            SwitcherViewMode.List => ListRowHeight,
-            _ => GridCardHeight
+            SwitcherViewMode.Compact => viewModel.CompactCardHeight,
+            SwitcherViewMode.List => viewModel.ListRowHeight,
+            _ => viewModel.GridCardHeight
         };
 
         var itemWidth = cardWidth + ItemHorizontalGap + SelectionFramePadding;
@@ -104,7 +103,9 @@ public partial class MainWindow : Window
             : Math.Max(1, (int)Math.Floor((screenWidth - (OuterMargin * 2) - ContentHorizontalMargin - LayoutSafetyPadding) / itemWidth));
         var preferredColumns = mode == SwitcherViewMode.List
             ? 1
-            : GetPreferredGridColumns(windowCount);
+            : viewModel.SelectedSizingPolicy == SwitcherSizingPolicy.Dense
+                ? maxColumns
+                : GetPreferredGridColumns(windowCount);
         var columns = Math.Clamp(preferredColumns, 1, Math.Min(windowCount, maxColumns));
 
         while (columns < Math.Min(windowCount, maxColumns) &&
@@ -225,7 +226,32 @@ public partial class MainWindow : Window
             return;
         }
 
+        if (e.OriginalSource is DependencyObject source && IsInteractiveHeaderElement(source))
+        {
+            return;
+        }
+
         DragMove();
+    }
+
+    private static bool IsInteractiveHeaderElement(DependencyObject source) =>
+        FindAncestor<ButtonBase>(source) is not null ||
+        FindAncestor<TextBoxBase>(source) is not null;
+
+    private static T? FindAncestor<T>(DependencyObject? source)
+        where T : DependencyObject
+    {
+        while (source is not null)
+        {
+            if (source is T match)
+            {
+                return match;
+            }
+
+            source = VisualTreeHelper.GetParent(source) ?? LogicalTreeHelper.GetParent(source);
+        }
+
+        return null;
     }
 
     private void OnCloseClick(object sender, RoutedEventArgs e) => Close();

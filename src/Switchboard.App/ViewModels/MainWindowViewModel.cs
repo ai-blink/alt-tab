@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Windows;
 using System.Windows.Media;
 using Switchboard.Core.Models;
 using Switchboard.Core.Services;
@@ -15,6 +16,16 @@ public enum OverlayThemeMode
 
 public partial class MainWindowViewModel : ObservableObject
 {
+    private const double BaseGridCardWidth = 274;
+    private const double BaseGridPreviewHeight = 160;
+    private const double GridCaptionHeight = 28;
+    private const double BaseCompactPreviewWidth = 126;
+    private const double BaseCompactTextWidth = 148;
+    private const double BaseCompactCardHeight = 82;
+    private const double BaseListWidth = 1120;
+    private const double BaseListPreviewWidth = 82;
+    private const double BaseListRowHeight = 54;
+
     private readonly IWindowCatalog windowCatalog;
     private readonly IWindowActivator windowActivator;
     private IReadOnlyList<WindowSnapshot> allWindows;
@@ -50,6 +61,19 @@ public partial class MainWindowViewModel : ObservableObject
         OverlayThemeMode.Light
     ];
 
+    public IReadOnlyList<ThumbnailScalePreset> ThumbnailScalePresets { get; } =
+    [
+        ThumbnailScalePreset.Normal,
+        ThumbnailScalePreset.Large,
+        ThumbnailScalePreset.ExtraLarge
+    ];
+
+    public IReadOnlyList<SwitcherSizingPolicy> SizingPolicies { get; } =
+    [
+        SwitcherSizingPolicy.Auto,
+        SwitcherSizingPolicy.Dense
+    ];
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(VisibleWindows))]
     [NotifyPropertyChangedFor(nameof(WindowCountLabel))]
@@ -71,10 +95,57 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private int gridColumnCount = 3;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ThumbnailScale))]
+    [NotifyPropertyChangedFor(nameof(ThumbnailScaleLabel))]
+    [NotifyPropertyChangedFor(nameof(GridCardWidth))]
+    [NotifyPropertyChangedFor(nameof(GridCardHeight))]
+    [NotifyPropertyChangedFor(nameof(CompactCardWidth))]
+    [NotifyPropertyChangedFor(nameof(CompactCardHeight))]
+    [NotifyPropertyChangedFor(nameof(CompactPreviewColumnWidth))]
+    [NotifyPropertyChangedFor(nameof(ListWidth))]
+    [NotifyPropertyChangedFor(nameof(ListRowHeight))]
+    [NotifyPropertyChangedFor(nameof(ListPreviewColumnWidth))]
+    private ThumbnailScalePreset selectedThumbnailScalePreset = ThumbnailScalePreset.Normal;
+
+    [ObservableProperty]
+    private SwitcherSizingPolicy selectedSizingPolicy = SwitcherSizingPolicy.Auto;
+
+    [ObservableProperty]
+    private SwitcherViewMode defaultViewMode = SwitcherViewMode.Grid;
+
+    [ObservableProperty]
+    private bool isSettingsOpen;
+
     public IReadOnlyList<WindowSnapshot> VisibleWindows =>
         WindowQuery.Apply(allWindows, SearchText, SelectedSortMode).ToList();
 
     public string WindowCountLabel => $"{VisibleWindows.Count} windows";
+
+    public double ThumbnailScale => SelectedThumbnailScalePreset switch
+    {
+        ThumbnailScalePreset.Large => 1.1,
+        ThumbnailScalePreset.ExtraLarge => 1.2,
+        _ => 1.0
+    };
+
+    public string ThumbnailScaleLabel => $"{ThumbnailScale:0.0}x";
+
+    public double GridCardWidth => Math.Round(BaseGridCardWidth * ThumbnailScale);
+
+    public double GridCardHeight => GridCaptionHeight + Math.Round(BaseGridPreviewHeight * ThumbnailScale);
+
+    public double CompactCardWidth => BaseCompactTextWidth + Math.Round(BaseCompactPreviewWidth * ThumbnailScale);
+
+    public double CompactCardHeight => Math.Round(BaseCompactCardHeight * ThumbnailScale);
+
+    public GridLength CompactPreviewColumnWidth => new(Math.Round(BaseCompactPreviewWidth * ThumbnailScale));
+
+    public double ListWidth => BaseListWidth + Math.Round(BaseListPreviewWidth * (ThumbnailScale - 1));
+
+    public double ListRowHeight => Math.Round(BaseListRowHeight * ThumbnailScale);
+
+    public GridLength ListPreviewColumnWidth => new(Math.Round(BaseListPreviewWidth * ThumbnailScale));
 
     public Brush ShellBackground => SelectedAppearanceMode switch
     {
@@ -155,6 +226,12 @@ public partial class MainWindowViewModel : ObservableObject
 
     public void SetGridColumnCount(int columnCount) =>
         GridColumnCount = Math.Max(1, columnCount);
+
+    [RelayCommand]
+    private void ToggleSettings() => IsSettingsOpen = !IsSettingsOpen;
+
+    [RelayCommand]
+    private void CloseSettings() => IsSettingsOpen = false;
 
     [RelayCommand]
     private void Refresh()
