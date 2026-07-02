@@ -83,9 +83,12 @@ public partial class MainWindowViewModel : ObservableObject
 
     public IReadOnlyList<SwitcherHotkeyPreset> HotkeyPresets { get; } =
     [
-        SwitcherHotkeyPreset.AltSpace,
-        SwitcherHotkeyPreset.CtrlSpace,
-        SwitcherHotkeyPreset.CtrlAltTab
+        SwitcherHotkeyPreset.CtrlAltSpace,
+        SwitcherHotkeyPreset.CtrlShiftSpace,
+        SwitcherHotkeyPreset.CtrlAltTab,
+        SwitcherHotkeyPreset.CtrlAltS,
+        SwitcherHotkeyPreset.CtrlShiftS,
+        SwitcherHotkeyPreset.CtrlAltW
     ];
 
     [ObservableProperty]
@@ -131,7 +134,7 @@ public partial class MainWindowViewModel : ObservableObject
     private SwitcherViewMode defaultViewMode = SwitcherViewMode.Grid;
 
     [ObservableProperty]
-    private SwitcherHotkeyPreset selectedHotkeyPreset = SwitcherHotkeyPreset.AltSpace;
+    private SwitcherHotkeyPreset selectedHotkeyPreset = SwitcherHotkeyPreset.CtrlAltSpace;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AreDwmThumbnailsVisible))]

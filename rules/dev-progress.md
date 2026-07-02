@@ -22,7 +22,7 @@
 - 2026-07-03: Completed count-sized overlay slice. The overlay now starts with manual centered bounds, grows to fit the current filtered window count when possible, hides the in-overlay scrollbar, and keeps the grid column count synchronized with the calculated shell size.
 - 2026-07-03: Completed compact settings panel slice. The header now has a small settings button that opens an in-overlay popover for thumbnail scale presets (`1.0x`, `1.1x`, `1.2x`), sizing policy (`Auto`, `Dense`), and default view mode candidates. Thumbnail scale enlarges card/preview dimensions while keeping the existing DWM soft contain/crop logic.
 - 2026-07-03: Completed view refinement slice. Compact mode now separates thumbnail and caption rows so titles do not overlap previews, List mode renders real two-column rows, and the header includes an `Always on top` toggle bound to overlay topmost behavior.
-- 2026-07-03: Completed opacity and hotkey settings slice. The settings popover now includes overlay opacity presets (`25%`, `50%`, `75%`, `90%`) and hotkey candidates (`Alt+Space`, `Ctrl+Space`, `Ctrl+Alt+Tab`) backed by Core model enums for later persistence. DWM thumbnails are temporarily unregistered while settings is open so native thumbnail composition does not draw above the popover.
+- 2026-07-03: Completed opacity and hotkey settings slice. The settings popover now includes overlay opacity presets (`25%`, `50%`, `75%`, `90%`) and three-key hotkey candidates (`Ctrl+Alt+Space`, `Ctrl+Shift+Space`, `Ctrl+Alt+Tab`, `Ctrl+Alt+S`, `Ctrl+Shift+S`, `Ctrl+Alt+W`) backed by Core model enums for later persistence. DWM thumbnails are temporarily unregistered while settings is open so native thumbnail composition does not draw above the popover.
 
 ## Verification
 

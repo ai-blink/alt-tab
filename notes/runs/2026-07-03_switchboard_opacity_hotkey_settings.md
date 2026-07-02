@@ -10,7 +10,7 @@ Add compact settings for overlay opacity and switcher hotkey candidates without 
 
 - Settings popover exposes overlay opacity options: `25%`, `50%`, `75%`, and `90%`.
 - Opacity changes scale shell/header/card/search/segment background alpha without changing the existing Transparent/Dark/Light appearance modes.
-- Settings popover exposes hotkey candidates: `Alt+Space`, `Ctrl+Space`, and `Ctrl+Alt+Tab`.
+- Settings popover exposes three-key hotkey candidates: `Ctrl+Alt+Space`, `Ctrl+Shift+Space`, `Ctrl+Alt+Tab`, `Ctrl+Alt+S`, `Ctrl+Shift+S`, and `Ctrl+Alt+W`.
 - State is represented with Core model enums so later settings persistence can attach to the same surface.
 - Grid, Compact, and List views still render.
 - Build, tests, and runtime visual smoke pass.
