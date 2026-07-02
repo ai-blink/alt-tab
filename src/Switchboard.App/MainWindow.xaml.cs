@@ -33,6 +33,7 @@ public partial class MainWindow : Window
         DataContext = viewModel;
 
         Loaded += OnLoaded;
+        Closing += OnClosing;
         Closed += OnClosed;
         PreviewKeyDown += OnPreviewKeyDown;
         viewModel.PropertyChanged += OnViewModelPropertyChanged;
@@ -51,6 +52,28 @@ public partial class MainWindow : Window
                 WindowList.Focus();
             }),
             DispatcherPriority.ApplicationIdle);
+    }
+
+    public void ShowOverlay()
+    {
+        ApplyContentSizedBounds();
+        ShowInTaskbar = true;
+        Show();
+        Activate();
+        Focus();
+        WindowList.Focus();
+    }
+
+    private void OnClosing(object? sender, CancelEventArgs e)
+    {
+        if (System.Windows.Application.Current is App { IsExitRequested: true })
+        {
+            return;
+        }
+
+        e.Cancel = true;
+        ShowInTaskbar = false;
+        Hide();
     }
 
     private void OnClosed(object? sender, EventArgs e) =>
@@ -154,7 +177,7 @@ public partial class MainWindow : Window
 
     private readonly record struct SwitcherLayout(int Columns, double Width, double Height);
 
-    private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+    private void OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
         switch (e.Key)
         {
@@ -244,8 +267,8 @@ public partial class MainWindow : Window
     }
 
     private static bool IsInteractiveHeaderElement(DependencyObject source) =>
-        FindAncestor<ButtonBase>(source) is not null ||
-        FindAncestor<TextBoxBase>(source) is not null;
+        FindAncestor<System.Windows.Controls.Primitives.ButtonBase>(source) is not null ||
+        FindAncestor<System.Windows.Controls.Primitives.TextBoxBase>(source) is not null;
 
     private static T? FindAncestor<T>(DependencyObject? source)
         where T : DependencyObject

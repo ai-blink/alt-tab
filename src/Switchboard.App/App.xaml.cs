@@ -4,12 +4,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Switchboard.App.ViewModels;
 using Switchboard.Core.Services;
 using Switchboard.Native;
+using Drawing = System.Drawing;
+using Forms = System.Windows.Forms;
 
 namespace Switchboard.App;
 
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
     private ServiceProvider? serviceProvider;
+    private Forms.NotifyIcon? notifyIcon;
+
+    public bool IsExitRequested { get; private set; }
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -26,15 +31,53 @@ public partial class App : Application
 
         serviceProvider = services.BuildServiceProvider();
 
-        ShutdownMode = ShutdownMode.OnMainWindowClose;
+        ShutdownMode = ShutdownMode.OnExplicitShutdown;
+        InitializeTrayIcon();
+
         MainWindow = serviceProvider.GetRequiredService<MainWindow>();
-        MainWindow.Show();
+        ShowOverlay();
     }
 
     protected override void OnExit(ExitEventArgs e)
     {
+        notifyIcon?.Dispose();
         serviceProvider?.Dispose();
         base.OnExit(e);
+    }
+
+    public void ShowOverlay()
+    {
+        if (MainWindow is MainWindow mainWindow)
+        {
+            mainWindow.ShowOverlay();
+        }
+    }
+
+    public void ExitFromTray()
+    {
+        IsExitRequested = true;
+        notifyIcon?.Dispose();
+        notifyIcon = null;
+        Shutdown();
+    }
+
+    private void InitializeTrayIcon()
+    {
+        var openItem = new Forms.ToolStripMenuItem("Open Switchboard", null, (_, _) => Dispatcher.Invoke(ShowOverlay));
+        var exitItem = new Forms.ToolStripMenuItem("Exit", null, (_, _) => Dispatcher.Invoke(ExitFromTray));
+
+        notifyIcon = new Forms.NotifyIcon
+        {
+            Icon = Drawing.SystemIcons.Application,
+            Text = "Switchboard",
+            Visible = true,
+            ContextMenuStrip = new Forms.ContextMenuStrip()
+        };
+
+        notifyIcon.ContextMenuStrip.Items.Add(openItem);
+        notifyIcon.ContextMenuStrip.Items.Add(new Forms.ToolStripSeparator());
+        notifyIcon.ContextMenuStrip.Items.Add(exitItem);
+        notifyIcon.DoubleClick += (_, _) => Dispatcher.Invoke(ShowOverlay);
     }
 
     private static void EnsureWindowsEnvironmentVariables()

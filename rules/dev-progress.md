@@ -23,6 +23,7 @@
 - 2026-07-03: Completed compact settings panel slice. The header now has a small settings button that opens an in-overlay popover for thumbnail scale presets (`1.0x`, `1.1x`, `1.2x`), sizing policy (`Auto`, `Dense`), and default view mode candidates. Thumbnail scale enlarges card/preview dimensions while keeping the existing DWM soft contain/crop logic.
 - 2026-07-03: Completed view refinement slice. Compact mode now separates thumbnail and caption rows so titles do not overlap previews, List mode renders real two-column rows, and the header includes an `Always on top` toggle bound to overlay topmost behavior.
 - 2026-07-03: Completed opacity and hotkey settings slice. The settings popover now includes overlay opacity presets (`25%`, `50%`, `75%`, `90%`) and three hotkey combo boxes for first modifier, second modifier, and key, backed by Core model enums for later persistence. DWM thumbnails are temporarily unregistered while settings is open so native thumbnail composition does not draw above the popover.
+- 2026-07-03: Added tray residency groundwork for global hotkeys. Closing the overlay now hides it instead of shutting down the process, the app owns a tray icon with Open and Exit actions, and only tray Exit requests application shutdown.
 
 ## Verification
 
@@ -53,6 +54,9 @@
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after opacity/hotkey settings changes.
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after opacity/hotkey settings changes.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, opened settings via UI Automation, selected `80%`, selected `Ctrl+Space`, selected Grid/Compact/List, and captured `notes/runs/2026-07-03_switchboard_opacity_hotkey_settings_open_smoke.png`, `notes/runs/2026-07-03_switchboard_opacity_80_smoke.png`, `notes/runs/2026-07-03_switchboard_hotkey_ctrl_space_smoke.png`, `notes/runs/2026-07-03_switchboard_opacity_hotkey_compact_smoke.png`, and `notes/runs/2026-07-03_switchboard_opacity_hotkey_list_smoke.png`.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after tray residency changes.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after tray residency changes.
+- Runtime smoke: launched `Switchboard.App.exe`, confirmed the process starts and remains resident for tray/hotkey groundwork, then stopped the test process.
 
 ## Blockers
 
@@ -60,7 +64,7 @@
 
 ## Next
 
-- Begin settings persistence for appearance, opacity, thumbnail scale, sizing policy, default view mode, always-on-top, and hotkey candidate, or design the activation fallback UX for Windows foreground-lock failures.
+- Connect selected hotkey modifier/key settings to Native global hotkey registration, begin settings persistence, or design the activation fallback UX for Windows foreground-lock failures.
 
 ## Follow-Up
 

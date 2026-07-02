@@ -146,7 +146,7 @@ public sealed class DwmThumbnailPreview : FrameworkElement
 
         var source = PresentationSource.FromVisual(window);
         var transform = source?.CompositionTarget?.TransformToDevice ?? Matrix.Identity;
-        var point = TransformToAncestor(window).Transform(new Point(0, 0));
+        var point = TransformToAncestor(window).Transform(new System.Windows.Point(0, 0));
         var left = (int)Math.Round(point.X * transform.M11);
         var top = (int)Math.Round(point.Y * transform.M22);
         var width = (int)Math.Round(ActualWidth * transform.M11);

@@ -13,7 +13,7 @@ public sealed class EnumEqualsConverter : IValueConverter
     {
         if (value is not true || parameter is null)
         {
-            return Binding.DoNothing;
+            return System.Windows.Data.Binding.DoNothing;
         }
 
         return Enum.Parse(targetType, parameter.ToString()!);

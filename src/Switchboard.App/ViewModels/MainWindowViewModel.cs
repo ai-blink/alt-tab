@@ -4,6 +4,9 @@ using System.Windows;
 using System.Windows.Media;
 using Switchboard.Core.Models;
 using Switchboard.Core.Services;
+using Brush = System.Windows.Media.Brush;
+using Color = System.Windows.Media.Color;
+using SolidColorBrush = System.Windows.Media.SolidColorBrush;
 
 namespace Switchboard.App.ViewModels;
 
