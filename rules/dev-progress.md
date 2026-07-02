@@ -22,6 +22,7 @@
 - 2026-07-03: Completed count-sized overlay slice. The overlay now starts with manual centered bounds, grows to fit the current filtered window count when possible, hides the in-overlay scrollbar, and keeps the grid column count synchronized with the calculated shell size.
 - 2026-07-03: Completed compact settings panel slice. The header now has a small settings button that opens an in-overlay popover for thumbnail scale presets (`1.0x`, `1.1x`, `1.2x`), sizing policy (`Auto`, `Dense`), and default view mode candidates. Thumbnail scale enlarges card/preview dimensions while keeping the existing DWM soft contain/crop logic.
 - 2026-07-03: Completed view refinement slice. Compact mode now separates thumbnail and caption rows so titles do not overlap previews, List mode renders real two-column rows, and the header includes an `Always on top` toggle bound to overlay topmost behavior.
+- 2026-07-03: Completed opacity and hotkey settings slice. The settings popover now includes overlay opacity presets (`80%`, `90%`, `100%`) and hotkey candidates (`Alt+Space`, `Ctrl+Space`, `Ctrl+Alt+Tab`) backed by Core model enums for later persistence. DWM thumbnails are temporarily unregistered while settings is open so native thumbnail composition does not draw above the popover.
 
 ## Verification
 
@@ -48,6 +49,10 @@
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after compact/list/topmost view refinements.
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after compact/list/topmost view refinements.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, selected Compact and List modes via UI Automation, and captured `notes/runs/2026-07-03_switchboard_view_refinements_compact_smoke.png` plus `notes/runs/2026-07-03_switchboard_view_refinements_list_two_column_smoke.png`.
+- Initial `dotnet build Switchboard.slnx --nologo` after opacity/hotkey changes was blocked by a previous `Switchboard.App` process locking build outputs; stopped that process and reran successfully.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after opacity/hotkey settings changes.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after opacity/hotkey settings changes.
+- Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, opened settings via UI Automation, selected `80%`, selected `Ctrl+Space`, selected Grid/Compact/List, and captured `notes/runs/2026-07-03_switchboard_opacity_hotkey_settings_open_smoke.png`, `notes/runs/2026-07-03_switchboard_opacity_80_smoke.png`, `notes/runs/2026-07-03_switchboard_hotkey_ctrl_space_smoke.png`, `notes/runs/2026-07-03_switchboard_opacity_hotkey_compact_smoke.png`, and `notes/runs/2026-07-03_switchboard_opacity_hotkey_list_smoke.png`.
 
 ## Blockers
 
@@ -55,7 +60,7 @@
 
 ## Next
 
-- Begin settings persistence for appearance, thumbnail scale, sizing policy, and default view mode, or design the activation fallback UX for Windows foreground-lock failures.
+- Begin settings persistence for appearance, opacity, thumbnail scale, sizing policy, default view mode, always-on-top, and hotkey candidate, or design the activation fallback UX for Windows foreground-lock failures.
 
 ## Follow-Up
 
@@ -63,4 +68,5 @@
 - FOLLOW_UP: Persist the selected appearance mode once settings persistence exists.
 - FOLLOW_UP: Add a user-visible fallback for Windows foreground-lock cases where `SetForegroundWindow` refuses activation even after the overlay requests it.
 - FOLLOW_UP: Persist overlay settings once the settings surface stabilizes.
+- FOLLOW_UP: Connect `SwitcherHotkeyPreset` to a Native global hotkey registration boundary, including collision/failure fallback UX.
 - IGNORE_FOR_V1: Mini dock, timeline, advanced virtual desktop management, and automatic window placement remain out of scope.

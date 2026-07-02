@@ -67,10 +67,24 @@ public partial class MainWindowViewModel : ObservableObject
         ThumbnailScalePreset.ExtraLarge
     ];
 
+    public IReadOnlyList<OverlayOpacityPreset> OverlayOpacityPresets { get; } =
+    [
+        OverlayOpacityPreset.Soft,
+        OverlayOpacityPreset.Balanced,
+        OverlayOpacityPreset.Solid
+    ];
+
     public IReadOnlyList<SwitcherSizingPolicy> SizingPolicies { get; } =
     [
         SwitcherSizingPolicy.Auto,
         SwitcherSizingPolicy.Dense
+    ];
+
+    public IReadOnlyList<SwitcherHotkeyPreset> HotkeyPresets { get; } =
+    [
+        SwitcherHotkeyPreset.AltSpace,
+        SwitcherHotkeyPreset.CtrlSpace,
+        SwitcherHotkeyPreset.CtrlAltTab
     ];
 
     [ObservableProperty]
@@ -90,6 +104,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private OverlayThemeMode selectedAppearanceMode = OverlayThemeMode.Transparent;
+
+    [ObservableProperty]
+    private OverlayOpacityPreset selectedOverlayOpacityPreset = OverlayOpacityPreset.Solid;
 
     [ObservableProperty]
     private int gridColumnCount = 3;
@@ -113,6 +130,10 @@ public partial class MainWindowViewModel : ObservableObject
     private SwitcherViewMode defaultViewMode = SwitcherViewMode.Grid;
 
     [ObservableProperty]
+    private SwitcherHotkeyPreset selectedHotkeyPreset = SwitcherHotkeyPreset.AltSpace;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AreDwmThumbnailsVisible))]
     private bool isSettingsOpen;
 
     [ObservableProperty]
@@ -148,30 +169,37 @@ public partial class MainWindowViewModel : ObservableObject
 
     public Brush ShellBackground => SelectedAppearanceMode switch
     {
-        OverlayThemeMode.Light => Brush(250, 248, 250, 252),
-        OverlayThemeMode.Dark => Brush(248, 21, 24, 30),
-        _ => Brush(210, 13, 16, 22)
+        OverlayThemeMode.Light => Brush(ScaledAlpha(250), 248, 250, 252),
+        OverlayThemeMode.Dark => Brush(ScaledAlpha(248), 21, 24, 30),
+        _ => Brush(ScaledAlpha(210), 13, 16, 22)
     };
 
     public Brush HeaderBackground => SelectedAppearanceMode switch
     {
-        OverlayThemeMode.Light => Brush(248, 255, 255, 255),
-        OverlayThemeMode.Dark => Brush(232, 28, 31, 38),
-        _ => Brush(144, 20, 24, 32)
+        OverlayThemeMode.Light => Brush(ScaledAlpha(248), 255, 255, 255),
+        OverlayThemeMode.Dark => Brush(ScaledAlpha(232), 28, 31, 38),
+        _ => Brush(ScaledAlpha(144), 20, 24, 32)
     };
 
     public Brush CardBackground => SelectedAppearanceMode switch
     {
-        OverlayThemeMode.Light => Brush(250, 255, 255, 255),
-        OverlayThemeMode.Dark => Brush(238, 35, 38, 46),
-        _ => Brush(164, 26, 30, 40)
+        OverlayThemeMode.Light => Brush(ScaledAlpha(250), 255, 255, 255),
+        OverlayThemeMode.Dark => Brush(ScaledAlpha(238), 35, 38, 46),
+        _ => Brush(ScaledAlpha(164), 26, 30, 40)
+    };
+
+    public Brush PopoverBackground => SelectedAppearanceMode switch
+    {
+        OverlayThemeMode.Light => Brush(ScaledAlpha(252, minimum: 230), 255, 255, 255),
+        OverlayThemeMode.Dark => Brush(ScaledAlpha(248, minimum: 220), 28, 31, 38),
+        _ => Brush(ScaledAlpha(236, minimum: 210), 20, 24, 32)
     };
 
     public Brush SearchBackground => SelectedAppearanceMode switch
     {
-        OverlayThemeMode.Light => Brush(255, 244, 246, 250),
-        OverlayThemeMode.Dark => Brush(255, 16, 19, 25),
-        _ => Brush(138, 8, 11, 17)
+        OverlayThemeMode.Light => Brush(ScaledAlpha(255), 244, 246, 250),
+        OverlayThemeMode.Dark => Brush(ScaledAlpha(255), 16, 19, 25),
+        _ => Brush(ScaledAlpha(138), 8, 11, 17)
     };
 
     public Brush BorderBrush => SelectedAppearanceMode switch
@@ -197,9 +225,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     public Brush SegmentBackground => SelectedAppearanceMode switch
     {
-        OverlayThemeMode.Light => Brush(255, 236, 239, 245),
-        OverlayThemeMode.Dark => Brush(255, 11, 14, 20),
-        _ => Brush(126, 8, 11, 17)
+        OverlayThemeMode.Light => Brush(ScaledAlpha(255), 236, 239, 245),
+        OverlayThemeMode.Dark => Brush(ScaledAlpha(255), 11, 14, 20),
+        _ => Brush(ScaledAlpha(126), 8, 11, 17)
     };
 
     public Brush PreviewLineBrush => SelectedAppearanceMode == OverlayThemeMode.Light
@@ -210,7 +238,10 @@ public partial class MainWindowViewModel : ObservableObject
         ? Brush(52, 12, 18, 28)
         : Brush(72, 255, 255, 255);
 
-    public double ShellShadowOpacity => SelectedAppearanceMode == OverlayThemeMode.Transparent ? 0.45 : 0.28;
+    public double ShellShadowOpacity =>
+        (SelectedAppearanceMode == OverlayThemeMode.Transparent ? 0.45 : 0.28) * OpacityScale;
+
+    public bool AreDwmThumbnailsVisible => !IsSettingsOpen;
 
     public void SelectNextWindow() => MoveSelection(1);
 
@@ -258,9 +289,20 @@ public partial class MainWindowViewModel : ObservableObject
 
     partial void OnSelectedAppearanceModeChanged(OverlayThemeMode value)
     {
+        RefreshOverlayBrushes();
+    }
+
+    partial void OnSelectedOverlayOpacityPresetChanged(OverlayOpacityPreset value)
+    {
+        RefreshOverlayBrushes();
+    }
+
+    private void RefreshOverlayBrushes()
+    {
         OnPropertyChanged(nameof(ShellBackground));
         OnPropertyChanged(nameof(HeaderBackground));
         OnPropertyChanged(nameof(CardBackground));
+        OnPropertyChanged(nameof(PopoverBackground));
         OnPropertyChanged(nameof(SearchBackground));
         OnPropertyChanged(nameof(BorderBrush));
         OnPropertyChanged(nameof(TextBrush));
@@ -272,6 +314,19 @@ public partial class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(PreviewShadeBrush));
         OnPropertyChanged(nameof(ShellShadowOpacity));
     }
+
+    private double OpacityScale => SelectedOverlayOpacityPreset switch
+    {
+        OverlayOpacityPreset.Soft => 0.8,
+        OverlayOpacityPreset.Balanced => 0.9,
+        _ => 1.0
+    };
+
+    private byte ScaledAlpha(byte alpha) =>
+        (byte)Math.Clamp((int)Math.Round(alpha * OpacityScale), 0, byte.MaxValue);
+
+    private byte ScaledAlpha(byte alpha, byte minimum) =>
+        (byte)Math.Clamp(Math.Max(minimum, (int)Math.Round(alpha * OpacityScale)), 0, byte.MaxValue);
 
     private static SolidColorBrush Brush(byte alpha, byte red, byte green, byte blue)
     {

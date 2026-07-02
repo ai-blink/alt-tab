@@ -14,6 +14,13 @@ public sealed class DwmThumbnailPreview : FrameworkElement
             typeof(DwmThumbnailPreview),
             new FrameworkPropertyMetadata((nint)0, OnSourceHandleChanged));
 
+    public static readonly DependencyProperty IsPreviewVisibleProperty =
+        DependencyProperty.Register(
+            nameof(IsPreviewVisible),
+            typeof(bool),
+            typeof(DwmThumbnailPreview),
+            new FrameworkPropertyMetadata(true, OnIsPreviewVisibleChanged));
+
     private const int DwmTnpRectDestination = 0x00000001;
     private const int DwmTnpRectSource = 0x00000002;
     private const int DwmTnpOpacity = 0x00000004;
@@ -39,11 +46,34 @@ public sealed class DwmThumbnailPreview : FrameworkElement
         set => SetValue(SourceHandleProperty, value);
     }
 
+    public bool IsPreviewVisible
+    {
+        get => (bool)GetValue(IsPreviewVisibleProperty);
+        set => SetValue(IsPreviewVisibleProperty, value);
+    }
+
     private static void OnSourceHandleChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
     {
         if (dependencyObject is DwmThumbnailPreview preview)
         {
             preview.RegisterThumbnail();
+        }
+    }
+
+    private static void OnIsPreviewVisibleChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+    {
+        if (dependencyObject is not DwmThumbnailPreview preview)
+        {
+            return;
+        }
+
+        if (preview.IsPreviewVisible)
+        {
+            preview.RegisterThumbnail();
+        }
+        else
+        {
+            preview.UnregisterThumbnail();
         }
     }
 
@@ -59,7 +89,7 @@ public sealed class DwmThumbnailPreview : FrameworkElement
     {
         UnregisterThumbnail();
 
-        if (!IsLoaded || SourceHandle == 0)
+        if (!IsLoaded || !IsPreviewVisible || SourceHandle == 0)
         {
             return;
         }
@@ -102,7 +132,7 @@ public sealed class DwmThumbnailPreview : FrameworkElement
 
     private void UpdateThumbnail()
     {
-        if (thumbnail == 0 || !IsLoaded || ActualWidth <= 0 || ActualHeight <= 0)
+        if (thumbnail == 0 || !IsLoaded || !IsPreviewVisible || ActualWidth <= 0 || ActualHeight <= 0)
         {
             return;
         }

@@ -17,5 +17,7 @@
 | done | Size the overlay and grid columns to the current window count instead of relying on visible scrolling. | `notes/runs/2026-07-02_switchboard_count_sized_desktop_smoke.png` |
 | done | Add compact in-overlay settings for thumbnail scale, sizing policy, and default view mode candidates. | `notes/runs/2026-07-03_switchboard_settings_panel_smoke.png` |
 | done | Refine Compact/List modes and add an Always on top toggle. | `notes/runs/2026-07-03_switchboard_view_refinements_list_two_column_smoke.png` |
+| done | Add compact opacity and hotkey candidate settings. | `notes/runs/2026-07-03_switchboard_opacity_hotkey_settings_open_smoke.png` |
 | later | Foreground activation fallback UX. | Handle Windows foreground-lock failures gracefully |
+| later | Native global hotkey registration. | Connect `SwitcherHotkeyPreset` to Win32 registration with collision/failure UX |
 | later | Settings persistence and favorite windows. | JSON or LiteDB decision |
