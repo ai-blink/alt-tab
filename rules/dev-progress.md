@@ -19,6 +19,7 @@
 - 2026-07-02: Completed keyboard selection and foreground activation slice. Tab/Shift+Tab and arrow keys move the selected card, Enter requests foreground activation for the selected real window, and Esc still closes the overlay.
 - 2026-07-02: Completed view mode templates slice. The header now exposes `격자` / `압축` / `목록` view modes, each backed by a distinct WPF `DataTemplate` while keeping the same compact overlay size and real DWM thumbnail source.
 - 2026-07-02: Completed all-windows and double-click activation slice. The overlay no longer caps visible windows at 6, grid/compact/list modes scroll inside the fixed shell, cards/rows double-click through the existing foreground activation path, and DWM thumbnails use a soft contain crop plus toned letterbox background instead of aggressive cover cropping.
+- 2026-07-03: Completed count-sized overlay slice. The overlay now starts with manual centered bounds, grows to fit the current filtered window count when possible, hides the in-overlay scrollbar, and keeps the grid column count synchronized with the calculated shell size.
 
 ## Verification
 
@@ -38,6 +39,7 @@
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after all-windows/double-click/thumbnail changes. Initial attempt was blocked by a previous running `Switchboard.App` process locking the exe; stopped that process and reran successfully.
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after all-windows/double-click/thumbnail changes.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, selected `격자` / `압축` / `목록` via UI Automation, captured `notes/runs/2026-07-02_switchboard_all_windows_grid_smoke.png`, `notes/runs/2026-07-02_switchboard_all_windows_compact_smoke.png`, and `notes/runs/2026-07-02_switchboard_all_windows_list_smoke.png`, and confirmed the overlay showed 12 windows on the current desktop with fixed shell size, scrolling, live DWM thumbnails, and 3-column grid/compact layouts.
+- Manual visual smoke: captured `notes/runs/2026-07-02_switchboard_count_sized_desktop_smoke.png` after `0a15adf` and confirmed the overlay expands with the available desktop bounds instead of depending on a visible scrollbar.
 
 ## Blockers
 
@@ -45,12 +47,12 @@
 
 ## Next
 
-- Design the activation fallback UX for Windows foreground-lock failures, or begin settings persistence for appearance/view mode.
+- Add a small in-overlay settings button/panel for thumbnail scale, grid or auto sizing policy, and default view mode candidates.
 
 ## Follow-Up
 
 - FOLLOW_UP: Improve thumbnail polish for transparent mode once real activation/hotkey behavior is in place.
 - FOLLOW_UP: Persist the selected appearance mode once settings persistence exists.
 - FOLLOW_UP: Add a user-visible fallback for Windows foreground-lock cases where `SetForegroundWindow` refuses activation even after the overlay requests it.
-- FOLLOW_UP: Restyle the vertical scrollbar to match the overlay chrome once interaction behavior stabilizes.
+- FOLLOW_UP: Persist overlay settings once the settings surface stabilizes.
 - IGNORE_FOR_V1: Mini dock, timeline, advanced virtual desktop management, and automatic window placement remain out of scope.
