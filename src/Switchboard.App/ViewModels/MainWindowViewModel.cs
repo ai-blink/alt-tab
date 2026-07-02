@@ -145,9 +145,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     public void SelectPreviousWindow() => MoveSelection(-1);
 
-    public void SelectWindowAbove() => MoveSelection(-GridColumnCount);
+    public void SelectWindowAbove() => MoveSelection(-VerticalSelectionStep);
 
-    public void SelectWindowBelow() => MoveSelection(GridColumnCount);
+    public void SelectWindowBelow() => MoveSelection(VerticalSelectionStep);
 
     public bool TryActivateSelectedWindow() =>
         SelectedWindow is not null && windowActivator.TryActivate(SelectedWindow);
@@ -163,6 +163,8 @@ public partial class MainWindowViewModel : ObservableObject
 
     private WindowSnapshot? PickDefaultWindow() =>
         VisibleWindows.FirstOrDefault(window => window.IsActive) ?? VisibleWindows.FirstOrDefault();
+
+    private int VerticalSelectionStep => SelectedViewMode == SwitcherViewMode.List ? 1 : GridColumnCount;
 
     private void MoveSelection(int offset) =>
         SelectedWindow = WindowSelection.Move(VisibleWindows, SelectedWindow, offset);

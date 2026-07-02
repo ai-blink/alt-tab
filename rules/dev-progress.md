@@ -17,6 +17,7 @@
 - 2026-07-02: Rebalanced cards so thumbnails are the primary surface. Titles are now a single-line bottom caption instead of taking half the card.
 - 2026-07-02: Doubled the thumbnail-first card height while preserving the 3x2 switcher layout. The DWM preview area is now the dominant surface, with titles kept as compact captions.
 - 2026-07-02: Completed keyboard selection and foreground activation slice. Tab/Shift+Tab and arrow keys move the selected card, Enter requests foreground activation for the selected real window, and Esc still closes the overlay.
+- 2026-07-02: Completed view mode templates slice. The header now exposes `격자` / `압축` / `목록` view modes, each backed by a distinct WPF `DataTemplate` while keeping the same compact overlay size and real DWM thumbnail source.
 
 ## Verification
 
@@ -30,6 +31,9 @@
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_thumbnail_first_smoke.png`, and confirmed thumbnail-first cards with compact bottom captions.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_thumbnail_double_height_smoke.png`, and confirmed roughly doubled thumbnail height with compact captions.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, captured `notes/runs/2026-07-02_switchboard_keyboard_activation_smoke.png`, and confirmed the compact overlay still opens with real windows and visible selected-card focus.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after view mode template changes.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after view mode template changes.
+- Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, selected `격자` / `압축` / `목록` via UI Automation, captured `notes/runs/2026-07-02_switchboard_view_modes_grid_smoke.png`, `notes/runs/2026-07-02_switchboard_view_modes_compact_smoke.png`, and `notes/runs/2026-07-02_switchboard_view_modes_list_smoke.png`, and confirmed all three templates render without increasing the overlay.
 
 ## Blockers
 
@@ -37,7 +41,7 @@
 
 ## Next
 
-- Add real view-specific templates for Compact and List modes after the overlay interaction model is stable.
+- Design the activation fallback UX for Windows foreground-lock failures, or begin settings persistence for appearance/view mode.
 
 ## Follow-Up
 
