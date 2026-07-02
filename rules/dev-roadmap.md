@@ -13,5 +13,6 @@
 | done | Double thumbnail height while preserving the 3x2 switcher layout. | `notes/runs/2026-07-02_switchboard_thumbnail_double_height_smoke.png` |
 | done | Keyboard selection and foreground activation. | `dotnet test`, `notes/runs/2026-07-02_switchboard_keyboard_activation_smoke.png` |
 | done | Compact/List mode-specific templates. | `notes/runs/2026-07-02_switchboard_view_modes_list_smoke.png` |
+| done | Show all windows with in-overlay scrolling, soft DWM thumbnail fit, and double-click activation. | `notes/runs/2026-07-02_switchboard_all_windows_list_smoke.png` |
 | later | Foreground activation fallback UX. | Handle Windows foreground-lock failures gracefully |
 | later | Settings persistence and favorite windows. | JSON or LiteDB decision |

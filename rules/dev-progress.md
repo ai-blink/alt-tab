@@ -18,6 +18,7 @@
 - 2026-07-02: Doubled the thumbnail-first card height while preserving the 3x2 switcher layout. The DWM preview area is now the dominant surface, with titles kept as compact captions.
 - 2026-07-02: Completed keyboard selection and foreground activation slice. Tab/Shift+Tab and arrow keys move the selected card, Enter requests foreground activation for the selected real window, and Esc still closes the overlay.
 - 2026-07-02: Completed view mode templates slice. The header now exposes `격자` / `압축` / `목록` view modes, each backed by a distinct WPF `DataTemplate` while keeping the same compact overlay size and real DWM thumbnail source.
+- 2026-07-02: Completed all-windows and double-click activation slice. The overlay no longer caps visible windows at 6, grid/compact/list modes scroll inside the fixed shell, cards/rows double-click through the existing foreground activation path, and DWM thumbnails use a soft contain crop plus toned letterbox background instead of aggressive cover cropping.
 
 ## Verification
 
@@ -34,6 +35,9 @@
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after view mode template changes.
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after view mode template changes.
 - Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, selected `격자` / `압축` / `목록` via UI Automation, captured `notes/runs/2026-07-02_switchboard_view_modes_grid_smoke.png`, `notes/runs/2026-07-02_switchboard_view_modes_compact_smoke.png`, and `notes/runs/2026-07-02_switchboard_view_modes_list_smoke.png`, and confirmed all three templates render without increasing the overlay.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after all-windows/double-click/thumbnail changes. Initial attempt was blocked by a previous running `Switchboard.App` process locking the exe; stopped that process and reran successfully.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after all-windows/double-click/thumbnail changes.
+- Manual visual smoke: launched `src/Switchboard.App/bin/Debug/net10.0-windows/Switchboard.App.exe`, selected `격자` / `압축` / `목록` via UI Automation, captured `notes/runs/2026-07-02_switchboard_all_windows_grid_smoke.png`, `notes/runs/2026-07-02_switchboard_all_windows_compact_smoke.png`, and `notes/runs/2026-07-02_switchboard_all_windows_list_smoke.png`, and confirmed the overlay showed 12 windows on the current desktop with fixed shell size, scrolling, live DWM thumbnails, and 3-column grid/compact layouts.
 
 ## Blockers
 
@@ -48,4 +52,5 @@
 - FOLLOW_UP: Improve thumbnail polish for transparent mode once real activation/hotkey behavior is in place.
 - FOLLOW_UP: Persist the selected appearance mode once settings persistence exists.
 - FOLLOW_UP: Add a user-visible fallback for Windows foreground-lock cases where `SetForegroundWindow` refuses activation even after the overlay requests it.
+- FOLLOW_UP: Restyle the vertical scrollbar to match the overlay chrome once interaction behavior stabilizes.
 - IGNORE_FOR_V1: Mini dock, timeline, advanced virtual desktop management, and automatic window placement remain out of scope.

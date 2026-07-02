@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Switchboard.App.ViewModels;
@@ -72,11 +73,7 @@ public partial class MainWindow : Window
                 return;
 
             case Key.Return:
-                if (viewModel.TryActivateSelectedWindow())
-                {
-                    Close();
-                }
-
+                ActivateSelectedWindowAndClose();
                 e.Handled = true;
                 return;
         }
@@ -90,6 +87,27 @@ public partial class MainWindow : Window
         {
             WindowList.ScrollIntoView(viewModel.SelectedWindow);
         }
+    }
+
+    private void ActivateSelectedWindowAndClose()
+    {
+        if (viewModel.TryActivateSelectedWindow())
+        {
+            Close();
+        }
+    }
+
+    private void OnWindowListMouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton != MouseButton.Left ||
+            ItemsControl.ContainerFromElement(WindowList, e.OriginalSource as DependencyObject) is not ListBoxItem item)
+        {
+            return;
+        }
+
+        WindowList.SelectedItem = item.DataContext;
+        ActivateSelectedWindowAndClose();
+        e.Handled = true;
     }
 
     private void OnChromeMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

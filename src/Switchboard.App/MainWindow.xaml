@@ -25,7 +25,7 @@
         <app:EnumEqualsConverter x:Key="EnumEqualsConverter" />
 
         <DataTemplate x:Key="GridWindowTemplate">
-            <Border Width="279"
+            <Border Width="274"
                     Height="188"
                     Background="{Binding DataContext.CardBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderBrush="{Binding DataContext.BorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
@@ -39,7 +39,10 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0"
-                          Background="{Binding ThumbnailBrush}">
+                          Background="{Binding DataContext.SearchBackground, RelativeSource={RelativeSource AncestorType=Window}}"
+                          ClipToBounds="True">
+                        <Rectangle Fill="{Binding ThumbnailBrush}"
+                                   Opacity="0.32" />
                         <Rectangle Fill="{Binding DataContext.PreviewShadeBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
                         <Border Margin="9"
                                 Background="#22FFFFFF"
@@ -126,7 +129,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="CompactWindowTemplate">
-            <Border Width="279"
+            <Border Width="274"
                     Height="82"
                     Background="{Binding DataContext.CardBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                     BorderBrush="{Binding DataContext.BorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
@@ -135,12 +138,15 @@
                     ClipToBounds="True">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="104" />
+                        <ColumnDefinition Width="126" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Column="0"
-                          Background="{Binding ThumbnailBrush}">
+                          Background="{Binding DataContext.SearchBackground, RelativeSource={RelativeSource AncestorType=Window}}"
+                          ClipToBounds="True">
+                        <Rectangle Fill="{Binding ThumbnailBrush}"
+                                   Opacity="0.32" />
                         <Rectangle Fill="{Binding DataContext.PreviewShadeBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
                         <TextBlock HorizontalAlignment="Right"
                                    VerticalAlignment="Bottom"
@@ -232,8 +238,10 @@
 
                     <Grid Grid.Column="0"
                           Margin="7"
-                          Background="{Binding ThumbnailBrush}"
+                          Background="{Binding DataContext.SearchBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                           ClipToBounds="True">
+                        <Rectangle Fill="{Binding ThumbnailBrush}"
+                                   Opacity="0.32" />
                         <Rectangle Fill="{Binding DataContext.PreviewShadeBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
                         <app:DwmThumbnailPreview SourceHandle="{Binding Handle}" />
                     </Grid>
@@ -298,7 +306,7 @@
             <Setter Property="ItemContainerStyle" Value="{DynamicResource WindowCardItemStyle}" />
             <Setter Property="ItemTemplate" Value="{StaticResource GridWindowTemplate}" />
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
@@ -595,6 +603,7 @@
                 <Grid Grid.Row="1" Margin="14,12,14,8">
                     <ListBox x:Name="WindowList"
                              ItemsSource="{Binding VisibleWindows}"
+                             MouseDoubleClick="OnWindowListMouseDoubleClick"
                              SelectedItem="{Binding SelectedWindow}"
                              Style="{StaticResource WindowListStyle}" />
                 </Grid>
