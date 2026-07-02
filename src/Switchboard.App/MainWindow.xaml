@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="Switchboard"
         Width="860"
-        Height="392"
+        Height="540"
         MinWidth="780"
-        MinHeight="360"
+        MinHeight="500"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -285,7 +285,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Border Width="250"
-                                        Height="108"
+                                        Height="188"
                                         Background="{Binding DataContext.CardBackground, RelativeSource={RelativeSource AncestorType=Window}}"
                                         BorderBrush="{Binding DataContext.BorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
                                         BorderThickness="1"

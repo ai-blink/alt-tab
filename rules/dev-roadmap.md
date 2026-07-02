@@ -10,6 +10,7 @@
 | done | Native top-level window enumeration. | `Switchboard.Native` provider |
 | done | DWM thumbnail rendering path. | `notes/runs/2026-07-02_switchboard_dwm_thumbnail_smoke.png` |
 | done | Rebalance cards around thumbnails as the primary content. | `notes/runs/2026-07-02_switchboard_thumbnail_first_smoke.png` |
+| done | Double thumbnail height while preserving the 3x2 switcher layout. | `notes/runs/2026-07-02_switchboard_thumbnail_double_height_smoke.png` |
 | next | Keyboard selection and foreground activation. | Tab/arrows/Enter behavior |
 | later | Compact/List mode-specific templates. | App view template work |
 | later | Settings persistence and favorite windows. | JSON or LiteDB decision |
