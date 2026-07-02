@@ -11,7 +11,7 @@
         Height="540"
         MinWidth="875"
         MinHeight="500"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="Manual"
         WindowStyle="None"
         AllowsTransparency="True"
         ResizeMode="NoResize"
@@ -306,7 +306,7 @@
             <Setter Property="ItemContainerStyle" Value="{DynamicResource WindowCardItemStyle}" />
             <Setter Property="ItemTemplate" Value="{StaticResource GridWindowTemplate}" />
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>

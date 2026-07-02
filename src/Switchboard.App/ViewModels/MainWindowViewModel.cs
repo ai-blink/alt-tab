@@ -15,8 +15,6 @@ public enum OverlayThemeMode
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    private const int GridColumnCount = 3;
-
     private readonly IWindowCatalog windowCatalog;
     private readonly IWindowActivator windowActivator;
     private IReadOnlyList<WindowSnapshot> allWindows;
@@ -69,6 +67,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private OverlayThemeMode selectedAppearanceMode = OverlayThemeMode.Transparent;
+
+    [ObservableProperty]
+    private int gridColumnCount = 3;
 
     public IReadOnlyList<WindowSnapshot> VisibleWindows =>
         WindowQuery.Apply(allWindows, SearchText, SelectedSortMode).ToList();
@@ -151,6 +152,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     public bool TryActivateSelectedWindow() =>
         SelectedWindow is not null && windowActivator.TryActivate(SelectedWindow);
+
+    public void SetGridColumnCount(int columnCount) =>
+        GridColumnCount = Math.Max(1, columnCount);
 
     [RelayCommand]
     private void Refresh()
