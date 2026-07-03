@@ -29,6 +29,9 @@ public partial class MainWindowViewModel : ObservableObject
     private const double BaseListWidth = 600;
     private const double BaseListPreviewWidth = 82;
     private const double BaseListRowHeight = 54;
+    private const double ItemHorizontalGap = 6;
+    private const double ItemVerticalGap = 8;
+    private const double SelectionFramePadding = 8;
 
     private readonly IWindowCatalog windowCatalog;
     private readonly IWindowActivator windowActivator;
@@ -94,6 +97,8 @@ public partial class MainWindowViewModel : ObservableObject
     private string? searchText;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ItemSlotWidth))]
+    [NotifyPropertyChangedFor(nameof(ItemSlotHeight))]
     private SwitcherViewMode selectedViewMode = SwitcherViewMode.Grid;
 
     [ObservableProperty]
@@ -122,6 +127,8 @@ public partial class MainWindowViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(ListWidth))]
     [NotifyPropertyChangedFor(nameof(ListRowHeight))]
     [NotifyPropertyChangedFor(nameof(ListPreviewColumnWidth))]
+    [NotifyPropertyChangedFor(nameof(ItemSlotWidth))]
+    [NotifyPropertyChangedFor(nameof(ItemSlotHeight))]
     private ThumbnailScalePreset selectedThumbnailScalePreset = ThumbnailScalePreset.Normal;
 
     [ObservableProperty]
@@ -175,6 +182,20 @@ public partial class MainWindowViewModel : ObservableObject
     public double ListRowHeight => Math.Round(BaseListRowHeight * ThumbnailScale);
 
     public GridLength ListPreviewColumnWidth => new(Math.Round(BaseListPreviewWidth * ThumbnailScale));
+
+    public double ItemSlotWidth => SelectedViewMode switch
+    {
+        SwitcherViewMode.Compact => CompactCardWidth + ItemHorizontalGap + SelectionFramePadding,
+        SwitcherViewMode.List => ListWidth + ItemHorizontalGap + SelectionFramePadding,
+        _ => GridCardWidth + ItemHorizontalGap + SelectionFramePadding
+    };
+
+    public double ItemSlotHeight => SelectedViewMode switch
+    {
+        SwitcherViewMode.Compact => CompactCardHeight + ItemVerticalGap + SelectionFramePadding,
+        SwitcherViewMode.List => ListRowHeight + ItemVerticalGap + SelectionFramePadding,
+        _ => GridCardHeight + ItemVerticalGap + SelectionFramePadding
+    };
 
     public Brush ShellBackground => SelectedAppearanceMode switch
     {

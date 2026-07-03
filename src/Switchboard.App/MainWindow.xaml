@@ -317,7 +317,8 @@
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <WrapPanel ItemHeight="{Binding DataContext.ItemSlotHeight, RelativeSource={RelativeSource AncestorType=Window}}"
+                                   ItemWidth="{Binding DataContext.ItemSlotWidth, RelativeSource={RelativeSource AncestorType=Window}}" />
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>

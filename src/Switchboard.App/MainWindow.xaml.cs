@@ -24,7 +24,7 @@ public partial class MainWindow : Window
     private const double ListDetailsHeaderHeight = 30;
     private const double ItemHorizontalGap = 6;
     private const double ItemVerticalGap = 8;
-    private const double SelectionFramePadding = 4;
+    private const double SelectionFramePadding = 8;
     private const double LayoutSafetyPadding = 24;
 
     private readonly MainWindowViewModel viewModel;
@@ -161,16 +161,17 @@ public partial class MainWindow : Window
     private void ApplyContentSizedBounds()
     {
         var windowCount = Math.Max(1, viewModel.VisibleWindows.Count);
-        var screenWidth = SystemParameters.PrimaryScreenWidth;
-        var screenHeight = SystemParameters.PrimaryScreenHeight;
+        var workArea = SystemParameters.WorkArea;
+        var screenWidth = workArea.Width;
+        var screenHeight = workArea.Height;
         var layout = CalculateLayout(windowCount, screenWidth, screenHeight);
 
         viewModel.SetGridColumnCount(layout.Columns);
         WindowState = WindowState.Normal;
         Width = layout.Width;
         Height = layout.Height;
-        Left = Math.Max(0, (screenWidth - Width) / 2);
-        Top = Math.Max(0, (screenHeight - Height) / 2);
+        Left = workArea.Left + Math.Max(0, (screenWidth - Width) / 2);
+        Top = workArea.Top + Math.Max(0, (screenHeight - Height) / 2);
     }
 
     private SwitcherLayout CalculateLayout(int windowCount, double screenWidth, double screenHeight)
