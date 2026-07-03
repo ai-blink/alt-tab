@@ -27,6 +27,7 @@
 - 2026-07-03: Expanded the hotkey key combo box from a small test set to `Space`, `Tab`, `Enter`, `A-Z`, `0-9`, and `F1-F12`, with display labels separated from enum storage values.
 - 2026-07-03: Connected selected hotkey settings to Win32 `RegisterHotKey`. The app now registers the current modifier/key combo on startup, refreshes registration when combo boxes change, and handles `WM_HOTKEY` by showing the overlay while the process remains resident in the tray.
 - 2026-07-04: Fixed settings-open thumbnail regression. The settings surface now uses a WPF `Popup` anchored to the settings button, so the menu renders above native DWM thumbnails without unregistering thumbnail previews.
+- 2026-07-04: Removed the remaining Native provider 12-window cap. Win32 enumeration now returns all candidate top-level windows to the switcher, while the existing overlay sizing and grid column policies handle larger counts.
 
 ## Verification
 
@@ -69,6 +70,8 @@
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after the settings popup fix.
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after the settings popup fix.
 - Runtime smoke: launched `Switchboard.App.exe`, opened settings through UI Automation, captured `notes/runs/2026-07-04_switchboard_settings_popup_thumbnails_smoke.png`, and confirmed DWM thumbnails remain visible while the settings menu is open.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after removing the Native provider 12-window cap.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after removing the Native provider 12-window cap.
 
 ## Blockers
 

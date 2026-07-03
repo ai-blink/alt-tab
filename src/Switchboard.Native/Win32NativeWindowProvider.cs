@@ -82,7 +82,6 @@ public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCa
         return windows
             .OrderByDescending(window => window.IsActive)
             .ThenByDescending(window => window.LastActivatedAt)
-            .Take(12)
             .ToList();
     }
 
