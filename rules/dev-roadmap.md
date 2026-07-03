@@ -23,5 +23,6 @@
 | done | Native global hotkey registration. | Selected hotkey modifier/key settings are registered with Win32 `RegisterHotKey` |
 | done | Keep DWM thumbnails visible while settings is open. | `notes/runs/2026-07-04_switchboard_settings_popup_thumbnails_smoke.png` |
 | done | Remove remaining Native window-count cap. | Win32 provider no longer truncates candidate top-level windows to 12 |
+| done | Add sort controls to the main header. | `notes/runs/2026-07-04_switchboard_main_sort_ui_smoke.png` |
 | later | Global hotkey collision feedback. | Show a user-visible warning when Win32 registration fails because a combo is reserved or already in use |
 | later | Settings persistence and favorite windows. | JSON or LiteDB decision |

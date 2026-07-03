@@ -50,15 +50,6 @@ public partial class MainWindowViewModel : ObservableObject
         SwitcherViewMode.List
     ];
 
-    public IReadOnlyList<WindowSortMode> SortModes { get; } =
-    [
-        WindowSortMode.Recent,
-        WindowSortMode.App,
-        WindowSortMode.Monitor,
-        WindowSortMode.Title,
-        WindowSortMode.Favorites
-    ];
-
     public IReadOnlyList<OverlayThemeMode> AppearanceModes { get; } =
     [
         OverlayThemeMode.Transparent,

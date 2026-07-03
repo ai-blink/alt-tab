@@ -610,19 +610,41 @@
                                 </StackPanel>
                             </Border>
 
-                            <Border Width="74"
-                                    Height="30"
+                            <Border Height="30"
                                     Margin="0,0,8,0"
                                     Background="{Binding SegmentBackground}"
                                     BorderBrush="{Binding BorderBrush}"
                                     BorderThickness="1"
-                                    CornerRadius="7">
-                                <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           FontSize="11"
-                                           FontWeight="SemiBold"
-                                           Foreground="{Binding MutedTextBrush}"
-                                           Text="{Binding SelectedSortMode}" />
+                                    CornerRadius="7"
+                                    Padding="1"
+                                    ToolTip="Sort windows">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton Content="최근"
+                                                 AutomationProperties.Name="Sort by recent"
+                                                 GroupName="SortMode"
+                                                 IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Recent}"
+                                                 Style="{StaticResource ModeRadioStyle}" />
+                                    <RadioButton Content="앱"
+                                                 AutomationProperties.Name="Sort by app"
+                                                 GroupName="SortMode"
+                                                 IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=App}"
+                                                 Style="{StaticResource ModeRadioStyle}" />
+                                    <RadioButton Content="모니터"
+                                                 AutomationProperties.Name="Sort by monitor"
+                                                 GroupName="SortMode"
+                                                 IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Monitor}"
+                                                 Style="{StaticResource ModeRadioStyle}" />
+                                    <RadioButton Content="제목"
+                                                 AutomationProperties.Name="Sort by title"
+                                                 GroupName="SortMode"
+                                                 IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Title}"
+                                                 Style="{StaticResource ModeRadioStyle}" />
+                                    <RadioButton Content="즐겨찾기"
+                                                 AutomationProperties.Name="Sort by favorites"
+                                                 GroupName="SortMode"
+                                                 IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Favorites}"
+                                                 Style="{StaticResource ModeRadioStyle}" />
+                                </StackPanel>
                             </Border>
 
                             <Button x:Name="SettingsButton"
