@@ -152,7 +152,6 @@ public partial class MainWindowViewModel : ObservableObject
     private SwitcherHotkeyKey selectedHotkeyKey = SwitcherHotkeyKey.Space;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AreDwmThumbnailsVisible))]
     private bool isSettingsOpen;
 
     [ObservableProperty]
@@ -260,7 +259,7 @@ public partial class MainWindowViewModel : ObservableObject
     public double ShellShadowOpacity =>
         (SelectedAppearanceMode == OverlayThemeMode.Transparent ? 0.45 : 0.28) * OpacityScale;
 
-    public bool AreDwmThumbnailsVisible => !IsSettingsOpen;
+    public bool AreDwmThumbnailsVisible => true;
 
     public string SelectedHotkeyLabel =>
         $"{FormatHotkeyPart(SelectedFirstHotkeyModifier)}+{FormatHotkeyPart(SelectedSecondHotkeyModifier)}+{FormatHotkeyPart(SelectedHotkeyKey)}";

@@ -625,7 +625,8 @@
                                            Text="{Binding SelectedSortMode}" />
                             </Border>
 
-                            <Button Content="&#xE713;"
+                            <Button x:Name="SettingsButton"
+                                    Content="&#xE713;"
                                     AutomationProperties.Name="Settings"
                                     Command="{Binding ToggleSettingsCommand}"
                                     Margin="0,0,8,0"
@@ -743,17 +744,21 @@
             </Grid>
         </Border>
 
+        <Popup x:Name="SettingsPopup"
+               AllowsTransparency="True"
+               HorizontalOffset="-342"
+               IsOpen="{Binding IsSettingsOpen, Mode=TwoWay}"
+               Placement="Bottom"
+               PlacementTarget="{Binding ElementName=SettingsButton}"
+               StaysOpen="True"
+               VerticalOffset="10">
         <Border Width="386"
-                Margin="0,48,46,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Panel.ZIndex="10"
+                DataContext="{Binding PlacementTarget.DataContext, ElementName=SettingsPopup}"
                 Background="{Binding PopoverBackground}"
                 BorderBrush="{Binding BorderBrush}"
                 BorderThickness="1"
                 CornerRadius="9"
-                Padding="12"
-                Visibility="{Binding IsSettingsOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+                Padding="12">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="24"
                                   Direction="270"
@@ -1014,5 +1019,6 @@
                 </Grid>
             </Grid>
         </Border>
+        </Popup>
     </Grid>
 </Window>
