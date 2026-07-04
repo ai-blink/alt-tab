@@ -26,5 +26,6 @@
 | done | Add sort controls to the main header. | `notes/runs/2026-07-04_switchboard_main_sort_ui_smoke.png` |
 | done | Align responsive grid calculation with rendered slots. | `notes/runs/2026-07-04_switchboard_responsive_grid_smoke.png` |
 | done | Use scored responsive grid layout selection. | `notes/runs/2026-07-04_switchboard_scored_responsive_layout_smoke.png` |
+| done | Add whole-overlay app scale presets. | `notes/runs/2026-07-05_switchboard_app_scale_smoke.png` |
 | later | Global hotkey collision feedback. | Show a user-visible warning when Win32 registration fails because a combo is reserved or already in use |
 | later | Settings persistence and favorite windows. | JSON or LiteDB decision |

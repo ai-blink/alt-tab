@@ -75,6 +75,13 @@ public partial class MainWindowViewModel : ObservableObject
         OverlayOpacityPreset.Ninety
     ];
 
+    public IReadOnlyList<OverlayScalePreset> OverlayScalePresets { get; } =
+    [
+        OverlayScalePreset.Fifty,
+        OverlayScalePreset.Seventy,
+        OverlayScalePreset.Ninety
+    ];
+
     public IReadOnlyList<SwitcherSizingPolicy> SizingPolicies { get; } =
     [
         SwitcherSizingPolicy.Auto,
@@ -113,6 +120,10 @@ public partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private OverlayOpacityPreset selectedOverlayOpacityPreset = OverlayOpacityPreset.Ninety;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AppScale))]
+    private OverlayScalePreset selectedOverlayScalePreset = OverlayScalePreset.Ninety;
 
     [ObservableProperty]
     private int gridColumnCount = 3;
@@ -168,6 +179,13 @@ public partial class MainWindowViewModel : ObservableObject
     };
 
     public string ThumbnailScaleLabel => $"{ThumbnailScale:0.0}x";
+
+    public double AppScale => SelectedOverlayScalePreset switch
+    {
+        OverlayScalePreset.Fifty => 0.5,
+        OverlayScalePreset.Seventy => 0.7,
+        _ => 0.9
+    };
 
     public double GridCardWidth => Math.Round(BaseGridCardWidth * ThumbnailScale);
 

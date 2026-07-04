@@ -26,10 +26,14 @@ public partial class MainWindow : Window
     private const double ItemVerticalGap = 8;
     private const double SelectionFramePadding = 8;
     private const double LayoutSafetyPadding = 24;
+    private const double MinLayoutWidth = 875;
+    private const double MinLayoutHeight = 500;
 
     private readonly MainWindowViewModel viewModel;
     private HwndSource? hwndSource;
     private GlobalHotkeyRegistration? hotkeyRegistration;
+    private double currentLayoutWidth = 955;
+    private double currentLayoutHeight = 540;
 
     public MainWindow(MainWindowViewModel viewModel)
     {
@@ -102,6 +106,11 @@ public partial class MainWindow : Window
             Dispatcher.BeginInvoke(ApplyContentSizedBounds, DispatcherPriority.Loaded);
         }
 
+        if (e.PropertyName == nameof(MainWindowViewModel.SelectedOverlayScalePreset))
+        {
+            Dispatcher.BeginInvoke(ApplyOverlayScaleBounds, DispatcherPriority.Loaded);
+        }
+
         if (e.PropertyName == nameof(MainWindowViewModel.IsAlwaysOnTop))
         {
             Topmost = viewModel.IsAlwaysOnTop;
@@ -162,16 +171,29 @@ public partial class MainWindow : Window
     {
         var windowCount = Math.Max(1, viewModel.VisibleWindows.Count);
         var workArea = SystemParameters.WorkArea;
-        var screenWidth = workArea.Width;
-        var screenHeight = workArea.Height;
-        var layout = CalculateLayout(windowCount, screenWidth, screenHeight);
+        var appScale = viewModel.AppScale;
+        var layout = CalculateLayout(windowCount, workArea.Width, workArea.Height);
 
         viewModel.SetGridColumnCount(layout.Columns);
+        currentLayoutWidth = layout.Width;
+        currentLayoutHeight = layout.Height;
         WindowState = WindowState.Normal;
-        Width = layout.Width;
-        Height = layout.Height;
-        Left = workArea.Left + Math.Max(0, (screenWidth - Width) / 2);
-        Top = workArea.Top + Math.Max(0, (screenHeight - Height) / 2);
+        Width = currentLayoutWidth * appScale;
+        Height = currentLayoutHeight * appScale;
+        Left = workArea.Left + Math.Max(0, (workArea.Width - Width) / 2);
+        Top = workArea.Top + Math.Max(0, (workArea.Height - Height) / 2);
+    }
+
+    private void ApplyOverlayScaleBounds()
+    {
+        var workArea = SystemParameters.WorkArea;
+        var appScale = viewModel.AppScale;
+
+        WindowState = WindowState.Normal;
+        Width = Math.Min(workArea.Width, currentLayoutWidth * appScale);
+        Height = Math.Min(workArea.Height, currentLayoutHeight * appScale);
+        Left = workArea.Left + Math.Max(0, (workArea.Width - Width) / 2);
+        Top = workArea.Top + Math.Max(0, (workArea.Height - Height) / 2);
     }
 
     private SwitcherLayout CalculateLayout(int windowCount, double screenWidth, double screenHeight)
@@ -205,8 +227,8 @@ public partial class MainWindow : Window
 
         return new SwitcherLayout(
             columns,
-            Math.Min(screenWidth, Math.Max(MinWidth, desiredWidth)),
-            Math.Min(screenHeight, Math.Max(MinHeight, desiredHeight)));
+            Math.Min(screenWidth, Math.Max(MinLayoutWidth, desiredWidth)),
+            Math.Min(screenHeight, Math.Max(MinLayoutHeight, desiredHeight)));
     }
 
     private int ChooseBestColumns(

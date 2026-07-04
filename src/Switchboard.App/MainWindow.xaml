@@ -9,8 +9,8 @@
         Title="Switchboard"
         Width="955"
         Height="540"
-        MinWidth="875"
-        MinHeight="500"
+        MinWidth="0"
+        MinHeight="0"
         WindowStartupLocation="Manual"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -472,6 +472,10 @@
     </Window.Resources>
 
     <Grid Margin="18">
+        <Grid.LayoutTransform>
+            <ScaleTransform ScaleX="{Binding AppScale}" ScaleY="{Binding AppScale}" />
+        </Grid.LayoutTransform>
+
         <Border Background="{Binding ShellBackground}"
                 BorderBrush="{Binding BorderBrush}"
                 BorderThickness="1"
@@ -782,6 +786,10 @@
                 BorderThickness="1"
                 CornerRadius="9"
                 Padding="12">
+            <Border.LayoutTransform>
+                <ScaleTransform ScaleX="{Binding AppScale}" ScaleY="{Binding AppScale}" />
+            </Border.LayoutTransform>
+
             <Border.Effect>
                 <DropShadowEffect BlurRadius="24"
                                   Direction="270"
@@ -792,6 +800,8 @@
 
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="12" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="12" />
                     <RowDefinition Height="Auto" />
@@ -966,6 +976,45 @@
                 </Grid>
 
                 <Grid Grid.Row="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="82" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="{Binding MutedTextBrush}"
+                               Text="전체 배율" />
+                    <Border Grid.Column="1"
+                            Height="30"
+                            Background="{Binding SegmentBackground}"
+                            BorderBrush="{Binding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="7"
+                            Padding="1">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="50%"
+                                         AutomationProperties.Name="App scale 50%"
+                                         GroupName="OverlayScale"
+                                         IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Fifty}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="70%"
+                                         AutomationProperties.Name="App scale 70%"
+                                         GroupName="OverlayScale"
+                                         IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Seventy}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="90%"
+                                         AutomationProperties.Name="App scale 90%"
+                                         GroupName="OverlayScale"
+                                         IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Ninety}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="82" />
                         <ColumnDefinition Width="*" />
