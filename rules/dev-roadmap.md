@@ -28,5 +28,6 @@
 | done | Use scored responsive grid layout selection. | `notes/runs/2026-07-04_switchboard_scored_responsive_layout_smoke.png` |
 | done | Add whole-overlay app scale presets. | `notes/runs/2026-07-05_switchboard_app_scale_smoke.png` |
 | done | Fix scaled DWM thumbnail fit. | `notes/runs/2026-07-05_switchboard_thumbnail_fit_grid_smoke.png` |
+| done | Persist settings automatically and close settings on outside click. | `notes/runs/2026-07-05_switchboard_settings_persistence.md` |
 | later | Global hotkey collision feedback. | Show a user-visible warning when Win32 registration fails because a combo is reserved or already in use |
-| later | Settings persistence and favorite windows. | JSON or LiteDB decision |
+| later | Favorite windows persistence. | JSON or LiteDB decision |

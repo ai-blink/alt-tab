@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows;
 using System.Windows.Media;
+using Switchboard.App;
 using Switchboard.Core.Models;
 using Switchboard.Core.Services;
 using Brush = System.Windows.Media.Brush;
@@ -35,15 +36,22 @@ public partial class MainWindowViewModel : ObservableObject
 
     private readonly IWindowCatalog windowCatalog;
     private readonly IWindowActivator windowActivator;
+    private readonly IUserSettingsStore userSettingsStore;
     private IReadOnlyList<WindowSnapshot> allWindows;
     private bool isUpdatingHotkeyModifiers;
 
-    public MainWindowViewModel(IWindowCatalog windowCatalog, IWindowActivator windowActivator)
+    public MainWindowViewModel(
+        IWindowCatalog windowCatalog,
+        IWindowActivator windowActivator,
+        IUserSettingsStore userSettingsStore)
     {
         this.windowCatalog = windowCatalog;
         this.windowActivator = windowActivator;
+        this.userSettingsStore = userSettingsStore;
         allWindows = windowCatalog.GetOpenWindows();
+        ApplyUserSettings(userSettingsStore.Load());
         SelectedWindow = PickDefaultWindow();
+        PropertyChanged += OnViewModelPropertyChanged;
     }
 
     public IReadOnlyList<SwitcherViewMode> ViewModes { get; } =
@@ -357,6 +365,61 @@ public partial class MainWindowViewModel : ObservableObject
 
     partial void OnSelectedSecondHotkeyModifierChanged(SwitcherHotkeyModifier value) =>
         EnsureDistinctHotkeyModifiers(changedFirstModifier: false);
+
+    private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (IsPersistedSetting(e.PropertyName))
+        {
+            userSettingsStore.Save(CreateUserSettings());
+        }
+    }
+
+    private static bool IsPersistedSetting(string? propertyName) =>
+        propertyName is
+            nameof(SelectedViewMode) or
+            nameof(SelectedSortMode) or
+            nameof(SelectedAppearanceMode) or
+            nameof(SelectedOverlayOpacityPreset) or
+            nameof(SelectedOverlayScalePreset) or
+            nameof(SelectedThumbnailScalePreset) or
+            nameof(SelectedSizingPolicy) or
+            nameof(DefaultViewMode) or
+            nameof(SelectedFirstHotkeyModifier) or
+            nameof(SelectedSecondHotkeyModifier) or
+            nameof(SelectedHotkeyKey) or
+            nameof(IsAlwaysOnTop);
+
+    private void ApplyUserSettings(UserSettings settings)
+    {
+        SelectedViewMode = settings.SelectedViewMode;
+        SelectedSortMode = settings.SelectedSortMode;
+        SelectedAppearanceMode = settings.SelectedAppearanceMode;
+        SelectedOverlayOpacityPreset = settings.SelectedOverlayOpacityPreset;
+        SelectedOverlayScalePreset = settings.SelectedOverlayScalePreset;
+        SelectedThumbnailScalePreset = settings.SelectedThumbnailScalePreset;
+        SelectedSizingPolicy = settings.SelectedSizingPolicy;
+        DefaultViewMode = settings.DefaultViewMode;
+        SelectedFirstHotkeyModifier = settings.SelectedFirstHotkeyModifier;
+        SelectedSecondHotkeyModifier = settings.SelectedSecondHotkeyModifier;
+        SelectedHotkeyKey = settings.SelectedHotkeyKey;
+        IsAlwaysOnTop = settings.IsAlwaysOnTop;
+    }
+
+    private UserSettings CreateUserSettings() => new()
+    {
+        SelectedViewMode = SelectedViewMode,
+        SelectedSortMode = SelectedSortMode,
+        SelectedAppearanceMode = SelectedAppearanceMode,
+        SelectedOverlayOpacityPreset = SelectedOverlayOpacityPreset,
+        SelectedOverlayScalePreset = SelectedOverlayScalePreset,
+        SelectedThumbnailScalePreset = SelectedThumbnailScalePreset,
+        SelectedSizingPolicy = SelectedSizingPolicy,
+        DefaultViewMode = DefaultViewMode,
+        SelectedFirstHotkeyModifier = SelectedFirstHotkeyModifier,
+        SelectedSecondHotkeyModifier = SelectedSecondHotkeyModifier,
+        SelectedHotkeyKey = SelectedHotkeyKey,
+        IsAlwaysOnTop = IsAlwaysOnTop
+    };
 
     private void EnsureDistinctHotkeyModifiers(bool changedFirstModifier)
     {

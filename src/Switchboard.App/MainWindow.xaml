@@ -777,7 +777,7 @@
                IsOpen="{Binding IsSettingsOpen, Mode=TwoWay}"
                Placement="Bottom"
                PlacementTarget="{Binding ElementName=SettingsButton}"
-               StaysOpen="True"
+               StaysOpen="False"
                VerticalOffset="10">
         <Border Width="386"
                 DataContext="{Binding PlacementTarget.DataContext, ElementName=SettingsPopup}"

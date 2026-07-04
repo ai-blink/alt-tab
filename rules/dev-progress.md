@@ -34,6 +34,7 @@
 - 2026-07-05: Added whole-overlay app scale presets. Settings now exposes `50%` / `70%` / `90%` app scale, scales the shell and settings popup together, and resizes the native overlay window from the last logical layout size.
 - 2026-07-05: Fixed DWM thumbnail fit after app scaling. Thumbnail destination rectangles now use the transformed rendered bounds and fill each preview host consistently across Grid, Compact, and List modes.
 - 2026-07-05: Extended whole-overlay app scale presets with `100%` and `120%` options in the existing compact settings popover.
+- 2026-07-05: Added automatic JSON settings persistence for view, sort, appearance, opacity, app scale, thumbnail scale, sizing policy, default view, hotkey, and always-on-top settings. The settings popup now also closes when the user clicks outside it.
 
 ## Verification
 
@@ -100,6 +101,9 @@
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after adding 100% and 120% app scale presets.
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after adding 100% and 120% app scale presets.
 - Runtime smoke: launched `Switchboard.App.exe`, opened settings through UI Automation, and confirmed `App scale 120%` is visible and selectable.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after settings persistence and outside-click popup changes.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after settings persistence and outside-click popup changes.
+- Runtime smoke: launched `Switchboard.App.exe`, changed app scale and sort mode, confirmed `%AppData%\Switchboard\settings.json` stores the values, restarted the app and confirmed the values are restored, and confirmed an outside click closes the settings popup. The temporary smoke settings file was removed afterward.
 
 ## Blockers
 
@@ -107,13 +111,12 @@
 
 ## Next
 
-- Begin settings persistence for hotkey and overlay settings, or design the activation fallback UX for Windows foreground-lock failures.
+- Design the activation fallback UX for Windows foreground-lock failures, or add global hotkey collision feedback.
 
 ## Follow-Up
 
 - FOLLOW_UP: Improve thumbnail polish for transparent mode once real activation/hotkey behavior is in place.
 - FOLLOW_UP: Persist the selected appearance mode once settings persistence exists.
 - FOLLOW_UP: Add a user-visible fallback for Windows foreground-lock cases where `SetForegroundWindow` refuses activation even after the overlay requests it.
-- FOLLOW_UP: Persist overlay settings once the settings surface stabilizes.
 - FOLLOW_UP: Add user-visible feedback when a selected global hotkey cannot be registered because it is reserved or already in use.
 - IGNORE_FOR_V1: Mini dock, timeline, advanced virtual desktop management, and automatic window placement remain out of scope.
