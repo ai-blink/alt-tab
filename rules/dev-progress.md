@@ -32,6 +32,7 @@
 - 2026-07-04: Fixed responsive grid slot sizing. Overlay layout now uses the real selection-frame footprint and Windows work area, and WrapPanel item slots use the same calculated width/height so the rendered grid columns match the layout calculation.
 - 2026-07-04: Replaced count-only grid column selection with scored responsive layout selection. Grid/compact modes now evaluate candidate column counts against window count, work-area width/height, empty slots, right-side blank space, overflow, and row/column balance.
 - 2026-07-05: Added whole-overlay app scale presets. Settings now exposes `50%` / `70%` / `90%` app scale, scales the shell and settings popup together, and resizes the native overlay window from the last logical layout size.
+- 2026-07-05: Fixed DWM thumbnail fit after app scaling. Thumbnail destination rectangles now use the transformed rendered bounds and fill each preview host consistently across Grid, Compact, and List modes.
 
 ## Verification
 
@@ -92,6 +93,9 @@
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after whole-overlay scale changes.
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after whole-overlay scale changes.
 - Runtime smoke: launched `Switchboard.App.exe`, opened settings through UI Automation, selected `App scale 50%`, captured `notes/runs/2026-07-05_switchboard_app_scale_smoke.png`, and confirmed the app-scale radio option is selectable in the settings popup.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after DWM thumbnail fit changes.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after DWM thumbnail fit changes.
+- Runtime smoke: launched `Switchboard.App.exe`, selected Grid/Compact/List through UI Automation, captured `notes/runs/2026-07-05_switchboard_thumbnail_fit_grid_smoke.png`, `notes/runs/2026-07-05_switchboard_thumbnail_fit_compact_smoke.png`, and `notes/runs/2026-07-05_switchboard_thumbnail_fit_list_smoke.png`.
 
 ## Blockers
 
