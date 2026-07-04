@@ -30,6 +30,7 @@
 - 2026-07-04: Removed the remaining Native provider 12-window cap. Win32 enumeration now returns all candidate top-level windows to the switcher, while the existing overlay sizing and grid column policies handle larger counts.
 - 2026-07-04: Added main-header sort controls. The header now exposes `최근` / `앱` / `모니터` / `제목` / `즐겨찾기` segmented sort buttons bound to the existing `SelectedSortMode`.
 - 2026-07-04: Fixed responsive grid slot sizing. Overlay layout now uses the real selection-frame footprint and Windows work area, and WrapPanel item slots use the same calculated width/height so the rendered grid columns match the layout calculation.
+- 2026-07-04: Replaced count-only grid column selection with scored responsive layout selection. Grid/compact modes now evaluate candidate column counts against window count, work-area width/height, empty slots, right-side blank space, overflow, and row/column balance.
 
 ## Verification
 
@@ -82,6 +83,10 @@
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after responsive grid sizing changes.
 - `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after responsive grid sizing changes.
 - Runtime smoke: launched `Switchboard.App.exe`, captured `notes/runs/2026-07-04_switchboard_responsive_grid_smoke.png`, and confirmed the grid renders 6 filled columns instead of leaving the right side empty.
+- Initial `dotnet build Switchboard.slnx --nologo` after scored responsive layout changes was blocked by a resident `Switchboard.App` process locking build outputs; stopped that process and reran successfully.
+- `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors after scored responsive layout changes.
+- `dotnet test Switchboard.slnx --nologo`: passed, 4 tests after scored responsive layout changes.
+- Runtime smoke: launched `Switchboard.App.exe`, captured `notes/runs/2026-07-04_switchboard_scored_responsive_layout_smoke.png`, and confirmed 29 windows lay out across the available work-area width.
 
 ## Blockers
 

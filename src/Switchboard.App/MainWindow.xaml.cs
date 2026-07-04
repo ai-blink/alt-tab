@@ -196,18 +196,9 @@ public partial class MainWindow : Window
         var maxColumns = mode == SwitcherViewMode.List
             ? Math.Min(2, availableColumns)
             : availableColumns;
-        var preferredColumns = mode == SwitcherViewMode.List
-            ? 2
-            : viewModel.SelectedSizingPolicy == SwitcherSizingPolicy.Dense
-                ? maxColumns
-                : GetPreferredGridColumns(windowCount);
-        var columns = Math.Clamp(preferredColumns, 1, Math.Min(windowCount, maxColumns));
-
-        while (columns < Math.Min(windowCount, maxColumns) &&
-               CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight) > screenHeight)
-        {
-            columns++;
-        }
+        var columns = mode == SwitcherViewMode.List
+            ? Math.Clamp(2, 1, Math.Min(windowCount, maxColumns))
+            : ChooseBestColumns(windowCount, maxColumns, itemWidth, cardHeight, detailsHeaderHeight, screenWidth, screenHeight);
 
         var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + LayoutSafetyPadding;
         var desiredHeight = CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight);
@@ -218,14 +209,46 @@ public partial class MainWindow : Window
             Math.Min(screenHeight, Math.Max(MinHeight, desiredHeight)));
     }
 
-    private static int GetPreferredGridColumns(int windowCount) => windowCount switch
+    private int ChooseBestColumns(
+        int windowCount,
+        int maxColumns,
+        double itemWidth,
+        double cardHeight,
+        double detailsHeaderHeight,
+        double screenWidth,
+        double screenHeight)
     {
-        <= 3 => windowCount,
-        <= 6 => 3,
-        <= 12 => 4,
-        <= 20 => 5,
-        _ => (int)Math.Ceiling(Math.Sqrt(windowCount * 1.35))
-    };
+        var columnLimit = Math.Max(1, Math.Min(windowCount, maxColumns));
+        var best = new LayoutCandidate(1, double.MaxValue);
+
+        for (var columns = 1; columns <= columnLimit; columns++)
+        {
+            var rows = (int)Math.Ceiling(windowCount / (double)columns);
+            var emptySlots = (rows * columns) - windowCount;
+            var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + LayoutSafetyPadding;
+            var desiredHeight = CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight);
+            var widthOverflow = Math.Max(0, desiredWidth - screenWidth);
+            var heightOverflow = Math.Max(0, desiredHeight - screenHeight);
+            var rightBlankRatio = Math.Max(0, screenWidth - desiredWidth) / screenWidth;
+            var rowColumnBalance = Math.Abs(rows - columns);
+            var denseWeight = viewModel.SelectedSizingPolicy == SwitcherSizingPolicy.Dense ? 1.0 : 0.0;
+
+            var score =
+                (emptySlots * (55 - (denseWeight * 25))) +
+                (rightBlankRatio * (70 + (denseWeight * 45))) +
+                (rowColumnBalance * (3 + (denseWeight * 2))) +
+                (rows * 1.8) +
+                (widthOverflow * 100) +
+                (heightOverflow * 100);
+
+            if (score < best.Score)
+            {
+                best = new LayoutCandidate(columns, score);
+            }
+        }
+
+        return best.Columns;
+    }
 
     private static double CalculateDesiredHeight(int windowCount, int columns, double cardHeight, double detailsHeaderHeight)
     {
@@ -240,6 +263,8 @@ public partial class MainWindow : Window
     }
 
     private readonly record struct SwitcherLayout(int Columns, double Width, double Height);
+
+    private readonly record struct LayoutCandidate(int Columns, double Score);
 
     private void OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
