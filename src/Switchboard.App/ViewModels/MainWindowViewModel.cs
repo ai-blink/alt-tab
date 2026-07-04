@@ -79,7 +79,9 @@ public partial class MainWindowViewModel : ObservableObject
     [
         OverlayScalePreset.Fifty,
         OverlayScalePreset.Seventy,
-        OverlayScalePreset.Ninety
+        OverlayScalePreset.Ninety,
+        OverlayScalePreset.Hundred,
+        OverlayScalePreset.OneTwenty
     ];
 
     public IReadOnlyList<SwitcherSizingPolicy> SizingPolicies { get; } =
@@ -184,6 +186,8 @@ public partial class MainWindowViewModel : ObservableObject
     {
         OverlayScalePreset.Fifty => 0.5,
         OverlayScalePreset.Seventy => 0.7,
+        OverlayScalePreset.Hundred => 1.0,
+        OverlayScalePreset.OneTwenty => 1.2,
         _ => 0.9
     };
 

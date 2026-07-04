@@ -1010,6 +1010,16 @@
                                          GroupName="OverlayScale"
                                          IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Ninety}"
                                          Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="100%"
+                                         AutomationProperties.Name="App scale 100%"
+                                         GroupName="OverlayScale"
+                                         IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Hundred}"
+                                         Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="120%"
+                                         AutomationProperties.Name="App scale 120%"
+                                         GroupName="OverlayScale"
+                                         IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=OneTwenty}"
+                                         Style="{StaticResource ModeRadioStyle}" />
                         </StackPanel>
                     </Border>
                 </Grid>

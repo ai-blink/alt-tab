@@ -4,5 +4,7 @@ public enum OverlayScalePreset
 {
     Fifty,
     Seventy,
-    Ninety
+    Ninety,
+    Hundred,
+    OneTwenty
 }
