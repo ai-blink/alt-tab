@@ -2,32 +2,15 @@
 
 | Status | Milestone | Evidence |
 |---|---|---|
-| done | Initialize `.NET 10 + WPF` solution and project structure. | `dotnet build`, `dotnet test` pass |
-| done | Preserve Stitch design references inside project. | `references/stitch/switchboard_premium_window_switcher` |
-| done | Build visibly polished mock-data switcher shell. | `dotnet build`, `dotnet test`, visual smoke PNG |
-| done | Fix launch visibility and run manual visual smoke. | `notes/runs/2026-07-02_switchboard_visible_smoke.png` |
-| done | Convert shell to compact transparent overlay with light/dark modes. | `notes/runs/2026-07-02_switchboard_compact_transparent_smoke.png` |
-| done | Native top-level window enumeration. | `Switchboard.Native` provider |
-| done | DWM thumbnail rendering path. | `notes/runs/2026-07-02_switchboard_dwm_thumbnail_smoke.png` |
-| done | Rebalance cards around thumbnails as the primary content. | `notes/runs/2026-07-02_switchboard_thumbnail_first_smoke.png` |
-| done | Double thumbnail height while preserving the 3x2 switcher layout. | `notes/runs/2026-07-02_switchboard_thumbnail_double_height_smoke.png` |
-| done | Keyboard selection and foreground activation. | `dotnet test`, `notes/runs/2026-07-02_switchboard_keyboard_activation_smoke.png` |
-| done | Compact/List mode-specific templates. | `notes/runs/2026-07-02_switchboard_view_modes_list_smoke.png` |
-| done | Show all windows with in-overlay scrolling, soft DWM thumbnail fit, and double-click activation. | `notes/runs/2026-07-02_switchboard_all_windows_list_smoke.png` |
-| done | Size the overlay and grid columns to the current window count instead of relying on visible scrolling. | `notes/runs/2026-07-02_switchboard_count_sized_desktop_smoke.png` |
-| done | Add compact in-overlay settings for thumbnail scale, sizing policy, and default view mode candidates. | `notes/runs/2026-07-03_switchboard_settings_panel_smoke.png` |
-| done | Refine Compact/List modes and add an Always on top toggle. | `notes/runs/2026-07-03_switchboard_view_refinements_list_two_column_smoke.png` |
-| done | Add compact opacity and hotkey candidate settings. | `notes/runs/2026-07-03_switchboard_opacity_hotkey_settings_open_smoke.png` |
-| done | Keep the app resident in the tray when the overlay is closed. | `dotnet build`, `dotnet test`, runtime process smoke |
-| later | Foreground activation fallback UX. | Handle Windows foreground-lock failures gracefully |
-| done | Native global hotkey registration. | Selected hotkey modifier/key settings are registered with Win32 `RegisterHotKey` |
-| done | Keep DWM thumbnails visible while settings is open. | `notes/runs/2026-07-04_switchboard_settings_popup_thumbnails_smoke.png` |
-| done | Remove remaining Native window-count cap. | Win32 provider no longer truncates candidate top-level windows to 12 |
-| done | Add sort controls to the main header. | `notes/runs/2026-07-04_switchboard_main_sort_ui_smoke.png` |
-| done | Align responsive grid calculation with rendered slots. | `notes/runs/2026-07-04_switchboard_responsive_grid_smoke.png` |
-| done | Use scored responsive grid layout selection. | `notes/runs/2026-07-04_switchboard_scored_responsive_layout_smoke.png` |
-| done | Add whole-overlay app scale presets. | `notes/runs/2026-07-05_switchboard_app_scale_smoke.png` |
-| done | Fix scaled DWM thumbnail fit. | `notes/runs/2026-07-05_switchboard_thumbnail_fit_grid_smoke.png` |
-| done | Persist settings automatically and close settings on outside click. | `notes/runs/2026-07-05_switchboard_settings_persistence.md` |
-| later | Global hotkey collision feedback. | Show a user-visible warning when Win32 registration fails because a combo is reserved or already in use |
-| later | Favorite windows persistence. | JSON or LiteDB decision |
+| done | Initialize `.NET 10 + WPF` App/Core/Native/Tests structure and preserve Stitch references. | `dotnet build`, `dotnet test`, `references/stitch/` |
+| done | Deliver the compact transparent WPF overlay with Grid/Compact/List views and settings. | `notes/runs/2026-07-02_*`, `notes/runs/2026-07-03_*` |
+| done | Enumerate all candidate Win32 windows and render full-source DWM thumbnails. | Native provider, `DwmThumbnailPreview`, visual smoke artifacts |
+| done | Add keyboard/mouse activation, sorting, tray residency, configurable hotkey registration, and settings persistence. | App runtime smokes and `%AppData%` persistence probe |
+| done | Size rows, columns, and overlay bounds responsively without a 25-window accessibility ceiling. | `SwitcherLayoutCalculatorTests`, 30-window query regression |
+| done | Stabilize visible-state catalog polling without rebuilding unchanged WPF/DWM visuals. | `MainWindowViewModelRefreshTests` |
+| done | Make Alt+Tab toggle the overlay once per gesture and restore the previous foreground window. | `AltTabKeyFilterTests`, 10-gesture runtime smoke |
+| done | Separate transient foreground presentation from persistent always-on-top policy. | 0 foreground/topmost failures; `WS_EX_TOPMOST=0` when disabled |
+| later | Add user-visible configurable-hotkey collision feedback. | Report reserved/already-registered Win32 combinations |
+| later | Replace visible-state polling with Win32 event-driven catalog updates. | Preserve stable visual identity while reducing background work |
+| later | Persist favorite windows. | Choose JSON or LiteDB storage |
+| later | Add elevated/security-desktop activation fallback UX. | Explain foreground limitations without silent failure |

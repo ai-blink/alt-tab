@@ -22,7 +22,6 @@ public sealed class DwmThumbnailPreview : FrameworkElement
             new FrameworkPropertyMetadata(true, OnIsPreviewVisibleChanged));
 
     private const int DwmTnpRectDestination = 0x00000001;
-    private const int DwmTnpRectSource = 0x00000002;
     private const int DwmTnpOpacity = 0x00000004;
     private const int DwmTnpVisible = 0x00000008;
     private const int DwmTnpSourceClientAreaOnly = 0x00000010;
@@ -157,19 +156,12 @@ public sealed class DwmThumbnailPreview : FrameworkElement
             return;
         }
 
-        var flags = DwmTnpRectDestination | DwmTnpVisible | DwmTnpOpacity | DwmTnpSourceClientAreaOnly;
-        var hasSourceRect = TryCreateAdjustedRects(left, top, width, height, out var destination, out var sourceRect);
-
-        if (hasSourceRect)
-        {
-            flags |= DwmTnpRectSource;
-        }
+        var destination = CreateFittedDestinationRect(left, top, width, height);
 
         var properties = new DwmThumbnailProperties
         {
-            Flags = flags,
+            Flags = DwmTnpRectDestination | DwmTnpVisible | DwmTnpOpacity | DwmTnpSourceClientAreaOnly,
             Destination = destination,
-            Source = sourceRect,
             Opacity = 255,
             Visible = true,
             SourceClientAreaOnly = false
@@ -178,55 +170,48 @@ public sealed class DwmThumbnailPreview : FrameworkElement
         _ = DwmUpdateThumbnailProperties(thumbnail, ref properties);
     }
 
-    private bool TryCreateAdjustedRects(
-        int left,
-        int top,
-        int width,
-        int height,
-        out DwmRect destination,
-        out DwmRect sourceRect)
+    private DwmRect CreateFittedDestinationRect(int left, int top, int width, int height)
     {
         if (DwmQueryThumbnailSourceSize(thumbnail, out var sourceSize) != 0 ||
             sourceSize.Width <= 0 ||
             sourceSize.Height <= 0)
         {
-            destination = new DwmRect(left, top, left + width, top + height);
-            sourceRect = default;
-            return false;
+            return new DwmRect(left, top, left + width, top + height);
         }
 
-        var targetRatio = (double)width / height;
-        sourceRect = CreateCoverSourceRect(sourceSize.Width, sourceSize.Height, targetRatio);
-        destination = new DwmRect(left, top, left + width, top + height);
-        return true;
+        return FitDestinationRect(left, top, width, height, sourceSize.Width, sourceSize.Height);
     }
 
-    private static DwmRect CreateCoverSourceRect(int sourceWidth, int sourceHeight, double targetRatio)
+    private static DwmRect FitDestinationRect(
+        int left,
+        int top,
+        int width,
+        int height,
+        int sourceWidth,
+        int sourceHeight)
     {
-        if (sourceWidth <= 0 || sourceHeight <= 0 || targetRatio <= 0)
+        if (sourceWidth <= 0 || sourceHeight <= 0)
         {
-            return new DwmRect(0, 0, sourceWidth, sourceHeight);
+            return new DwmRect(left, top, left + width, top + height);
         }
 
         var sourceRatio = (double)sourceWidth / sourceHeight;
+        var targetRatio = (double)width / height;
+        var renderWidth = width;
+        var renderHeight = height;
 
         if (sourceRatio > targetRatio)
         {
-            var exactWidth = (int)Math.Round(sourceHeight * targetRatio);
-            var croppedWidth = Math.Clamp(exactWidth, 1, sourceWidth);
-            var left = (sourceWidth - croppedWidth) / 2;
-            return new DwmRect(left, 0, left + croppedWidth, sourceHeight);
+            renderHeight = Math.Max(1, (int)Math.Round(width / sourceRatio));
         }
-
-        if (sourceRatio < targetRatio)
+        else
         {
-            var exactHeight = (int)Math.Round(sourceWidth / targetRatio);
-            var croppedHeight = Math.Clamp(exactHeight, 1, sourceHeight);
-            var top = (sourceHeight - croppedHeight) / 2;
-            return new DwmRect(0, top, sourceWidth, top + croppedHeight);
+            renderWidth = Math.Max(1, (int)Math.Round(height * sourceRatio));
         }
 
-        return new DwmRect(0, 0, sourceWidth, sourceHeight);
+        var renderLeft = left + ((width - renderWidth) / 2);
+        var renderTop = top + ((height - renderHeight) / 2);
+        return new DwmRect(renderLeft, renderTop, renderLeft + renderWidth, renderTop + renderHeight);
     }
 
     [DllImport("dwmapi.dll")]

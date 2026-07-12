@@ -313,7 +313,7 @@
             <Setter Property="ItemContainerStyle" Value="{DynamicResource WindowCardItemStyle}" />
             <Setter Property="ItemTemplate" Value="{StaticResource GridWindowTemplate}" />
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>

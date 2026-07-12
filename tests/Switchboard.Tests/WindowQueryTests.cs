@@ -26,6 +26,29 @@ public sealed class WindowQueryTests
         Assert.Equal("Editor", result[0].AppName);
     }
 
+    [Fact]
+    public void Apply_does_not_cap_results_at_twenty_five_windows()
+    {
+        var now = DateTimeOffset.UtcNow;
+        var windows = Enumerable.Range(1, 30)
+            .Select(index => new WindowSnapshot(
+                $"window-{index}",
+                index,
+                "App",
+                $"Window {index}",
+                "Primary",
+                "APP",
+                "#111111",
+                false,
+                false,
+                now.AddSeconds(-index)))
+            .ToArray();
+
+        var result = WindowQuery.Apply(windows, null, WindowSortMode.Recent);
+
+        Assert.Equal(30, result.Count);
+    }
+
     private static WindowSnapshot[] CreateWindows()
     {
         var now = DateTimeOffset.UtcNow;

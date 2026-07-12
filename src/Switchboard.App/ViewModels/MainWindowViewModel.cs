@@ -320,6 +320,51 @@ public partial class MainWindowViewModel : ObservableObject
     public void SetGridColumnCount(int columnCount) =>
         GridColumnCount = Math.Max(1, columnCount);
 
+    public void RefreshWindows()
+    {
+        var refreshedWindows = windowCatalog.GetOpenWindows();
+
+        if (HasSamePresentation(allWindows, refreshedWindows))
+        {
+            return;
+        }
+
+        allWindows = refreshedWindows;
+        EnsureSelectedWindowIsVisible();
+        OnPropertyChanged(nameof(VisibleWindows));
+        OnPropertyChanged(nameof(WindowCountLabel));
+    }
+
+    private static bool HasSamePresentation(
+        IReadOnlyList<WindowSnapshot> current,
+        IReadOnlyList<WindowSnapshot> refreshed)
+    {
+        if (current.Count != refreshed.Count)
+        {
+            return false;
+        }
+
+        for (var index = 0; index < current.Count; index++)
+        {
+            var left = current[index];
+            var right = refreshed[index];
+
+            if (left.Handle != right.Handle ||
+                left.AppName != right.AppName ||
+                left.Title != right.Title ||
+                left.MonitorName != right.MonitorName ||
+                left.ThumbnailLabel != right.ThumbnailLabel ||
+                left.ThumbnailBrush != right.ThumbnailBrush ||
+                left.IsActive != right.IsActive ||
+                left.IsFavorite != right.IsFavorite)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     [RelayCommand]
     private void ToggleSettings() => IsSettingsOpen = !IsSettingsOpen;
 
@@ -329,10 +374,7 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private void Refresh()
     {
-        allWindows = windowCatalog.GetOpenWindows();
-        SelectedWindow = PickDefaultWindow();
-        OnPropertyChanged(nameof(VisibleWindows));
-        OnPropertyChanged(nameof(WindowCountLabel));
+        RefreshWindows();
     }
 
     private WindowSnapshot? PickDefaultWindow() =>

@@ -7,6 +7,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Switchboard.Core.Models;
+using Switchboard.Core.Services;
 using Switchboard.App.ViewModels;
 using Switchboard.Native;
 
@@ -16,28 +17,25 @@ public partial class MainWindow : Window
 {
     private const int WmHotkey = 0x0312;
     private const int SwitchboardHotkeyId = 0x5342;
-    private const double OuterMargin = 18;
-    private const double ContentHorizontalMargin = 28;
-    private const double ContentVerticalMargin = 20;
-    private const double HeaderHeight = 52;
-    private const double FooterHeight = 30;
-    private const double ListDetailsHeaderHeight = 30;
-    private const double ItemHorizontalGap = 6;
-    private const double ItemVerticalGap = 8;
-    private const double SelectionFramePadding = 8;
-    private const double LayoutSafetyPadding = 24;
-    private const double MinLayoutWidth = 875;
-    private const double MinLayoutHeight = 500;
-
+    private const int AltTabHotkeyId = 0x5343;
     private readonly MainWindowViewModel viewModel;
     private HwndSource? hwndSource;
     private GlobalHotkeyRegistration? hotkeyRegistration;
+    private GlobalHotkeyRegistration? altTabHotkeyRegistration;
+    private LowLevelAltTabHookRegistration? altTabHookRegistration;
+    private readonly DispatcherTimer refreshTimer;
+    private nint previousForegroundWindow;
     private double currentLayoutWidth = 955;
     private double currentLayoutHeight = 540;
 
     public MainWindow(MainWindowViewModel viewModel)
     {
         this.viewModel = viewModel;
+        refreshTimer = new DispatcherTimer(DispatcherPriority.Background)
+        {
+            Interval = TimeSpan.FromSeconds(1)
+        };
+        refreshTimer.Tick += OnRefreshTimerTick;
 
         InitializeComponent();
         DataContext = viewModel;
@@ -51,8 +49,10 @@ public partial class MainWindow : Window
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
+        RefreshWindowCatalog();
         ApplyContentSizedBounds();
         ShowInTaskbar = true;
+        StartRefreshTimer();
         InitializeGlobalHotkey();
 
         Dispatcher.BeginInvoke(
@@ -67,9 +67,18 @@ public partial class MainWindow : Window
 
     public void ShowOverlay()
     {
+        if (!IsVisible)
+        {
+            RememberForegroundWindow();
+        }
+
+        RefreshWindowCatalog();
         ApplyContentSizedBounds();
         ShowInTaskbar = true;
         Show();
+        StartRefreshTimer();
+        var hwnd = new WindowInteropHelper(this).Handle;
+        _ = ForegroundWindowPresenter.TryPresent(hwnd, viewModel.IsAlwaysOnTop);
         Activate();
         Focus();
         WindowList.Focus();
@@ -83,17 +92,54 @@ public partial class MainWindow : Window
         }
 
         e.Cancel = true;
-        ShowInTaskbar = false;
-        Hide();
+        HideOverlay(restorePreviousWindow: false);
     }
 
     private void OnClosed(object? sender, EventArgs e)
     {
+        StopRefreshTimer();
+        refreshTimer.Tick -= OnRefreshTimerTick;
+        altTabHotkeyRegistration?.Dispose();
+        altTabHotkeyRegistration = null;
+        altTabHookRegistration?.Dispose();
+        altTabHookRegistration = null;
         hotkeyRegistration?.Dispose();
         hotkeyRegistration = null;
         hwndSource?.RemoveHook(WndProc);
         hwndSource = null;
         viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+    }
+
+    private void OnRefreshTimerTick(object? sender, EventArgs e)
+    {
+        if (!IsVisible)
+        {
+            StopRefreshTimer();
+            return;
+        }
+
+        RefreshWindowCatalog();
+    }
+
+    private void RefreshWindowCatalog()
+    {
+        viewModel.RefreshWindows();
+    }
+
+    private void StartRefreshTimer()
+    {
+        if (!refreshTimer.IsEnabled)
+        {
+            refreshTimer.Start();
+        }
+    }
+
+    private void StopRefreshTimer()
+    {
+        if (refreshTimer.IsEnabled)
+        {
+            refreshTimer.Stop();
+        }
     }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -108,7 +154,7 @@ public partial class MainWindow : Window
 
         if (e.PropertyName == nameof(MainWindowViewModel.SelectedOverlayScalePreset))
         {
-            Dispatcher.BeginInvoke(ApplyOverlayScaleBounds, DispatcherPriority.Loaded);
+            Dispatcher.BeginInvoke(ApplyContentSizedBounds, DispatcherPriority.Loaded);
         }
 
         if (e.PropertyName == nameof(MainWindowViewModel.IsAlwaysOnTop))
@@ -133,7 +179,43 @@ public partial class MainWindow : Window
 
         hwndSource = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
         hwndSource?.AddHook(WndProc);
+        RegisterAltTabHook();
+        RegisterAltTabHotkeyFallback();
         RegisterGlobalHotkey();
+    }
+
+    private void RegisterAltTabHook()
+    {
+        altTabHookRegistration?.Dispose();
+        altTabHookRegistration = null;
+        altTabHookRegistration = LowLevelAltTabHookRegistration.TryRegister(() =>
+            Dispatcher.BeginInvoke(ToggleOverlay, DispatcherPriority.Input));
+    }
+
+    private void RegisterAltTabHotkeyFallback()
+    {
+        altTabHotkeyRegistration?.Dispose();
+        altTabHotkeyRegistration = null;
+
+        if (altTabHookRegistration?.IsRegistered == true)
+        {
+            return;
+        }
+
+        var hwnd = new WindowInteropHelper(this).Handle;
+
+        if (hwnd == 0)
+        {
+            return;
+        }
+
+        // Passing Alt twice intentionally produces a single MOD_ALT bit.
+        altTabHotkeyRegistration = GlobalHotkeyRegistration.TryRegister(
+            hwnd,
+            AltTabHotkeyId,
+            SwitcherHotkeyModifier.Alt,
+            SwitcherHotkeyModifier.Alt,
+            SwitcherHotkeyKey.Tab);
     }
 
     private void RegisterGlobalHotkey()
@@ -158,13 +240,78 @@ public partial class MainWindow : Window
 
     private nint WndProc(nint hwnd, int msg, nint wParam, nint lParam, ref bool handled)
     {
-        if (msg == WmHotkey && wParam.ToInt32() == SwitchboardHotkeyId)
+        if (msg != WmHotkey)
+        {
+            return 0;
+        }
+
+        if (wParam.ToInt32() == SwitchboardHotkeyId)
         {
             ShowOverlay();
             handled = true;
         }
+        else if (wParam.ToInt32() == AltTabHotkeyId)
+        {
+            ToggleOverlay();
+            handled = true;
+        }
 
         return 0;
+    }
+
+    private void ToggleOverlay()
+    {
+        if (IsVisible)
+        {
+            HideOverlay(restorePreviousWindow: true);
+            return;
+        }
+
+        ShowOverlay();
+    }
+
+    private void HideOverlay(bool restorePreviousWindow)
+    {
+        ShowInTaskbar = false;
+        StopRefreshTimer();
+        Hide();
+
+        if (restorePreviousWindow)
+        {
+            var hwnd = previousForegroundWindow;
+            previousForegroundWindow = 0;
+            RestoreForegroundWindowAfterInput(hwnd);
+        }
+    }
+
+    private void RestoreForegroundWindowAfterInput(nint hwnd)
+    {
+        if (hwnd == 0)
+        {
+            return;
+        }
+
+        var restoreTimer = new DispatcherTimer(DispatcherPriority.Input)
+        {
+            Interval = TimeSpan.FromMilliseconds(100)
+        };
+        restoreTimer.Tick += (_, _) =>
+        {
+            restoreTimer.Stop();
+            _ = ForegroundWindowPresenter.TryRestore(hwnd);
+        };
+        restoreTimer.Start();
+    }
+
+    private void RememberForegroundWindow()
+    {
+        var currentWindow = ForegroundWindowPresenter.GetCurrentWindow();
+        var overlayWindow = new WindowInteropHelper(this).Handle;
+
+        if (currentWindow != 0 && currentWindow != overlayWindow)
+        {
+            previousForegroundWindow = currentWindow;
+        }
     }
 
     private void ApplyContentSizedBounds()
@@ -172,32 +319,6 @@ public partial class MainWindow : Window
         var windowCount = Math.Max(1, viewModel.VisibleWindows.Count);
         var workArea = SystemParameters.WorkArea;
         var appScale = viewModel.AppScale;
-        var layout = CalculateLayout(windowCount, workArea.Width, workArea.Height);
-
-        viewModel.SetGridColumnCount(layout.Columns);
-        currentLayoutWidth = layout.Width;
-        currentLayoutHeight = layout.Height;
-        WindowState = WindowState.Normal;
-        Width = currentLayoutWidth * appScale;
-        Height = currentLayoutHeight * appScale;
-        Left = workArea.Left + Math.Max(0, (workArea.Width - Width) / 2);
-        Top = workArea.Top + Math.Max(0, (workArea.Height - Height) / 2);
-    }
-
-    private void ApplyOverlayScaleBounds()
-    {
-        var workArea = SystemParameters.WorkArea;
-        var appScale = viewModel.AppScale;
-
-        WindowState = WindowState.Normal;
-        Width = Math.Min(workArea.Width, currentLayoutWidth * appScale);
-        Height = Math.Min(workArea.Height, currentLayoutHeight * appScale);
-        Left = workArea.Left + Math.Max(0, (workArea.Width - Width) / 2);
-        Top = workArea.Top + Math.Max(0, (workArea.Height - Height) / 2);
-    }
-
-    private SwitcherLayout CalculateLayout(int windowCount, double screenWidth, double screenHeight)
-    {
         var mode = viewModel.SelectedViewMode;
         var cardWidth = mode switch
         {
@@ -211,82 +332,28 @@ public partial class MainWindow : Window
             SwitcherViewMode.List => viewModel.ListRowHeight,
             _ => viewModel.GridCardHeight
         };
-        var detailsHeaderHeight = mode == SwitcherViewMode.List ? ListDetailsHeaderHeight : 0;
+        var layout = SwitcherLayoutCalculator.Calculate(
+            windowCount,
+            workArea.Width,
+            workArea.Height,
+            appScale,
+            mode,
+            viewModel.SelectedSizingPolicy,
+            cardWidth,
+            cardHeight);
 
-        var itemWidth = cardWidth + ItemHorizontalGap + SelectionFramePadding;
-        var availableColumns = Math.Max(1, (int)Math.Floor((screenWidth - (OuterMargin * 2) - ContentHorizontalMargin - LayoutSafetyPadding) / itemWidth));
-        var maxColumns = mode == SwitcherViewMode.List
-            ? Math.Min(2, availableColumns)
-            : availableColumns;
-        var columns = mode == SwitcherViewMode.List
-            ? Math.Clamp(2, 1, Math.Min(windowCount, maxColumns))
-            : ChooseBestColumns(windowCount, maxColumns, itemWidth, cardHeight, detailsHeaderHeight, screenWidth, screenHeight);
-
-        var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + LayoutSafetyPadding;
-        var desiredHeight = CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight);
-
-        return new SwitcherLayout(
-            columns,
-            Math.Min(screenWidth, Math.Max(MinLayoutWidth, desiredWidth)),
-            Math.Min(screenHeight, Math.Max(MinLayoutHeight, desiredHeight)));
+        viewModel.SetGridColumnCount(layout.Columns);
+        currentLayoutWidth = layout.Width;
+        currentLayoutHeight = layout.Height;
+        ScrollViewer.SetVerticalScrollBarVisibility(
+            WindowList,
+            layout.RequiresVerticalScroll ? ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden);
+        WindowState = WindowState.Normal;
+        Width = Math.Min(workArea.Width, currentLayoutWidth * appScale);
+        Height = Math.Min(workArea.Height, currentLayoutHeight * appScale);
+        Left = workArea.Left + Math.Max(0, (workArea.Width - Width) / 2);
+        Top = workArea.Top + Math.Max(0, (workArea.Height - Height) / 2);
     }
-
-    private int ChooseBestColumns(
-        int windowCount,
-        int maxColumns,
-        double itemWidth,
-        double cardHeight,
-        double detailsHeaderHeight,
-        double screenWidth,
-        double screenHeight)
-    {
-        var columnLimit = Math.Max(1, Math.Min(windowCount, maxColumns));
-        var best = new LayoutCandidate(1, double.MaxValue);
-
-        for (var columns = 1; columns <= columnLimit; columns++)
-        {
-            var rows = (int)Math.Ceiling(windowCount / (double)columns);
-            var emptySlots = (rows * columns) - windowCount;
-            var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + LayoutSafetyPadding;
-            var desiredHeight = CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight);
-            var widthOverflow = Math.Max(0, desiredWidth - screenWidth);
-            var heightOverflow = Math.Max(0, desiredHeight - screenHeight);
-            var rightBlankRatio = Math.Max(0, screenWidth - desiredWidth) / screenWidth;
-            var rowColumnBalance = Math.Abs(rows - columns);
-            var denseWeight = viewModel.SelectedSizingPolicy == SwitcherSizingPolicy.Dense ? 1.0 : 0.0;
-
-            var score =
-                (emptySlots * (55 - (denseWeight * 25))) +
-                (rightBlankRatio * (70 + (denseWeight * 45))) +
-                (rowColumnBalance * (3 + (denseWeight * 2))) +
-                (rows * 1.8) +
-                (widthOverflow * 100) +
-                (heightOverflow * 100);
-
-            if (score < best.Score)
-            {
-                best = new LayoutCandidate(columns, score);
-            }
-        }
-
-        return best.Columns;
-    }
-
-    private static double CalculateDesiredHeight(int windowCount, int columns, double cardHeight, double detailsHeaderHeight)
-    {
-        var rows = (int)Math.Ceiling(windowCount / (double)columns);
-        return (OuterMargin * 2) +
-            HeaderHeight +
-            FooterHeight +
-            ContentVerticalMargin +
-            detailsHeaderHeight +
-            (rows * (cardHeight + ItemVerticalGap + SelectionFramePadding)) +
-            LayoutSafetyPadding;
-    }
-
-    private readonly record struct SwitcherLayout(int Columns, double Width, double Height);
-
-    private readonly record struct LayoutCandidate(int Columns, double Score);
 
     private void OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
