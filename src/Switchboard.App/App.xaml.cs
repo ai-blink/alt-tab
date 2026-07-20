@@ -26,6 +26,7 @@ public partial class App : System.Windows.Application
         services.AddSingleton<Win32NativeWindowProvider>();
         services.AddSingleton<IWindowCatalog>(provider => provider.GetRequiredService<Win32NativeWindowProvider>());
         services.AddSingleton<IWindowActivator>(provider => provider.GetRequiredService<Win32NativeWindowProvider>());
+        services.AddSingleton<IWindowCloser>(provider => provider.GetRequiredService<Win32NativeWindowProvider>());
         services.AddSingleton<IUserSettingsStore, JsonUserSettingsStore>();
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<MainWindow>();

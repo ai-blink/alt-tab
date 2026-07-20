@@ -25,6 +25,44 @@
         <app:EnumEqualsConverter x:Key="EnumEqualsConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
+        <Style x:Key="WindowCloseButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="20" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="#CC252B35" />
+            <Setter Property="BorderBrush" Value="#99AAB5C5" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="#DDE4EE" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="Content" Value="&#xE8BB;" />
+            <Setter Property="ToolTip" Value="창 종료" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Root"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#D9C42B3A" />
+                                <Setter TargetName="Root" Property="BorderBrush" Value="#FFF06A78" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#FFF06A78" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <DataTemplate x:Key="GridWindowTemplate">
             <Border Width="{Binding DataContext.GridCardWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                     Height="{Binding DataContext.GridCardHeight, RelativeSource={RelativeSource AncestorType=Window}}"
@@ -87,6 +125,7 @@
                                 <ColumnDefinition Width="70" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                        VerticalAlignment="Center"
@@ -124,6 +163,12 @@
                                            Foreground="#84C0FF"
                                            Text="ACTIVE" />
                             </Border>
+                            <Button Grid.Column="3"
+                                    Margin="6,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Command="{Binding DataContext.CloseWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource WindowCloseButtonStyle}" />
                         </Grid>
                     </Border>
                 </Grid>
@@ -165,6 +210,7 @@
                                 <ColumnDefinition Width="54" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0"
@@ -203,6 +249,12 @@
                                            Foreground="#84C0FF"
                                            Text="ACTIVE" />
                             </Border>
+                            <Button Grid.Column="3"
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Command="{Binding DataContext.CloseWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource WindowCloseButtonStyle}" />
                         </Grid>
                     </Border>
                 </Grid>
@@ -267,6 +319,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0"
@@ -301,6 +354,12 @@
                                        Foreground="#84C0FF"
                                        Text="ACTIVE" />
                         </Border>
+                        <Button Grid.Column="2"
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Command="{Binding DataContext.CloseWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"
+                                Style="{StaticResource WindowCloseButtonStyle}" />
                     </Grid>
                 </Grid>
             </Border>

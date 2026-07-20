@@ -419,6 +419,8 @@ public partial class MainWindow : Window
     private void OnWindowListMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (e.ChangedButton != MouseButton.Left ||
+            e.OriginalSource is DependencyObject source &&
+            FindAncestor<System.Windows.Controls.Primitives.ButtonBase>(source) is not null ||
             ItemsControl.ContainerFromElement(WindowList, e.OriginalSource as DependencyObject) is not ListBoxItem item)
         {
             return;

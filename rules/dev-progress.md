@@ -2,6 +2,9 @@
 
 ## Current
 
+- 2026-07-20: Added always-visible close controls to Grid/Compact/List cards and routed standard `WM_CLOSE` requests through a dedicated `IWindowCloser` boundary.
+- 2026-07-20: Moved Grid/Compact close controls outside the DWM thumbnail destination to prevent render-order occlusion.
+- 2026-07-20: Prepared version metadata and user documentation for the `v0.1.1` Portable release.
 - 2026-07-13: Completed the Alt+Tab, thumbnail, responsive-count, polling, and foreground-presentation stability slice.
 - 2026-07-13: Alt+Tab now toggles the overlay once per gesture; plain navigation keys retain card-selection behavior.
 - 2026-07-13: Low-level keyboard capture runs on a dedicated message-loop thread with repeat-key suppression and fallback-only reserved hotkey registration.
@@ -16,7 +19,8 @@
 ## Verification
 
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors.
-- `dotnet test Switchboard.slnx --nologo --no-build`: passed, 12 tests.
+- `dotnet build Switchboard.slnx -c Release --nologo`: passed, 0 warnings, 0 errors.
+- `dotnet test Switchboard.slnx -c Release --nologo --no-build`: passed, 13 tests.
 - Runtime Alt+Tab smoke: 10 gestures produced `VHVHVHVHVH` with 0 visibility failures.
 - Runtime foreground smoke: 0 Switchboard foreground PID failures while visible and 0 previous-PID restoration failures while hidden.
 - Runtime topmost smoke with persisted `IsAlwaysOnTop=false`: 0 final `WS_EX_TOPMOST` failures.
@@ -34,4 +38,5 @@
 
 - FOLLOW_UP: Add a visible opt-out for low-level Alt+Tab capture before treating it as a normal default.
 - FOLLOW_UP: Add elevated/security-desktop foreground failure UX.
+- FOLLOW_UP: Add user-visible feedback when a protected/elevated window rejects a close request.
 - IGNORE_FOR_V1: Mini dock, timeline, advanced virtual desktop management, and automatic window placement remain out of scope.

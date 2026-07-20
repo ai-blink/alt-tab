@@ -36,6 +36,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     private readonly IWindowCatalog windowCatalog;
     private readonly IWindowActivator windowActivator;
+    private readonly IWindowCloser windowCloser;
     private readonly IUserSettingsStore userSettingsStore;
     private IReadOnlyList<WindowSnapshot> allWindows;
     private bool isUpdatingHotkeyModifiers;
@@ -43,10 +44,12 @@ public partial class MainWindowViewModel : ObservableObject
     public MainWindowViewModel(
         IWindowCatalog windowCatalog,
         IWindowActivator windowActivator,
+        IWindowCloser windowCloser,
         IUserSettingsStore userSettingsStore)
     {
         this.windowCatalog = windowCatalog;
         this.windowActivator = windowActivator;
+        this.windowCloser = windowCloser;
         this.userSettingsStore = userSettingsStore;
         allWindows = windowCatalog.GetOpenWindows();
         ApplyUserSettings(userSettingsStore.Load());
@@ -375,6 +378,15 @@ public partial class MainWindowViewModel : ObservableObject
     private void Refresh()
     {
         RefreshWindows();
+    }
+
+    [RelayCommand]
+    private void CloseWindow(WindowSnapshot? window)
+    {
+        if (window is not null)
+        {
+            _ = windowCloser.TryClose(window);
+        }
     }
 
     private WindowSnapshot? PickDefaultWindow() =>

@@ -51,8 +51,20 @@ public sealed class MainWindowViewModelRefreshTests
         Assert.Equal("Renamed project", viewModel.VisibleWindows[0].Title);
     }
 
-    private static MainWindowViewModel CreateViewModel(IWindowCatalog catalog) =>
-        new(catalog, new StubWindowActivator(), new StubSettingsStore());
+    [Fact]
+    public void CloseWindowCommand_requests_close_for_supplied_window()
+    {
+        var window = CreateWindow("Project", DateTimeOffset.UtcNow);
+        var closer = new StubWindowCloser();
+        var viewModel = CreateViewModel(new StubWindowCatalog([window]), closer);
+
+        viewModel.CloseWindowCommand.Execute(window);
+
+        Assert.Same(window, closer.ClosedWindow);
+    }
+
+    private static MainWindowViewModel CreateViewModel(IWindowCatalog catalog, IWindowCloser? closer = null) =>
+        new(catalog, new StubWindowActivator(), closer ?? new StubWindowCloser(), new StubSettingsStore());
 
     private static WindowSnapshot CreateWindow(string title, DateTimeOffset lastActivatedAt) =>
         new("editor", 1, "Editor", title, "Primary", "CODE", "#111111", true, false, lastActivatedAt);
@@ -67,6 +79,17 @@ public sealed class MainWindowViewModelRefreshTests
     private sealed class StubWindowActivator : IWindowActivator
     {
         public bool TryActivate(WindowSnapshot window) => true;
+    }
+
+    private sealed class StubWindowCloser : IWindowCloser
+    {
+        public WindowSnapshot? ClosedWindow { get; private set; }
+
+        public bool TryClose(WindowSnapshot window)
+        {
+            ClosedWindow = window;
+            return true;
+        }
     }
 
     private sealed class StubSettingsStore : IUserSettingsStore

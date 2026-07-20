@@ -6,7 +6,7 @@ using Switchboard.Core.Services;
 
 namespace Switchboard.Native;
 
-public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCatalog, IWindowActivator
+public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCatalog, IWindowActivator, IWindowCloser
 {
     private const int GwlExStyle = -20;
     private const uint GwOwner = 4;
@@ -14,6 +14,7 @@ public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCa
     private const long WsExAppWindow = 0x00040000L;
     private const int DwmwaCloaked = 14;
     private const int SwRestore = 9;
+    private const uint WmClose = 0x0010;
 
     public IReadOnlyList<WindowSnapshot> GetOpenWindows() => GetTopLevelWindows();
 
@@ -34,6 +35,11 @@ public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCa
 
         return foregroundRequested || GetForegroundWindow() == window.Handle;
     }
+
+    public bool TryClose(WindowSnapshot window) =>
+        window.Handle != 0 &&
+        IsWindow(window.Handle) &&
+        PostMessage(window.Handle, WmClose, 0, 0);
 
     public IReadOnlyList<WindowSnapshot> GetTopLevelWindows()
     {
@@ -223,6 +229,9 @@ public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCa
 
     [DllImport("user32.dll")]
     private static extern bool SetForegroundWindow(nint hWnd);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool PostMessage(nint hWnd, uint msg, nint wParam, nint lParam);
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern int GetWindowText(nint hWnd, StringBuilder lpString, int nMaxCount);
