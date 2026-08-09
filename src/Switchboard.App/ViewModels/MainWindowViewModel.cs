@@ -88,18 +88,14 @@ public partial class MainWindowViewModel : ObservableObject
         OverlayOpacityPreset.Ninety
     ];
 
-    public IReadOnlyList<CompactOverlaySize> CompactOverlaySizes { get; } =
+    public IReadOnlyList<OverlayScalePreset> OverlayScalePresets { get; } =
     [
-        CompactOverlaySize.ExtraSmall,
-        CompactOverlaySize.Small,
-        CompactOverlaySize.Medium,
-        CompactOverlaySize.Large,
-        CompactOverlaySize.ExtraLarge
+        OverlayScalePreset.Fifty,
+        OverlayScalePreset.Seventy,
+        OverlayScalePreset.Ninety,
+        OverlayScalePreset.Hundred,
+        OverlayScalePreset.OneTwenty
     ];
-
-    public IReadOnlyList<int> CompactOverlayMaximumColumnOptions { get; } = [4, 5, 6, 7];
-
-    public IReadOnlyList<int> CompactOverlayMaximumRowOptions { get; } = [4, 5, 6];
 
     public IReadOnlyList<OverlayPlacementOption> CompactOverlayPlacementOptions { get; } =
     [
@@ -150,6 +146,11 @@ public partial class MainWindowViewModel : ObservableObject
     private OverlayOpacityPreset selectedOverlayOpacityPreset = OverlayOpacityPreset.Ninety;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AppScale))]
+    [NotifyPropertyChangedFor(nameof(PresentationScale))]
+    private OverlayScalePreset selectedOverlayScalePreset = OverlayScalePreset.Ninety;
+
+    [ObservableProperty]
     private int gridColumnCount = 3;
 
     [ObservableProperty]
@@ -191,25 +192,11 @@ public partial class MainWindowViewModel : ObservableObject
     private bool isAlwaysOnTop = true;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CompactOverlayUiScale))]
+    [NotifyPropertyChangedFor(nameof(PresentationScale))]
     private bool isCompactOverlayEnabled;
 
     [ObservableProperty]
     private OverlayPlacement selectedCompactOverlayPlacement = OverlayPlacement.BottomLeft;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CompactOverlayWindowSizeRatio))]
-    private CompactOverlaySize selectedCompactOverlayWindowSize = CompactOverlaySize.Medium;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CompactOverlayUiScale))]
-    private CompactOverlaySize selectedCompactOverlayUiSize = CompactOverlaySize.Large;
-
-    [ObservableProperty]
-    private int selectedCompactOverlayMaximumColumns = 4;
-
-    [ObservableProperty]
-    private int selectedCompactOverlayMaximumRows = 4;
 
     public IReadOnlyList<WindowSnapshot> VisibleWindows =>
         WindowQuery.Apply(allWindows, SearchText, SelectedSortMode).ToList();
@@ -225,25 +212,16 @@ public partial class MainWindowViewModel : ObservableObject
 
     public string ThumbnailScaleLabel => $"{ThumbnailScale:0.0}x";
 
-    public double CompactOverlayWindowSizeRatio => SelectedCompactOverlayWindowSize switch
+    public double AppScale => SelectedOverlayScalePreset switch
     {
-        CompactOverlaySize.ExtraSmall => 0.45,
-        CompactOverlaySize.Small => 0.55,
-        CompactOverlaySize.Large => 0.75,
-        CompactOverlaySize.ExtraLarge => 0.85,
-        _ => 0.65
+        OverlayScalePreset.Fifty => 0.5,
+        OverlayScalePreset.Seventy => 0.7,
+        OverlayScalePreset.Hundred => 1.0,
+        OverlayScalePreset.OneTwenty => 1.2,
+        _ => 0.9
     };
 
-    public double CompactOverlayUiScale => IsCompactOverlayEnabled
-        ? SelectedCompactOverlayUiSize switch
-        {
-            CompactOverlaySize.ExtraSmall => 0.85,
-            CompactOverlaySize.Small => 0.925,
-            CompactOverlaySize.Medium => 1.0,
-            CompactOverlaySize.Large => 1.1,
-            _ => 1.2
-        }
-        : 1.0;
+    public double PresentationScale => AppScale * (IsCompactOverlayEnabled ? 0.7 : 1.0);
 
     public double GridCardWidth => Math.Round(BaseGridCardWidth * ThumbnailScale);
 
@@ -477,6 +455,7 @@ public partial class MainWindowViewModel : ObservableObject
             nameof(SelectedSortMode) or
             nameof(SelectedAppearanceMode) or
             nameof(SelectedOverlayOpacityPreset) or
+            nameof(SelectedOverlayScalePreset) or
             nameof(SelectedThumbnailScalePreset) or
             nameof(SelectedSizingPolicy) or
             nameof(DefaultViewMode) or
@@ -485,10 +464,6 @@ public partial class MainWindowViewModel : ObservableObject
             nameof(SelectedHotkeyKey) or
             nameof(IsCompactOverlayEnabled) or
             nameof(SelectedCompactOverlayPlacement) or
-            nameof(SelectedCompactOverlayWindowSize) or
-            nameof(SelectedCompactOverlayUiSize) or
-            nameof(SelectedCompactOverlayMaximumColumns) or
-            nameof(SelectedCompactOverlayMaximumRows) or
             nameof(IsAlwaysOnTop);
 
     private void ApplyUserSettings(UserSettings settings)
@@ -497,6 +472,7 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedSortMode = settings.SelectedSortMode;
         SelectedAppearanceMode = settings.SelectedAppearanceMode;
         SelectedOverlayOpacityPreset = settings.SelectedOverlayOpacityPreset;
+        SelectedOverlayScalePreset = settings.SelectedOverlayScalePreset;
         SelectedThumbnailScalePreset = settings.SelectedThumbnailScalePreset;
         SelectedSizingPolicy = settings.SelectedSizingPolicy;
         DefaultViewMode = settings.DefaultViewMode;
@@ -505,10 +481,6 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedHotkeyKey = settings.SelectedHotkeyKey;
         IsCompactOverlayEnabled = settings.IsCompactOverlayEnabled;
         SelectedCompactOverlayPlacement = settings.CompactOverlayPlacement;
-        SelectedCompactOverlayWindowSize = settings.CompactOverlayWindowSize;
-        SelectedCompactOverlayUiSize = settings.CompactOverlayUiSize;
-        SelectedCompactOverlayMaximumColumns = settings.CompactOverlayMaximumColumns;
-        SelectedCompactOverlayMaximumRows = settings.CompactOverlayMaximumRows;
         IsAlwaysOnTop = settings.IsAlwaysOnTop;
     }
 
@@ -518,6 +490,7 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedSortMode = SelectedSortMode,
         SelectedAppearanceMode = SelectedAppearanceMode,
         SelectedOverlayOpacityPreset = SelectedOverlayOpacityPreset,
+        SelectedOverlayScalePreset = SelectedOverlayScalePreset,
         SelectedThumbnailScalePreset = SelectedThumbnailScalePreset,
         SelectedSizingPolicy = SelectedSizingPolicy,
         DefaultViewMode = DefaultViewMode,
@@ -526,10 +499,6 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedHotkeyKey = SelectedHotkeyKey,
         IsCompactOverlayEnabled = IsCompactOverlayEnabled,
         CompactOverlayPlacement = SelectedCompactOverlayPlacement,
-        CompactOverlayWindowSize = SelectedCompactOverlayWindowSize,
-        CompactOverlayUiSize = SelectedCompactOverlayUiSize,
-        CompactOverlayMaximumColumns = SelectedCompactOverlayMaximumColumns,
-        CompactOverlayMaximumRows = SelectedCompactOverlayMaximumRows,
         IsAlwaysOnTop = IsAlwaysOnTop
     };
 

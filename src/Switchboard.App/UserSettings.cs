@@ -13,6 +13,8 @@ public sealed record UserSettings
 
     public OverlayOpacityPreset SelectedOverlayOpacityPreset { get; init; } = OverlayOpacityPreset.Ninety;
 
+    public OverlayScalePreset SelectedOverlayScalePreset { get; init; } = OverlayScalePreset.Ninety;
+
     public ThumbnailScalePreset SelectedThumbnailScalePreset { get; init; } = ThumbnailScalePreset.Normal;
 
     public SwitcherSizingPolicy SelectedSizingPolicy { get; init; } = SwitcherSizingPolicy.Auto;
@@ -28,14 +30,6 @@ public sealed record UserSettings
     public bool IsCompactOverlayEnabled { get; init; }
 
     public OverlayPlacement CompactOverlayPlacement { get; init; } = OverlayPlacement.BottomLeft;
-
-    public CompactOverlaySize CompactOverlayWindowSize { get; init; } = CompactOverlaySize.Medium;
-
-    public CompactOverlaySize CompactOverlayUiSize { get; init; } = CompactOverlaySize.Large;
-
-    public int CompactOverlayMaximumColumns { get; init; } = 4;
-
-    public int CompactOverlayMaximumRows { get; init; } = 4;
 
     public bool IsAlwaysOnTop { get; init; } = true;
 }
