@@ -47,7 +47,7 @@ public sealed class SwitcherLayoutCalculatorTests
             SwitcherSizingPolicy.Auto,
             cardWidth,
             cardHeight: 220);
-        var availableContentWidth = layout.Width - 36 - 28 - 24;
+        var availableContentWidth = layout.Width - 36 - 28 - 40;
         var unusedContentWidth = availableContentWidth - (layout.Columns * itemWidth);
 
         Assert.Equal(layout.Columns, (int)Math.Floor(availableContentWidth / itemWidth));
@@ -68,6 +68,24 @@ public sealed class SwitcherLayoutCalculatorTests
         Assert.Equal(760, minimumPhysicalHeight);
         Assert.True(minimumPhysicalHeight > 816 * 0.65);
         Assert.True(minimumPhysicalHeight <= 816);
+    }
+
+    [Fact]
+    public void Calculate_uses_four_columns_for_reported_compact_1_1_layout()
+    {
+        var layout = SwitcherLayoutCalculator.Calculate(
+            windowCount: 23,
+            workAreaWidth: 2346 * 0.65,
+            workAreaHeight: 1346 * 0.65,
+            appScale: 1.0,
+            SwitcherViewMode.Grid,
+            SwitcherSizingPolicy.Auto,
+            cardWidth: 301,
+            cardHeight: 204);
+
+        Assert.Equal(4, layout.Columns);
+        Assert.Equal(1364, layout.Width);
+        Assert.True(layout.RequiresVerticalScroll);
     }
 
     private static SwitcherLayout Calculate(int windowCount, double appScale = 0.9) =>

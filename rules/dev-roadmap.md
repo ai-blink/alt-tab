@@ -11,7 +11,7 @@
 | done | Make Alt+Tab toggle the overlay once per gesture and restore the previous foreground window. | `AltTabKeyFilterTests`, 10-gesture runtime smoke |
 | done | Separate transient foreground presentation from persistent always-on-top policy. | 0 foreground/topmost failures; `WS_EX_TOPMOST=0` when disabled |
 | done | Add always-visible per-card window close controls using standard `WM_CLOSE`. | `IWindowCloser`, `CloseWindowCommand`, 13 passing tests |
-| done | Unify overlay scaling at 80/100/125/150/200%, keep compact position and automatic layout, and prevent DWM previews from escaping the list viewport. | `MainWindowViewModelRefreshTests`, `SwitcherLayoutCalculatorTests`, 40 passing Release tests |
+| done | Unify overlay scaling at 80/100/125/150/200%, keep compact position and automatic layout, and prevent DWM previews from escaping the list viewport. | `MainWindowViewModelRefreshTests`, `SwitcherLayoutCalculatorTests`, 41 passing Release tests |
 | later | Add user-visible configurable-hotkey collision feedback. | Report reserved/already-registered Win32 combinations |
 | later | Replace visible-state polling with Win32 event-driven catalog updates. | Preserve stable visual identity while reducing background work |
 | later | Persist favorite windows. | Choose JSON or LiteDB storage |

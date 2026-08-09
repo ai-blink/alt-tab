@@ -13,7 +13,8 @@ public static class SwitcherLayoutCalculator
     private const double ItemHorizontalGap = 6;
     private const double ItemVerticalGap = 8;
     private const double SelectionFramePadding = 8;
-    private const double LayoutSafetyPadding = 24;
+    private const double HorizontalLayoutSafetyPadding = 40;
+    private const double VerticalLayoutSafetyPadding = 24;
     public const double MinimumLayoutWidth = 875;
     private const double MinLayoutHeight = 500;
 
@@ -37,7 +38,7 @@ public static class SwitcherLayoutCalculator
         var availableColumns = Math.Max(
             1,
             (int)Math.Floor(
-                (logicalScreenWidth - (OuterMargin * 2) - ContentHorizontalMargin - LayoutSafetyPadding) /
+                (logicalScreenWidth - (OuterMargin * 2) - ContentHorizontalMargin - HorizontalLayoutSafetyPadding) /
                 itemWidth));
         var maxColumns = mode == SwitcherViewMode.List
             ? Math.Min(2, availableColumns)
@@ -54,7 +55,7 @@ public static class SwitcherLayoutCalculator
                 logicalScreenHeight,
                 sizingPolicy);
         var rows = (int)Math.Ceiling(windowCount / (double)columns);
-        var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + LayoutSafetyPadding;
+        var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + HorizontalLayoutSafetyPadding;
         var desiredHeight = CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight);
 
         var layoutWidth = Math.Min(logicalScreenWidth, Math.Max(MinimumLayoutWidth, desiredWidth));
@@ -98,7 +99,7 @@ public static class SwitcherLayoutCalculator
         {
             var rows = (int)Math.Ceiling(windowCount / (double)columns);
             var emptySlots = (rows * columns) - windowCount;
-            var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + LayoutSafetyPadding;
+            var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + HorizontalLayoutSafetyPadding;
             var desiredHeight = CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight);
             var widthOverflow = Math.Max(0, desiredWidth - screenWidth);
             var heightOverflow = Math.Max(0, desiredHeight - screenHeight);
@@ -135,7 +136,7 @@ public static class SwitcherLayoutCalculator
             ContentVerticalMargin +
             detailsHeaderHeight +
             (rows * (cardHeight + ItemVerticalGap + SelectionFramePadding)) +
-            LayoutSafetyPadding;
+            VerticalLayoutSafetyPadding;
     }
 
     private static double ScaleWorkAreaToLogicalSize(double workAreaSize, double appScale)

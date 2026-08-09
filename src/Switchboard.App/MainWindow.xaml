@@ -376,9 +376,7 @@
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <WrapPanel Width="{Binding DataContext.WindowListContentWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-                                   ItemHeight="{Binding DataContext.ItemSlotHeight, RelativeSource={RelativeSource AncestorType=Window}}"
-                                   ItemWidth="{Binding DataContext.ItemSlotWidth, RelativeSource={RelativeSource AncestorType=Window}}" />
+                        <UniformGrid Columns="{Binding DataContext.GridColumnCount, RelativeSource={RelativeSource AncestorType=Window}}" />
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>

@@ -2,6 +2,7 @@
 
 ## Current
 
+- 2026-08-10: A runtime screenshot showed WPF wrapping a calculated four-column layout into three columns. The items panel now renders the calculator's exact column count with `UniformGrid`, with additional horizontal viewport safety for scrollbar, border, and DPI rounding.
 - 2026-08-10: Replaced the prototype's compact-only `0.7` multiplier with one unified `80/100/125/150/200%` overlay scale; legacy JSON scale names normalize to the nearest new safe preset.
 - 2026-08-10: Compact bounds now expand beyond the 65% target when needed for a complete card row, calculated columns are bound to the actual WrapPanel width, and off-viewport DWM thumbnails are hidden.
 - 2026-08-10: Replaced the compact-position ComboBox with the shared segmented-radio visual language and equalized fixed-option setting rows.
@@ -28,7 +29,7 @@
 
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors.
 - `dotnet build Switchboard.slnx -c Release --nologo`: passed, 0 warnings, 0 errors.
-- `dotnet test Switchboard.slnx -c Release --nologo`: passed, 40 tests.
+- `dotnet test Switchboard.slnx -c Release --nologo`: passed, 41 tests.
 - Focused scale/layout/settings regressions are included in the passing Release suite.
 - `notes/mocks/2026-08-09_compact-overlay-controls/compact-overlay-controls-mocks.html`: inline JavaScript syntax and required control checks passed.
 - Runtime Alt+Tab smoke: 10 gestures produced `VHVHVHVHVH` with 0 visibility failures.
