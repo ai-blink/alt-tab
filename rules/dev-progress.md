@@ -2,6 +2,9 @@
 
 ## Current
 
+- 2026-08-10: Reviewed all 42 commits through `7841f76` and scoped the `v0.2.0` release delta to the six commits after `v0.1.1`; superseded independent size and manual row/column experiments are excluded from the final patch notes.
+- 2026-08-10: Updated application version metadata, user documentation, and changelog for the `v0.2.0` Windows 11 x64 Portable release.
+- 2026-08-10: Built the self-contained `v0.2.0` win-x64 single executable, packaged it with the Korean readme, verified its embedded file version and ZIP entries, and completed a responsive-process smoke test.
 - 2026-08-10: A runtime screenshot showed WPF wrapping a calculated four-column layout into three columns. The items panel now renders the calculator's exact column count with `UniformGrid`, with additional horizontal viewport safety for scrollbar, border, and DPI rounding.
 - 2026-08-10: Replaced the prototype's compact-only `0.7` multiplier with one unified `80/100/125/150/200%` overlay scale; legacy JSON scale names normalize to the nearest new safe preset.
 - 2026-08-10: Compact bounds now expand beyond the 65% target when needed for a complete card row, calculated columns are bound to the actual WrapPanel width, and off-viewport DWM thumbnails are hidden.
@@ -30,6 +33,8 @@
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors.
 - `dotnet build Switchboard.slnx -c Release --nologo`: passed, 0 warnings, 0 errors.
 - `dotnet test Switchboard.slnx -c Release --nologo`: passed, 41 tests.
+- `dotnet publish` for the `v0.2.0` self-contained win-x64 single file: passed; package contains `Switchboard.App.exe` and `읽어주세요.txt`.
+- Packaged `Switchboard.App.exe`: file version `0.2.0.0`; process stayed alive and responsive for the smoke interval, then was stopped.
 - Focused scale/layout/settings regressions are included in the passing Release suite.
 - `notes/mocks/2026-08-09_compact-overlay-controls/compact-overlay-controls-mocks.html`: inline JavaScript syntax and required control checks passed.
 - Runtime Alt+Tab smoke: 10 gestures produced `VHVHVHVHVH` with 0 visibility failures.
@@ -43,7 +48,8 @@
 
 ## Next
 
-- Run the new Release build on request and visually verify 80% compact recovery, 125% plus 1.2x thumbnail reflow, 200% compact bounds, DWM scrolling, and the position segments.
+- FOLLOW_UP: Visually verify 80% compact recovery, 125% plus 1.2x thumbnail reflow, 200% compact bounds, DWM scrolling, and the position segments.
+- FOLLOW_UP: Publish the `v0.2.0` tag and Portable ZIP to the remote release page only when explicitly requested.
 
 ## Follow-Up
 
