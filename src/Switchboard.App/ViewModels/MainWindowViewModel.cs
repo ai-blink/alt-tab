@@ -20,6 +20,8 @@ public enum OverlayThemeMode
 
 public sealed record HotkeyKeyOption(SwitcherHotkeyKey Value, string Label);
 
+public sealed record OverlayPlacementOption(OverlayPlacement Value, string Label);
+
 public partial class MainWindowViewModel : ObservableObject
 {
     private const double BaseGridCardWidth = 274;
@@ -95,6 +97,15 @@ public partial class MainWindowViewModel : ObservableObject
         OverlayScalePreset.OneTwenty
     ];
 
+    public IReadOnlyList<OverlayPlacementOption> CompactOverlayPlacementOptions { get; } =
+    [
+        new(OverlayPlacement.BottomLeft, "좌측 아래"),
+        new(OverlayPlacement.BottomRight, "우측 아래"),
+        new(OverlayPlacement.TopLeft, "좌측 위"),
+        new(OverlayPlacement.TopRight, "우측 위"),
+        new(OverlayPlacement.Center, "가운데")
+    ];
+
     public IReadOnlyList<SwitcherSizingPolicy> SizingPolicies { get; } =
     [
         SwitcherSizingPolicy.Auto,
@@ -136,6 +147,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AppScale))]
+    [NotifyPropertyChangedFor(nameof(PresentationScale))]
     private OverlayScalePreset selectedOverlayScalePreset = OverlayScalePreset.Ninety;
 
     [ObservableProperty]
@@ -179,6 +191,13 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private bool isAlwaysOnTop = true;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PresentationScale))]
+    private bool isCompactOverlayEnabled;
+
+    [ObservableProperty]
+    private OverlayPlacement selectedCompactOverlayPlacement = OverlayPlacement.BottomLeft;
+
     public IReadOnlyList<WindowSnapshot> VisibleWindows =>
         WindowQuery.Apply(allWindows, SearchText, SelectedSortMode).ToList();
 
@@ -201,6 +220,8 @@ public partial class MainWindowViewModel : ObservableObject
         OverlayScalePreset.OneTwenty => 1.2,
         _ => 0.9
     };
+
+    public double PresentationScale => AppScale * (IsCompactOverlayEnabled ? 0.7 : 1.0);
 
     public double GridCardWidth => Math.Round(BaseGridCardWidth * ThumbnailScale);
 
@@ -441,6 +462,8 @@ public partial class MainWindowViewModel : ObservableObject
             nameof(SelectedFirstHotkeyModifier) or
             nameof(SelectedSecondHotkeyModifier) or
             nameof(SelectedHotkeyKey) or
+            nameof(IsCompactOverlayEnabled) or
+            nameof(SelectedCompactOverlayPlacement) or
             nameof(IsAlwaysOnTop);
 
     private void ApplyUserSettings(UserSettings settings)
@@ -456,6 +479,8 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedFirstHotkeyModifier = settings.SelectedFirstHotkeyModifier;
         SelectedSecondHotkeyModifier = settings.SelectedSecondHotkeyModifier;
         SelectedHotkeyKey = settings.SelectedHotkeyKey;
+        IsCompactOverlayEnabled = settings.IsCompactOverlayEnabled;
+        SelectedCompactOverlayPlacement = settings.CompactOverlayPlacement;
         IsAlwaysOnTop = settings.IsAlwaysOnTop;
     }
 
@@ -472,6 +497,8 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedFirstHotkeyModifier = SelectedFirstHotkeyModifier,
         SelectedSecondHotkeyModifier = SelectedSecondHotkeyModifier,
         SelectedHotkeyKey = SelectedHotkeyKey,
+        IsCompactOverlayEnabled = IsCompactOverlayEnabled,
+        CompactOverlayPlacement = SelectedCompactOverlayPlacement,
         IsAlwaysOnTop = IsAlwaysOnTop
     };
 

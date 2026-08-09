@@ -63,8 +63,33 @@ public sealed class MainWindowViewModelRefreshTests
         Assert.Same(window, closer.ClosedWindow);
     }
 
-    private static MainWindowViewModel CreateViewModel(IWindowCatalog catalog, IWindowCloser? closer = null) =>
-        new(catalog, new StubWindowActivator(), closer ?? new StubWindowCloser(), new StubSettingsStore());
+    [Fact]
+    public void Compact_overlay_preferences_are_loaded_and_saved()
+    {
+        var settingsStore = new StubSettingsStore(new UserSettings
+        {
+            IsCompactOverlayEnabled = true,
+            CompactOverlayPlacement = OverlayPlacement.TopLeft
+        });
+        var viewModel = CreateViewModel(
+            new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]),
+            settingsStore: settingsStore);
+
+        Assert.True(viewModel.IsCompactOverlayEnabled);
+        Assert.Equal(OverlayPlacement.TopLeft, viewModel.SelectedCompactOverlayPlacement);
+
+        viewModel.IsCompactOverlayEnabled = false;
+        viewModel.SelectedCompactOverlayPlacement = OverlayPlacement.BottomRight;
+
+        Assert.False(settingsStore.CurrentSettings.IsCompactOverlayEnabled);
+        Assert.Equal(OverlayPlacement.BottomRight, settingsStore.CurrentSettings.CompactOverlayPlacement);
+    }
+
+    private static MainWindowViewModel CreateViewModel(
+        IWindowCatalog catalog,
+        IWindowCloser? closer = null,
+        IUserSettingsStore? settingsStore = null) =>
+        new(catalog, new StubWindowActivator(), closer ?? new StubWindowCloser(), settingsStore ?? new StubSettingsStore());
 
     private static WindowSnapshot CreateWindow(string title, DateTimeOffset lastActivatedAt) =>
         new("editor", 1, "Editor", title, "Primary", "CODE", "#111111", true, false, lastActivatedAt);
@@ -92,12 +117,12 @@ public sealed class MainWindowViewModelRefreshTests
         }
     }
 
-    private sealed class StubSettingsStore : IUserSettingsStore
+    private sealed class StubSettingsStore(UserSettings? settings = null) : IUserSettingsStore
     {
-        public UserSettings Load() => new();
+        public UserSettings CurrentSettings { get; private set; } = settings ?? new();
 
-        public void Save(UserSettings settings)
-        {
-        }
+        public UserSettings Load() => CurrentSettings;
+
+        public void Save(UserSettings settings) => CurrentSettings = settings;
     }
 }

@@ -2,6 +2,10 @@
 
 ## Current
 
+- 2026-08-09: User approved compact-overlay Option 1: selectable position, five window-size levels, five independent UI-size levels, and automatic card layout.
+- 2026-08-09: Added an interactive three-option HTML mock; Option 2 was corrected to remove its conflicting window-size control before Option 1 was selected.
+- 2026-08-09: Added a custom Switchboard icon for the tray and taskbar window; the Release app launched successfully.
+- 2026-08-09: Added a persisted compact-overlay prototype and position calculation with tests. It is a baseline only: its combined 70% presentation scale must be replaced by the approved Option 1 behavior.
 - 2026-07-20: Added always-visible close controls to Grid/Compact/List cards and routed standard `WM_CLOSE` requests through a dedicated `IWindowCloser` boundary.
 - 2026-07-20: Moved Grid/Compact close controls outside the DWM thumbnail destination to prevent render-order occlusion.
 - 2026-07-20: Prepared version metadata and user documentation for the `v0.1.1` Portable release.
@@ -20,7 +24,8 @@
 
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors.
 - `dotnet build Switchboard.slnx -c Release --nologo`: passed, 0 warnings, 0 errors.
-- `dotnet test Switchboard.slnx -c Release --nologo --no-build`: passed, 13 tests.
+- `dotnet test Switchboard.slnx -c Release --nologo`: passed, 19 tests.
+- `notes/mocks/2026-08-09_compact-overlay-controls/compact-overlay-controls-mocks.html`: inline JavaScript syntax and required control checks passed.
 - Runtime Alt+Tab smoke: 10 gestures produced `VHVHVHVHVH` with 0 visibility failures.
 - Runtime foreground smoke: 0 Switchboard foreground PID failures while visible and 0 previous-PID restoration failures while hidden.
 - Runtime topmost smoke with persisted `IsAlwaysOnTop=false`: 0 final `WS_EX_TOPMOST` failures.
@@ -32,11 +37,12 @@
 
 ## Next
 
-- Add configurable-hotkey collision feedback or replace visible-state polling with Win32 event updates.
+- Implement approved compact-overlay Option 1: five-step window size and UI size remain independent; card rows/columns stay automatic.
 
 ## Follow-Up
 
 - FOLLOW_UP: Add a visible opt-out for low-level Alt+Tab capture before treating it as a normal default.
 - FOLLOW_UP: Add elevated/security-desktop foreground failure UX.
 - FOLLOW_UP: Add user-visible feedback when a protected/elevated window rejects a close request.
+- FOLLOW_UP: Revisit configurable-hotkey collision feedback and Win32 event-driven catalog updates after the approved compact-overlay slice.
 - IGNORE_FOR_V1: Mini dock, timeline, advanced virtual desktop management, and automatic window placement remain out of scope.

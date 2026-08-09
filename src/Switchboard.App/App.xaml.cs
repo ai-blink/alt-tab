@@ -13,6 +13,7 @@ public partial class App : System.Windows.Application
 {
     private ServiceProvider? serviceProvider;
     private Forms.NotifyIcon? notifyIcon;
+    private Drawing.Icon? trayIcon;
 
     public bool IsExitRequested { get; private set; }
 
@@ -42,7 +43,7 @@ public partial class App : System.Windows.Application
 
     protected override void OnExit(ExitEventArgs e)
     {
-        notifyIcon?.Dispose();
+        DisposeTrayIcon();
         serviceProvider?.Dispose();
         base.OnExit(e);
     }
@@ -58,8 +59,7 @@ public partial class App : System.Windows.Application
     public void ExitFromTray()
     {
         IsExitRequested = true;
-        notifyIcon?.Dispose();
-        notifyIcon = null;
+        DisposeTrayIcon();
         Shutdown();
     }
 
@@ -70,7 +70,7 @@ public partial class App : System.Windows.Application
 
         notifyIcon = new Forms.NotifyIcon
         {
-            Icon = Drawing.SystemIcons.Application,
+            Icon = trayIcon = SwitchboardIconFactory.CreateTrayIcon(),
             Text = "Switchboard",
             Visible = true,
             ContextMenuStrip = new Forms.ContextMenuStrip()
@@ -80,6 +80,14 @@ public partial class App : System.Windows.Application
         notifyIcon.ContextMenuStrip.Items.Add(new Forms.ToolStripSeparator());
         notifyIcon.ContextMenuStrip.Items.Add(exitItem);
         notifyIcon.DoubleClick += (_, _) => Dispatcher.Invoke(ShowOverlay);
+    }
+
+    private void DisposeTrayIcon()
+    {
+        notifyIcon?.Dispose();
+        notifyIcon = null;
+        trayIcon?.Dispose();
+        trayIcon = null;
     }
 
     private static void EnsureWindowsEnvironmentVariables()

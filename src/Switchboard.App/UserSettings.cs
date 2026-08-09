@@ -27,5 +27,9 @@ public sealed record UserSettings
 
     public SwitcherHotkeyKey SelectedHotkeyKey { get; init; } = SwitcherHotkeyKey.Space;
 
+    public bool IsCompactOverlayEnabled { get; init; }
+
+    public OverlayPlacement CompactOverlayPlacement { get; init; } = OverlayPlacement.BottomLeft;
+
     public bool IsAlwaysOnTop { get; init; } = true;
 }

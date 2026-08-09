@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Switchboard — 컴팩트 창 설정 3안</title>
+<style>
+:root {
+  --bg:#f4f6fa; --surface:#ffffff; --soft:#edf1f7; --line:#c4cad6;
+  --ink:#1c2028; --muted:#566174; --accent:#287fda; --accent-soft:#dcecff;
+  --shadow:0 16px 38px #22344a22; --desktop:#d8dee8; --window:#f9fbff;
+  --card:#ffffff; --preview:#d8e4f2; --warn:#8f5c00; --ok:#147645;
+}
+[data-theme="dark"] {
+  --bg:#0d1016; --surface:#151a23; --soft:#0b0e14; --line:#45506a;
+  --ink:#f6f8fc; --muted:#b7c0d2; --accent:#54a3ff; --accent-soft:#213c60;
+  --shadow:0 16px 38px #00000080; --desktop:#202a38; --window:#141a24;
+  --card:#222a38; --preview:#2f4966; --warn:#e1ad47; --ok:#5fd89b;
+}
+* { box-sizing:border-box; }
+body { margin:0; color:var(--ink); background:var(--bg); font:14px/1.5 "Segoe UI Variable Text","Segoe UI",sans-serif; }
+button,input,select { font:inherit; }
+button { border:0; cursor:pointer; }
+.top { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:14px; min-height:58px; padding:8px 22px; background:var(--surface); border-bottom:1px solid var(--line); }
+.brand { font-weight:750; letter-spacing:-.2px; }
+.brand small { margin-left:8px; color:var(--muted); font-size:12px; font-weight:500; }
+.tabs { display:flex; gap:5px; flex-wrap:wrap; }
+.tab,.theme { padding:8px 12px; border:1px solid transparent; border-radius:7px; background:transparent; color:var(--muted); font-weight:650; }
+.tab:hover,.theme:hover { background:var(--soft); }
+.tab.active { background:var(--accent-soft); border-color:var(--accent); color:var(--ink); }
+.spacer { flex:1; }
+.theme { border-color:var(--line); white-space:nowrap; }
+.main { max-width:1180px; margin:0 auto; padding:26px 20px 70px; }
+.panel { display:none; }
+.panel.active { display:block; }
+.heading { display:flex; align-items:baseline; gap:10px; margin-bottom:5px; }
+h1 { margin:0; font-size:22px; letter-spacing:-.4px; }
+.size { padding:2px 8px; border-radius:999px; background:var(--soft); color:var(--muted); font-size:11px; font-weight:700; }
+.sub { margin:0 0 18px; color:var(--muted); }
+.callout { margin:0 0 18px; padding:12px 14px; border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:9px; background:var(--soft); color:var(--muted); }
+.callout b { color:var(--ink); }
+.legend { display:flex; gap:8px 16px; flex-wrap:wrap; margin:0 0 18px; padding:10px 13px; border:1px solid var(--line); border-radius:9px; background:var(--soft); color:var(--muted); font-size:12px; }
+.legend strong { color:var(--ink); }
+.grid { display:grid; grid-template-columns:minmax(270px, .92fr) minmax(360px, 1.28fr); gap:18px; align-items:start; }
+.card { padding:16px; border:1px solid var(--line); border-radius:12px; background:var(--surface); box-shadow:0 2px 10px #00000008; }
+.card + .card { margin-top:14px; }
+.title { margin-bottom:12px; color:var(--muted); font-size:12px; font-weight:750; }
+.field { margin:0 0 17px; }
+.field:last-child { margin-bottom:0; }
+.label { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:7px; color:var(--ink); font-size:13px; font-weight:700; }
+.hint { margin-top:6px; color:var(--muted); font-size:12px; }
+.seg { display:flex; flex-wrap:wrap; overflow:hidden; border:1px solid var(--line); border-radius:8px; }
+.seg button { flex:1; min-width:65px; padding:8px 10px; color:var(--muted); background:var(--surface); border-right:1px solid var(--line); font-size:13px; font-weight:650; }
+.seg button:last-child { border-right:0; }
+.seg button.active { color:var(--ink); background:var(--accent-soft); }
+.seg--five { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); }
+.seg--five button { min-width:0; padding:8px 3px; border-right:1px solid var(--line); font-size:11px; }
+.select { width:100%; height:38px; padding:0 10px; color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:8px; }
+.toggle { display:flex; align-items:center; gap:9px; color:var(--ink); font-weight:700; }
+.toggle input { appearance:none; position:relative; width:44px; height:24px; margin:0; border-radius:999px; background:#647088; cursor:pointer; transition:.15s; }
+.toggle input::after { content:""; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:.15s; }
+.toggle input:checked { background:var(--accent); }
+.toggle input:checked::after { left:23px; }
+.range-row { display:flex; align-items:center; gap:8px; }
+.end { color:var(--muted); font-size:11px; white-space:nowrap; }
+input[type="range"] { width:100%; accent-color:var(--accent); }
+.value { min-width:54px; color:var(--accent); font-family:Consolas,monospace; font-size:12px; font-weight:800; text-align:right; }
+.preview-card { min-height:535px; padding:16px; }
+.preview-title { display:flex; justify-content:space-between; gap:10px; margin-bottom:11px; color:var(--muted); font-size:12px; }
+.desktop { position:relative; min-height:450px; overflow:hidden; border:1px solid var(--line); border-radius:11px; background:linear-gradient(145deg,var(--desktop),color-mix(in srgb,var(--desktop) 68%, var(--soft))); }
+.desktop::after { content:""; position:absolute; right:18px; bottom:16px; width:78px; height:6px; border-radius:99px; background:#ffffff48; }
+.overlay { position:absolute; display:flex; flex-direction:column; overflow:hidden; min-width:236px; border:1px solid color-mix(in srgb,var(--accent) 45%, var(--line)); border-radius:10px; background:var(--window); box-shadow:var(--shadow); transition:all .18s ease; }
+.pos-bottom-left { left:18px; bottom:18px; }.pos-bottom-right { right:18px; bottom:18px; }.pos-top-left { left:18px; top:18px; }.pos-top-right { right:18px; top:18px; }.pos-center { left:50%; top:50%; transform:translate(-50%,-50%); }
+.overlay-head { display:flex; align-items:center; gap:7px; min-height:var(--button); padding:0 calc(var(--ui) * .8); color:var(--ink); border-bottom:1px solid var(--line); font-size:var(--ui); font-weight:800; }
+.window-count { margin-right:auto; color:var(--muted); font:11px Consolas,monospace; }
+.sample-button { width:var(--button); height:var(--button); border:1px solid var(--line); border-radius:5px; background:var(--soft); color:var(--muted); font-size:calc(var(--ui) * .9); }
+.cards { display:grid; flex:1; gap:calc(var(--ui) * .45); padding:calc(var(--ui) * .7); overflow:auto; }
+.sample-window { min-width:0; padding:calc(var(--ui) * .55); border:1px solid var(--line); border-radius:7px; background:var(--card); }
+.thumb { height:calc(var(--ui) * 3.5); margin-bottom:calc(var(--ui) * .45); border-radius:4px; background:linear-gradient(135deg,var(--preview),#15263d); }
+.sample-window b,.sample-window span { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.sample-window b { font-size:calc(var(--ui) * .8); }.sample-window span { color:var(--muted); font-size:calc(var(--ui) * .62); }
+.more { padding:4px 8px; color:var(--muted); font-size:11px; text-align:center; }
+.badge { padding:2px 7px; border-radius:99px; background:var(--accent-soft); color:var(--ink); font-size:11px; font-weight:750; }
+.preset-list { display:grid; gap:8px; }
+.preset { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; padding:11px 12px; color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:9px; text-align:left; }
+.preset:hover { background:var(--soft); }.preset.active { border-color:var(--accent); background:var(--accent-soft); }
+.preset strong { display:block; font-size:13px; }.preset small { color:var(--muted); font-size:11px; }
+.check { color:var(--accent); font-weight:900; }
+details { margin-top:18px; border:1px dashed var(--line); border-radius:9px; color:var(--muted); }
+summary { padding:10px 13px; cursor:pointer; font-size:12px; font-weight:750; }
+.dev-body { padding:0 13px 12px; font-size:12px; }.dev-body code { padding:1px 4px; border-radius:4px; background:var(--soft); color:var(--ink); }
+@media (max-width:800px) { .top { align-items:flex-start; flex-wrap:wrap; }.spacer{display:none}.grid{grid-template-columns:1fr}.preview-card{min-height:440px}.desktop{min-height:360px}.overlay{max-width:calc(100% - 36px)} }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">Switchboard <small>컴팩트 창 설정 · 3안 검토용</small></div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="a">① 글씨 우선</button>
+    <button class="tab" data-tab="b">② 배치 조절</button>
+    <button class="tab" data-tab="c">③ 빠른 선택</button>
+  </nav>
+  <div class="spacer"></div>
+  <button class="theme" id="theme">☀️ 라이트</button>
+</header>
+
+<main class="main">
+  <section class="panel active" data-panel="a">
+    <div class="heading"><h1>① 글씨와 버튼을 먼저 지키는 안</h1><span class="size">작음</span></div>
+    <p class="sub">창 크기와 UI 크기를 분리합니다. 창은 작아져도 글씨와 버튼은 작아지지 않습니다.</p>
+    <div class="callout"><b>추천안:</b> 위치를 정하고, 창 크기와 UI 크기를 같은 <b>5단계</b>로 고릅니다. 열과 행은 자동으로 맞춥니다.</div>
+    <div class="legend"><strong>용어</strong><span>창 크기 = 화면에서 차지하는 영역</span><span>UI 크기 = 글씨·버튼·여백</span><span>자동 배치 = 남는 공간에 맞춰 카드 수를 정함</span></div>
+    <div class="grid">
+      <div>
+        <div class="card">
+          <div class="title">컴팩트 창</div>
+          <label class="toggle"><input id="a-enabled" type="checkbox" checked /> 컴팩트 창 사용</label>
+          <p class="hint">끄면 기존처럼 가운데에 보통 크기로 표시합니다.</p>
+        </div>
+        <div class="card">
+          <div class="field"><div class="label">표시 위치</div><select class="select" id="a-position"><option value="bottom-left">좌측 아래</option><option value="bottom-right">우측 아래</option><option value="top-left">좌측 위</option><option value="top-right">우측 위</option><option value="center">가운데</option></select></div>
+          <div class="field"><div class="label">창 크기</div><div class="seg seg--five" id="a-window"><button data-value="extra-small">아주 작게</button><button data-value="small">작게</button><button data-value="medium" class="active">보통</button><button data-value="large">크게</button><button data-value="extra-large">아주 크게</button></div><p class="hint">창의 바깥 크기만 바뀝니다.</p></div>
+          <div class="field"><div class="label">UI 크기 <span class="value" id="a-ui-value">크게</span></div><div class="seg seg--five" id="a-ui"><button data-value="1">아주 작게</button><button data-value="2">작게</button><button data-value="3">보통</button><button data-value="4" class="active">크게</button><button data-value="5">아주 크게</button></div><p class="hint" id="a-ui-hint">글씨와 버튼을 크게 유지합니다.</p></div>
+        </div>
+      </div>
+      <div class="card preview-card"><div class="preview-title"><span>화면 예시</span><span class="badge" id="a-summary"></span></div><div class="desktop" id="a-preview"></div></div>
+    </div>
+    <details><summary>🔧 개발 연결 메모</summary><div class="dev-body">현재 <code>SelectedOverlayScalePreset</code>은 창과 UI를 함께 줄입니다. 이 안은 창 한도와 UI 배율을 별도 설정으로 분리하고, 행·열은 기존 자동 배치 계산을 유지합니다.</div></details>
+  </section>
+
+  <section class="panel" data-panel="b">
+    <div class="heading"><h1>② 보이는 카드 수까지 직접 고르는 안</h1><span class="size">중간</span></div>
+    <p class="sub">창 크기와 UI 크기를 분리한 뒤, 한 화면에 보일 최대 열·행도 직접 고릅니다.</p>
+    <div class="callout"><b>배치를 고를 수 있습니다.</b> 많이 보고 싶을 때는 열·행을 늘리고, 조작을 편하게 하려면 2열·2행처럼 줄입니다. 넘는 창은 아래로 스크롤합니다.</div>
+    <div class="legend"><strong>용어</strong><span>열 = 가로 카드 수</span><span>행 = 세로 카드 수</span><span>UI 크기 = 글씨·버튼·여백</span></div>
+    <div class="grid">
+      <div>
+        <div class="card">
+          <div class="field"><div class="label">표시 위치</div><select class="select" id="b-position"><option value="bottom-left">좌측 아래</option><option value="bottom-right">우측 아래</option><option value="top-left">좌측 위</option><option value="top-right">우측 위</option><option value="center">가운데</option></select></div>
+          <div class="field"><div class="label">UI 크기 <span class="value" id="b-ui-value">크게</span></div><div class="range-row"><span class="end">◀ 보통</span><input id="b-ui" type="range" min="3" max="5" step="1" value="4" /><span class="end">아주 크게 ▶</span></div><p class="hint" id="b-ui-hint">조작 영역을 크게 유지합니다.</p></div>
+        </div>
+        <div class="card">
+          <div class="field"><div class="label">가로로 보이는 카드</div><div class="seg" id="b-columns"><button data-value="2" class="active">2열</button><button data-value="3">3열</button><button data-value="4">4열</button></div></div>
+          <div class="field"><div class="label">세로로 보이는 카드</div><div class="seg" id="b-rows"><button data-value="1">1행</button><button data-value="2" class="active">2행</button><button data-value="3">3행</button></div><p class="hint">모든 창을 보여 줄 수 없으면 스크롤로 이어집니다.</p></div>
+        </div>
+      </div>
+      <div class="card preview-card"><div class="preview-title"><span>화면 예시</span><span class="badge" id="b-summary"></span></div><div class="desktop" id="b-preview"></div></div>
+    </div>
+    <details><summary>🔧 개발 연결 메모</summary><div class="dev-body">기존 자동 열 계산에 사용자 최대값을 더합니다. 선택값은 <code>maxColumns</code>과 <code>maxRows</code>로 저장하고, 넘는 창은 기존 세로 스크롤을 사용합니다.</div></details>
+  </section>
+
+  <section class="panel" data-panel="c">
+    <div class="heading"><h1>③ 고르기 쉬운 세 가지 사용 방식</h1><span class="size">작음</span></div>
+    <p class="sub">세부 수치를 바로 고르기 어렵다면, 목적이 분명한 세 가지 선택지로 시작합니다.</p>
+    <div class="callout"><b>가장 빠른 안:</b> 처음에는 사용 방식을 하나 고르고, 필요할 때만 아래의 UI 크기를 조금 바꿉니다. 기본값은 <b>편하게 조작</b>입니다.</div>
+    <div class="legend"><strong>용어</strong><span>편하게 조작 = 큰 글씨·큰 버튼</span><span>균형 = 보통 크기와 카드 수</span><span>많이 보기 = 더 많은 카드를 한 번에 표시</span></div>
+    <div class="grid">
+      <div>
+        <div class="card">
+          <div class="title">사용 방식</div>
+          <div class="preset-list" id="c-presets">
+            <button class="preset active" data-value="easy"><span><strong>편하게 조작</strong><small>좌측 아래 · 큰 UI · 2열 × 2행</small></span><span class="check">✓</span></button>
+            <button class="preset" data-value="balanced"><span><strong>균형</strong><small>가운데 · 보통 UI · 3열 × 2행</small></span><span class="check"></span></button>
+            <button class="preset" data-value="more"><span><strong>많이 보기</strong><small>가운데 · 보통 UI · 4열 × 3행</small></span><span class="check"></span></button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="field"><div class="label">표시 위치</div><select class="select" id="c-position"><option value="bottom-left">좌측 아래</option><option value="bottom-right">우측 아래</option><option value="top-left">좌측 위</option><option value="top-right">우측 위</option><option value="center">가운데</option></select></div>
+          <div class="field"><div class="label">UI 크기 <span class="value" id="c-ui-value">아주 크게</span></div><div class="range-row"><span class="end">◀ 보통</span><input id="c-ui" type="range" min="3" max="5" step="1" value="5" /><span class="end">아주 크게 ▶</span></div><p class="hint" id="c-ui-hint">선택한 사용 방식에 맞춘 크기입니다.</p></div>
+        </div>
+      </div>
+      <div class="card preview-card"><div class="preview-title"><span>화면 예시</span><span class="badge" id="c-summary"></span></div><div class="desktop" id="c-preview"></div></div>
+    </div>
+    <details><summary>🔧 개발 연결 메모</summary><div class="dev-body">각 사용 방식은 위치·창 크기·UI 크기·열·행 값을 한꺼번에 저장하는 프리셋입니다. 사용자는 위치와 UI 크기만 나중에 덮어쓸 수 있습니다.</div></details>
+  </section>
+</main>
+
+<script>
+const WINDOWS = [
+  { app:'Visual Studio', title:'Switchboard.App' }, { app:'Chrome', title:'문서와 디자인 참고' },
+  { app:'PowerShell', title:'Release 빌드' }, { app:'Explorer', title:'프로젝트 폴더' },
+  { app:'Figma', title:'창 전환기 시안' }, { app:'메모장', title:'작업 메모' },
+  { app:'설정', title:'표시 및 접근성' }, { app:'메일', title:'새 메시지' },
+  { app:'음악', title:'집중용 재생 목록' }, { app:'계산기', title:'빠른 계산' },
+  { app:'캘린더', title:'오늘 일정' }, { app:'사진', title:'화면 캡처' }
+];
+const SIZE = { 'extra-small':[280,205], small:[360,260], medium:[455,310], large:[560,360], 'extra-large':[650,410] };
+const UI = {
+  1:{ label:'아주 작게', px:10, button:24 }, 2:{ label:'작게', px:12, button:28 },
+  3:{ label:'보통', px:14, button:34 }, 4:{ label:'크게', px:16, button:40 },
+  5:{ label:'아주 크게', px:18, button:46 }
+};
+
+function getOverlaySize(state) {
+  if (state.window !== 'auto') return SIZE[state.window];
+  const ui = UI[state.ui];
+  return [
+    Math.min(620, 90 + state.columns * (ui.px * 7 + 46)),
+    Math.min(380, ui.button + 62 + state.rows * (ui.px * 5 + 28))
+  ];
+}
+function renderPreview(targetId, summaryId, state) {
+  const [width, height] = getOverlaySize(state);
+  const ui = UI[state.ui];
+  const visible = Math.min(WINDOWS.length, state.columns * state.rows);
+  const position = state.enabled === false ? 'center' : state.position;
+  const cards = WINDOWS.slice(0, visible).map(window => `
+    <div class="sample-window"><div class="thumb"></div><b>${window.app}</b><span>${window.title}</span></div>`).join('');
+  const remaining = WINDOWS.length - visible;
+  document.getElementById(targetId).innerHTML = `
+    <div class="overlay pos-${position}" style="width:${width}px;height:${height}px;--ui:${ui.px}px;--button:${ui.button}px">
+      <div class="overlay-head"><span>Switchboard</span><span class="window-count">${visible}/${WINDOWS.length}</span><button class="sample-button">⚙</button><button class="sample-button">×</button></div>
+      <div class="cards" style="grid-template-columns:repeat(${state.columns},minmax(0,1fr))">${cards}</div>
+      ${remaining > 0 ? `<div class="more">아래로 ${remaining}개 더 보기</div>` : '<div class="more">모든 창 표시</div>'}
+    </div>`;
+  const automaticWindow = state.window === 'auto' ? '자동 창 · ' : '';
+  document.getElementById(summaryId).textContent = `${automaticWindow}${UI[state.ui].label} UI · ${state.columns}열 × ${state.rows}행`;
+}
+
+function bindSegment(id, state, key, render, numeric = false, onChange = null) {
+  const root = document.getElementById(id);
+  root.addEventListener('click', event => {
+    const button = event.target.closest('button'); if (!button) return;
+    root.querySelectorAll('button').forEach(item => item.classList.toggle('active', item === button));
+    state[key] = numeric ? Number(button.dataset.value) : button.dataset.value;
+    if (onChange) onChange();
+    render();
+  });
+}
+function bindSlider(id, state, key, valueId, hintId, render, label = '') {
+  const input = document.getElementById(id);
+  input.addEventListener('input', () => {
+    state[key] = Number(input.value);
+    document.getElementById(valueId).textContent = UI[state[key]].label;
+    if (hintId) document.getElementById(hintId).textContent = `${label}${UI[state[key]].label}로 표시합니다.`;
+    render();
+  });
+}
+
+const a = { enabled:true, position:'bottom-left', window:'medium', ui:4, columns:2, rows:2 };
+const renderA = () => renderPreview('a-preview', 'a-summary', a);
+const updateAUi = () => {
+  document.getElementById('a-ui-value').textContent = UI[a.ui].label;
+  document.getElementById('a-ui-hint').textContent = `글씨와 버튼을 ${UI[a.ui].label}로 표시합니다.`;
+};
+document.getElementById('a-enabled').addEventListener('change', event => { a.enabled = event.target.checked; renderA(); });
+document.getElementById('a-position').addEventListener('change', event => { a.position = event.target.value; renderA(); });
+bindSegment('a-window', a, 'window', renderA);
+bindSegment('a-ui', a, 'ui', renderA, true, updateAUi);
+renderA();
+
+const b = { enabled:true, position:'bottom-left', window:'auto', ui:4, columns:2, rows:2 };
+const renderB = () => renderPreview('b-preview', 'b-summary', b);
+document.getElementById('b-position').addEventListener('change', event => { b.position = event.target.value; renderB(); });
+bindSlider('b-ui', b, 'ui', 'b-ui-value', 'b-ui-hint', renderB, '글씨와 버튼을 ');
+bindSegment('b-columns', b, 'columns', renderB, true);
+bindSegment('b-rows', b, 'rows', renderB, true);
+renderB();
+
+const PRESETS = {
+  easy:{ position:'bottom-left', window:'medium', ui:5, columns:2, rows:2 },
+  balanced:{ position:'center', window:'medium', ui:4, columns:3, rows:2 },
+  more:{ position:'center', window:'large', ui:3, columns:4, rows:3 }
+};
+const c = { enabled:true, ...PRESETS.easy };
+const renderC = () => renderPreview('c-preview', 'c-summary', c);
+document.getElementById('c-presets').addEventListener('click', event => {
+  const button = event.target.closest('.preset'); if (!button) return;
+  Object.assign(c, PRESETS[button.dataset.value]);
+  document.getElementById('c-position').value = c.position;
+  document.getElementById('c-ui').value = c.ui;
+  document.getElementById('c-ui-value').textContent = UI[c.ui].label;
+  document.getElementById('c-ui-hint').textContent = '선택한 사용 방식에 맞춘 크기입니다.';
+  document.querySelectorAll('#c-presets .preset').forEach(item => {
+    const active = item === button; item.classList.toggle('active', active); item.querySelector('.check').textContent = active ? '✓' : '';
+  });
+  renderC();
+});
+document.getElementById('c-position').addEventListener('change', event => { c.position = event.target.value; renderC(); });
+bindSlider('c-ui', c, 'ui', 'c-ui-value', 'c-ui-hint', renderC, 'UI를 ');
+renderC();
+
+document.getElementById('tabs').addEventListener('click', event => {
+  const tab = event.target.closest('.tab'); if (!tab) return;
+  document.querySelectorAll('.tab').forEach(item => item.classList.toggle('active', item === tab));
+  document.querySelectorAll('.panel').forEach(item => item.classList.toggle('active', item.dataset.panel === tab.dataset.tab));
+});
+document.getElementById('theme').addEventListener('click', event => {
+  const dark = document.documentElement.dataset.theme === 'dark';
+  document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+  event.currentTarget.textContent = dark ? '🌙 다크' : '☀️ 라이트';
+});
+</script>
+</body>
+</html>

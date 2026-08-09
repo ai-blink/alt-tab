@@ -18,6 +18,7 @@ public partial class MainWindow : Window
     private const int WmHotkey = 0x0312;
     private const int SwitchboardHotkeyId = 0x5342;
     private const int AltTabHotkeyId = 0x5343;
+    private const double CompactWorkAreaRatio = 0.65;
     private readonly MainWindowViewModel viewModel;
     private HwndSource? hwndSource;
     private GlobalHotkeyRegistration? hotkeyRegistration;
@@ -38,6 +39,7 @@ public partial class MainWindow : Window
         refreshTimer.Tick += OnRefreshTimerTick;
 
         InitializeComponent();
+        Icon = SwitchboardIconFactory.CreateWindowIcon();
         DataContext = viewModel;
 
         Loaded += OnLoaded;
@@ -147,7 +149,9 @@ public partial class MainWindow : Window
         if (e.PropertyName is nameof(MainWindowViewModel.VisibleWindows) or
             nameof(MainWindowViewModel.SelectedViewMode) or
             nameof(MainWindowViewModel.SelectedThumbnailScalePreset) or
-            nameof(MainWindowViewModel.SelectedSizingPolicy))
+            nameof(MainWindowViewModel.SelectedSizingPolicy) or
+            nameof(MainWindowViewModel.IsCompactOverlayEnabled) or
+            nameof(MainWindowViewModel.SelectedCompactOverlayPlacement))
         {
             Dispatcher.BeginInvoke(ApplyContentSizedBounds, DispatcherPriority.Loaded);
         }
@@ -318,7 +322,13 @@ public partial class MainWindow : Window
     {
         var windowCount = Math.Max(1, viewModel.VisibleWindows.Count);
         var workArea = SystemParameters.WorkArea;
-        var appScale = viewModel.AppScale;
+        var layoutWorkAreaWidth = viewModel.IsCompactOverlayEnabled
+            ? workArea.Width * CompactWorkAreaRatio
+            : workArea.Width;
+        var layoutWorkAreaHeight = viewModel.IsCompactOverlayEnabled
+            ? workArea.Height * CompactWorkAreaRatio
+            : workArea.Height;
+        var appScale = viewModel.PresentationScale;
         var mode = viewModel.SelectedViewMode;
         var cardWidth = mode switch
         {
@@ -334,8 +344,8 @@ public partial class MainWindow : Window
         };
         var layout = SwitcherLayoutCalculator.Calculate(
             windowCount,
-            workArea.Width,
-            workArea.Height,
+            layoutWorkAreaWidth,
+            layoutWorkAreaHeight,
             appScale,
             mode,
             viewModel.SelectedSizingPolicy,
@@ -349,10 +359,21 @@ public partial class MainWindow : Window
             WindowList,
             layout.RequiresVerticalScroll ? ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden);
         WindowState = WindowState.Normal;
-        Width = Math.Min(workArea.Width, currentLayoutWidth * appScale);
-        Height = Math.Min(workArea.Height, currentLayoutHeight * appScale);
-        Left = workArea.Left + Math.Max(0, (workArea.Width - Width) / 2);
-        Top = workArea.Top + Math.Max(0, (workArea.Height - Height) / 2);
+        Width = Math.Min(layoutWorkAreaWidth, currentLayoutWidth * appScale);
+        Height = Math.Min(layoutWorkAreaHeight, currentLayoutHeight * appScale);
+        var placement = viewModel.IsCompactOverlayEnabled
+            ? viewModel.SelectedCompactOverlayPlacement
+            : OverlayPlacement.Center;
+        var position = OverlayPositionCalculator.Calculate(
+            workArea.Left,
+            workArea.Top,
+            workArea.Width,
+            workArea.Height,
+            Width,
+            Height,
+            placement);
+        Left = position.Left;
+        Top = position.Top;
     }
 
     private void OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
