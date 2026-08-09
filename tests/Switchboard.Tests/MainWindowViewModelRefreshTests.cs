@@ -69,7 +69,11 @@ public sealed class MainWindowViewModelRefreshTests
         var settingsStore = new StubSettingsStore(new UserSettings
         {
             IsCompactOverlayEnabled = true,
-            CompactOverlayPlacement = OverlayPlacement.TopLeft
+            CompactOverlayPlacement = OverlayPlacement.TopLeft,
+            CompactOverlayWindowSize = CompactOverlaySize.Small,
+            CompactOverlayUiSize = CompactOverlaySize.ExtraLarge,
+            CompactOverlayMaximumColumns = 7,
+            CompactOverlayMaximumRows = 6
         });
         var viewModel = CreateViewModel(
             new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]),
@@ -77,12 +81,38 @@ public sealed class MainWindowViewModelRefreshTests
 
         Assert.True(viewModel.IsCompactOverlayEnabled);
         Assert.Equal(OverlayPlacement.TopLeft, viewModel.SelectedCompactOverlayPlacement);
+        Assert.Equal(CompactOverlaySize.Small, viewModel.SelectedCompactOverlayWindowSize);
+        Assert.Equal(CompactOverlaySize.ExtraLarge, viewModel.SelectedCompactOverlayUiSize);
+        Assert.Equal(7, viewModel.SelectedCompactOverlayMaximumColumns);
+        Assert.Equal(6, viewModel.SelectedCompactOverlayMaximumRows);
 
         viewModel.IsCompactOverlayEnabled = false;
         viewModel.SelectedCompactOverlayPlacement = OverlayPlacement.BottomRight;
+        viewModel.SelectedCompactOverlayWindowSize = CompactOverlaySize.Large;
+        viewModel.SelectedCompactOverlayUiSize = CompactOverlaySize.Medium;
+        viewModel.SelectedCompactOverlayMaximumColumns = 5;
+        viewModel.SelectedCompactOverlayMaximumRows = 4;
 
         Assert.False(settingsStore.CurrentSettings.IsCompactOverlayEnabled);
         Assert.Equal(OverlayPlacement.BottomRight, settingsStore.CurrentSettings.CompactOverlayPlacement);
+        Assert.Equal(CompactOverlaySize.Large, settingsStore.CurrentSettings.CompactOverlayWindowSize);
+        Assert.Equal(CompactOverlaySize.Medium, settingsStore.CurrentSettings.CompactOverlayUiSize);
+        Assert.Equal(5, settingsStore.CurrentSettings.CompactOverlayMaximumColumns);
+        Assert.Equal(4, settingsStore.CurrentSettings.CompactOverlayMaximumRows);
+    }
+
+    [Fact]
+    public void Compact_overlay_defaults_keep_ui_readable()
+    {
+        var viewModel = CreateViewModel(new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]));
+
+        Assert.Equal(CompactOverlaySize.Medium, viewModel.SelectedCompactOverlayWindowSize);
+        Assert.Equal(CompactOverlaySize.Large, viewModel.SelectedCompactOverlayUiSize);
+        Assert.Equal(1.0, viewModel.CompactOverlayUiScale);
+
+        viewModel.IsCompactOverlayEnabled = true;
+
+        Assert.Equal(1.1, viewModel.CompactOverlayUiScale);
     }
 
     private static MainWindowViewModel CreateViewModel(

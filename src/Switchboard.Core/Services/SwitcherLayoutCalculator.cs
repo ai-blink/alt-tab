@@ -21,17 +21,19 @@ public static class SwitcherLayoutCalculator
         int windowCount,
         double workAreaWidth,
         double workAreaHeight,
-        double appScale,
+        double uiScale,
         SwitcherViewMode mode,
         SwitcherSizingPolicy sizingPolicy,
         double cardWidth,
-        double cardHeight)
+        double cardHeight,
+        int? maximumColumns = null,
+        int? maximumRows = null)
     {
         windowCount = Math.Max(1, windowCount);
-        appScale = appScale > 0 ? appScale : 1;
+        uiScale = uiScale > 0 ? uiScale : 1;
 
-        var logicalScreenWidth = workAreaWidth / appScale;
-        var logicalScreenHeight = workAreaHeight / appScale;
+        var logicalScreenWidth = ScaleWorkAreaToLogicalSize(workAreaWidth, uiScale);
+        var logicalScreenHeight = ScaleWorkAreaToLogicalSize(workAreaHeight, uiScale);
         var detailsHeaderHeight = mode == SwitcherViewMode.List ? ListDetailsHeaderHeight : 0;
         var itemWidth = cardWidth + ItemHorizontalGap + SelectionFramePadding;
         var availableColumns = Math.Max(
@@ -42,9 +44,15 @@ public static class SwitcherLayoutCalculator
         var maxColumns = mode == SwitcherViewMode.List
             ? Math.Min(2, availableColumns)
             : availableColumns;
-        var columns = mode == SwitcherViewMode.List
-            ? Math.Clamp(2, 1, Math.Min(windowCount, maxColumns))
-            : ChooseBestColumns(
+        maxColumns = maximumColumns is > 0
+            ? Math.Min(maxColumns, maximumColumns.Value)
+            : maxColumns;
+        var columns = mode switch
+        {
+            SwitcherViewMode.List => Math.Clamp(2, 1, Math.Min(windowCount, maxColumns)),
+            SwitcherViewMode.Compact when maximumColumns is > 0 =>
+                Math.Min(windowCount, maxColumns),
+            _ => ChooseBestColumns(
                 windowCount,
                 maxColumns,
                 itemWidth,
@@ -52,17 +60,22 @@ public static class SwitcherLayoutCalculator
                 detailsHeaderHeight,
                 logicalScreenWidth,
                 logicalScreenHeight,
-                sizingPolicy);
+                sizingPolicy,
+                maximumRows)
+        };
         var rows = (int)Math.Ceiling(windowCount / (double)columns);
+        var visibleRows = maximumRows is > 0
+            ? Math.Min(rows, maximumRows.Value)
+            : rows;
         var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + LayoutSafetyPadding;
-        var desiredHeight = CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight);
+        var desiredHeight = CalculateDesiredHeight(visibleRows, cardHeight, detailsHeaderHeight);
 
         return new SwitcherLayout(
             columns,
             rows,
             Math.Min(logicalScreenWidth, Math.Max(MinLayoutWidth, desiredWidth)),
             Math.Min(logicalScreenHeight, Math.Max(MinLayoutHeight, desiredHeight)),
-            desiredHeight > logicalScreenHeight);
+            rows > visibleRows || desiredHeight > logicalScreenHeight);
     }
 
     private static int ChooseBestColumns(
@@ -73,7 +86,8 @@ public static class SwitcherLayoutCalculator
         double detailsHeaderHeight,
         double screenWidth,
         double screenHeight,
-        SwitcherSizingPolicy sizingPolicy)
+        SwitcherSizingPolicy sizingPolicy,
+        int? maximumRows)
     {
         var columnLimit = Math.Max(1, Math.Min(windowCount, maxColumns));
         var best = new LayoutCandidate(1, double.MaxValue);
@@ -83,7 +97,10 @@ public static class SwitcherLayoutCalculator
             var rows = (int)Math.Ceiling(windowCount / (double)columns);
             var emptySlots = (rows * columns) - windowCount;
             var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + LayoutSafetyPadding;
-            var desiredHeight = CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight);
+            var visibleRows = maximumRows is > 0
+                ? Math.Min(rows, maximumRows.Value)
+                : rows;
+            var desiredHeight = CalculateDesiredHeight(visibleRows, cardHeight, detailsHeaderHeight);
             var widthOverflow = Math.Max(0, desiredWidth - screenWidth);
             var heightOverflow = Math.Max(0, desiredHeight - screenHeight);
             var rightBlankRatio = Math.Max(0, screenWidth - desiredWidth) / screenWidth;
@@ -107,19 +124,23 @@ public static class SwitcherLayoutCalculator
     }
 
     private static double CalculateDesiredHeight(
-        int windowCount,
-        int columns,
+        int visibleRows,
         double cardHeight,
         double detailsHeaderHeight)
     {
-        var rows = (int)Math.Ceiling(windowCount / (double)columns);
         return (OuterMargin * 2) +
             HeaderHeight +
             FooterHeight +
             ContentVerticalMargin +
             detailsHeaderHeight +
-            (rows * (cardHeight + ItemVerticalGap + SelectionFramePadding)) +
+            (visibleRows * (cardHeight + ItemVerticalGap + SelectionFramePadding)) +
             LayoutSafetyPadding;
+    }
+
+    private static double ScaleWorkAreaToLogicalSize(double workAreaSize, double uiScale)
+    {
+        var fixedMargin = OuterMargin * 2;
+        return fixedMargin + (Math.Max(1, workAreaSize - fixedMargin) / uiScale);
     }
 
     private readonly record struct LayoutCandidate(int Columns, double Score);

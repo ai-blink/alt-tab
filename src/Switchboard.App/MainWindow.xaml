@@ -496,6 +496,15 @@
             </Setter>
         </Style>
 
+        <Style x:Key="CompactSizeRadioStyle"
+               BasedOn="{StaticResource ModeRadioStyle}"
+               TargetType="RadioButton">
+            <Setter Property="FontSize" Value="9" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="2,0" />
+        </Style>
+
         <Style x:Key="WindowCardItemStyle" TargetType="ListBoxItem">
             <Setter Property="Padding" Value="0" />
             <Setter Property="Margin" Value="0,0,6,8" />
@@ -532,7 +541,7 @@
 
     <Grid Margin="18">
         <Grid.LayoutTransform>
-            <ScaleTransform ScaleX="{Binding PresentationScale}" ScaleY="{Binding PresentationScale}" />
+            <ScaleTransform ScaleX="{Binding CompactOverlayUiScale}" ScaleY="{Binding CompactOverlayUiScale}" />
         </Grid.LayoutTransform>
 
         <Border Background="{Binding ShellBackground}"
@@ -845,10 +854,6 @@
                 BorderThickness="1"
                 CornerRadius="9"
                 Padding="12">
-            <Border.LayoutTransform>
-                <ScaleTransform ScaleX="{Binding PresentationScale}" ScaleY="{Binding PresentationScale}" />
-            </Border.LayoutTransform>
-
             <Border.Effect>
                 <DropShadowEffect BlurRadius="24"
                                   Direction="270"
@@ -859,6 +864,10 @@
 
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="12" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="12" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="12" />
                     <RowDefinition Height="Auto" />
@@ -1085,7 +1094,8 @@
                     </Border>
                 </Grid>
 
-                <Grid Grid.Row="14">
+                <Grid Grid.Row="14"
+                      IsEnabled="{Binding IsCompactOverlayEnabled}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="82" />
                         <ColumnDefinition Width="*" />
@@ -1096,7 +1106,7 @@
                                FontSize="11"
                                FontWeight="SemiBold"
                                Foreground="{Binding MutedTextBrush}"
-                               Text="전체 배율" />
+                               Text="창 크기" />
                     <Border Grid.Column="1"
                             Height="30"
                             Background="{Binding SegmentBackground}"
@@ -1105,36 +1115,133 @@
                             CornerRadius="7"
                             Padding="1">
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton Content="50%"
-                                         AutomationProperties.Name="App scale 50%"
-                                         GroupName="OverlayScale"
-                                         IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Fifty}"
-                                         Style="{StaticResource ModeRadioStyle}" />
-                            <RadioButton Content="70%"
-                                         AutomationProperties.Name="App scale 70%"
-                                         GroupName="OverlayScale"
-                                         IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Seventy}"
-                                         Style="{StaticResource ModeRadioStyle}" />
-                            <RadioButton Content="90%"
-                                         AutomationProperties.Name="App scale 90%"
-                                         GroupName="OverlayScale"
-                                         IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Ninety}"
-                                         Style="{StaticResource ModeRadioStyle}" />
-                            <RadioButton Content="100%"
-                                         AutomationProperties.Name="App scale 100%"
-                                         GroupName="OverlayScale"
-                                         IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Hundred}"
-                                         Style="{StaticResource ModeRadioStyle}" />
-                            <RadioButton Content="120%"
-                                         AutomationProperties.Name="App scale 120%"
-                                         GroupName="OverlayScale"
-                                         IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=OneTwenty}"
-                                         Style="{StaticResource ModeRadioStyle}" />
+                            <RadioButton Content="아주 작게"
+                                         AutomationProperties.Name="Compact window size extra small"
+                                         GroupName="CompactWindowSize"
+                                         IsChecked="{Binding SelectedCompactOverlayWindowSize, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=ExtraSmall}"
+                                         Style="{StaticResource CompactSizeRadioStyle}" />
+                            <RadioButton Content="작게"
+                                         AutomationProperties.Name="Compact window size small"
+                                         GroupName="CompactWindowSize"
+                                         IsChecked="{Binding SelectedCompactOverlayWindowSize, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Small}"
+                                         Style="{StaticResource CompactSizeRadioStyle}" />
+                            <RadioButton Content="보통"
+                                         AutomationProperties.Name="Compact window size medium"
+                                         GroupName="CompactWindowSize"
+                                         IsChecked="{Binding SelectedCompactOverlayWindowSize, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Medium}"
+                                         Style="{StaticResource CompactSizeRadioStyle}" />
+                            <RadioButton Content="크게"
+                                         AutomationProperties.Name="Compact window size large"
+                                         GroupName="CompactWindowSize"
+                                         IsChecked="{Binding SelectedCompactOverlayWindowSize, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Large}"
+                                         Style="{StaticResource CompactSizeRadioStyle}" />
+                            <RadioButton Content="아주 크게"
+                                         AutomationProperties.Name="Compact window size extra large"
+                                         GroupName="CompactWindowSize"
+                                         IsChecked="{Binding SelectedCompactOverlayWindowSize, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=ExtraLarge}"
+                                         Style="{StaticResource CompactSizeRadioStyle}" />
                         </StackPanel>
                     </Border>
                 </Grid>
 
-                <Grid Grid.Row="16">
+                <Grid Grid.Row="16"
+                      IsEnabled="{Binding IsCompactOverlayEnabled}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="82" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="{Binding MutedTextBrush}"
+                               Text="UI 크기" />
+                    <Border Grid.Column="1"
+                            Height="30"
+                            Background="{Binding SegmentBackground}"
+                            BorderBrush="{Binding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="7"
+                            Padding="1">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Content="아주 작게"
+                                         AutomationProperties.Name="Compact UI size extra small"
+                                         GroupName="CompactUiSize"
+                                         IsChecked="{Binding SelectedCompactOverlayUiSize, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=ExtraSmall}"
+                                         Style="{StaticResource CompactSizeRadioStyle}" />
+                            <RadioButton Content="작게"
+                                         AutomationProperties.Name="Compact UI size small"
+                                         GroupName="CompactUiSize"
+                                         IsChecked="{Binding SelectedCompactOverlayUiSize, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Small}"
+                                         Style="{StaticResource CompactSizeRadioStyle}" />
+                            <RadioButton Content="보통"
+                                         AutomationProperties.Name="Compact UI size medium"
+                                         GroupName="CompactUiSize"
+                                         IsChecked="{Binding SelectedCompactOverlayUiSize, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Medium}"
+                                         Style="{StaticResource CompactSizeRadioStyle}" />
+                            <RadioButton Content="크게"
+                                         AutomationProperties.Name="Compact UI size large"
+                                         GroupName="CompactUiSize"
+                                         IsChecked="{Binding SelectedCompactOverlayUiSize, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Large}"
+                                         Style="{StaticResource CompactSizeRadioStyle}" />
+                            <RadioButton Content="아주 크게"
+                                         AutomationProperties.Name="Compact UI size extra large"
+                                         GroupName="CompactUiSize"
+                                         IsChecked="{Binding SelectedCompactOverlayUiSize, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=ExtraLarge}"
+                                         Style="{StaticResource CompactSizeRadioStyle}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="18"
+                      IsEnabled="{Binding IsCompactOverlayEnabled}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="82" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="{Binding MutedTextBrush}"
+                               Text="최대 배치" />
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="56" />
+                            <ColumnDefinition Width="14" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="56" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   VerticalAlignment="Center"
+                                   FontSize="11"
+                                   Foreground="{Binding MutedTextBrush}"
+                                   Text="열" />
+                        <ComboBox Grid.Column="1"
+                                  Height="30"
+                                  Margin="5,0,0,0"
+                                  AutomationProperties.Name="Compact maximum columns"
+                                  ItemsSource="{Binding CompactOverlayMaximumColumnOptions}"
+                                  SelectedItem="{Binding SelectedCompactOverlayMaximumColumns}" />
+                        <TextBlock Grid.Column="3"
+                                   VerticalAlignment="Center"
+                                   FontSize="11"
+                                   Foreground="{Binding MutedTextBrush}"
+                                   Text="행" />
+                        <ComboBox Grid.Column="4"
+                                  Height="30"
+                                  Margin="5,0,0,0"
+                                  AutomationProperties.Name="Compact maximum rows"
+                                  ItemsSource="{Binding CompactOverlayMaximumRowOptions}"
+                                  SelectedItem="{Binding SelectedCompactOverlayMaximumRows}" />
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="82" />
                         <ColumnDefinition Width="*" />

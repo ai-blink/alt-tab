@@ -18,7 +18,7 @@ public partial class MainWindow : Window
     private const int WmHotkey = 0x0312;
     private const int SwitchboardHotkeyId = 0x5342;
     private const int AltTabHotkeyId = 0x5343;
-    private const double CompactWorkAreaRatio = 0.65;
+    private const double OverlayOuterMargin = 18;
     private readonly MainWindowViewModel viewModel;
     private HwndSource? hwndSource;
     private GlobalHotkeyRegistration? hotkeyRegistration;
@@ -151,12 +151,11 @@ public partial class MainWindow : Window
             nameof(MainWindowViewModel.SelectedThumbnailScalePreset) or
             nameof(MainWindowViewModel.SelectedSizingPolicy) or
             nameof(MainWindowViewModel.IsCompactOverlayEnabled) or
-            nameof(MainWindowViewModel.SelectedCompactOverlayPlacement))
-        {
-            Dispatcher.BeginInvoke(ApplyContentSizedBounds, DispatcherPriority.Loaded);
-        }
-
-        if (e.PropertyName == nameof(MainWindowViewModel.SelectedOverlayScalePreset))
+            nameof(MainWindowViewModel.SelectedCompactOverlayPlacement) or
+            nameof(MainWindowViewModel.SelectedCompactOverlayWindowSize) or
+            nameof(MainWindowViewModel.SelectedCompactOverlayUiSize) or
+            nameof(MainWindowViewModel.SelectedCompactOverlayMaximumColumns) or
+            nameof(MainWindowViewModel.SelectedCompactOverlayMaximumRows))
         {
             Dispatcher.BeginInvoke(ApplyContentSizedBounds, DispatcherPriority.Loaded);
         }
@@ -323,12 +322,12 @@ public partial class MainWindow : Window
         var windowCount = Math.Max(1, viewModel.VisibleWindows.Count);
         var workArea = SystemParameters.WorkArea;
         var layoutWorkAreaWidth = viewModel.IsCompactOverlayEnabled
-            ? workArea.Width * CompactWorkAreaRatio
+            ? workArea.Width * viewModel.CompactOverlayWindowSizeRatio
             : workArea.Width;
         var layoutWorkAreaHeight = viewModel.IsCompactOverlayEnabled
-            ? workArea.Height * CompactWorkAreaRatio
+            ? workArea.Height * viewModel.CompactOverlayWindowSizeRatio
             : workArea.Height;
-        var appScale = viewModel.PresentationScale;
+        var uiScale = viewModel.CompactOverlayUiScale;
         var mode = viewModel.SelectedViewMode;
         var cardWidth = mode switch
         {
@@ -346,11 +345,13 @@ public partial class MainWindow : Window
             windowCount,
             layoutWorkAreaWidth,
             layoutWorkAreaHeight,
-            appScale,
+            uiScale,
             mode,
             viewModel.SelectedSizingPolicy,
             cardWidth,
-            cardHeight);
+            cardHeight,
+            viewModel.IsCompactOverlayEnabled ? viewModel.SelectedCompactOverlayMaximumColumns : null,
+            viewModel.IsCompactOverlayEnabled ? viewModel.SelectedCompactOverlayMaximumRows : null);
 
         viewModel.SetGridColumnCount(layout.Columns);
         currentLayoutWidth = layout.Width;
@@ -359,8 +360,8 @@ public partial class MainWindow : Window
             WindowList,
             layout.RequiresVerticalScroll ? ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden);
         WindowState = WindowState.Normal;
-        Width = Math.Min(layoutWorkAreaWidth, currentLayoutWidth * appScale);
-        Height = Math.Min(layoutWorkAreaHeight, currentLayoutHeight * appScale);
+        Width = ScaleLayoutDimension(currentLayoutWidth, uiScale, layoutWorkAreaWidth);
+        Height = ScaleLayoutDimension(currentLayoutHeight, uiScale, layoutWorkAreaHeight);
         var placement = viewModel.IsCompactOverlayEnabled
             ? viewModel.SelectedCompactOverlayPlacement
             : OverlayPlacement.Center;
@@ -374,6 +375,13 @@ public partial class MainWindow : Window
             placement);
         Left = position.Left;
         Top = position.Top;
+    }
+
+    private static double ScaleLayoutDimension(double logicalDimension, double uiScale, double workAreaDimension)
+    {
+        var fixedMargin = OverlayOuterMargin * 2;
+        var scaledContent = Math.Max(0, logicalDimension - fixedMargin) * uiScale;
+        return Math.Min(workAreaDimension, fixedMargin + scaledContent);
     }
 
     private void OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
