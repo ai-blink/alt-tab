@@ -2,7 +2,7 @@
 
 ## Current
 
-- 2026-08-09: Implemented compact-overlay settings: selectable position, five independent window-size and UI-size levels, persisted maximum columns (4~7) and rows (4~6), and automatic layout within those limits. The old combined `PresentationScale`/65% work-area prototype was removed; defaults are `보통` window, `크게` UI, and 4×4 maximum.
+- 2026-08-09: Implemented compact-overlay settings: selectable position, five independent window-size and UI-size levels, persisted maximum columns (4~7) and rows (4~6), and automatic layout within those limits. Grid bounds expand past the compact size cap when needed to render the selected grid (for example 5×5) without UI clipping. The old combined `PresentationScale`/65% work-area prototype was removed; defaults are `보통` window, `크게` UI, and 4×4 maximum.
 - 2026-08-09: Added an interactive three-option HTML mock; Option 2 was corrected to remove its conflicting window-size control before Option 1 was selected.
 - 2026-08-09: Added a custom Switchboard icon for the tray and taskbar window; the Release app launched successfully.
 - 2026-08-09: Added a persisted compact-overlay prototype and position calculation with tests. It is a baseline only: its combined 70% presentation scale must be replaced by the approved Option 1 behavior.
@@ -24,7 +24,7 @@
 
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors.
 - `dotnet build Switchboard.slnx -c Release --nologo`: passed, 0 warnings, 0 errors.
-- `dotnet test Switchboard.slnx -c Release --nologo`: passed, 20 tests.
+- `dotnet test Switchboard.slnx -c Release --nologo`: passed, 23 tests.
 - Focused compact layout/settings tests: passed, 7 tests.
 - `notes/mocks/2026-08-09_compact-overlay-controls/compact-overlay-controls-mocks.html`: inline JavaScript syntax and required control checks passed.
 - Runtime Alt+Tab smoke: 10 gestures produced `VHVHVHVHVH` with 0 visibility failures.

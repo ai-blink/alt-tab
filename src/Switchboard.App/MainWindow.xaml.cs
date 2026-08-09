@@ -327,6 +327,14 @@ public partial class MainWindow : Window
         var layoutWorkAreaHeight = viewModel.IsCompactOverlayEnabled
             ? workArea.Height * viewModel.CompactOverlayWindowSizeRatio
             : workArea.Height;
+        var usesConfiguredGridBounds = viewModel.IsCompactOverlayEnabled &&
+            windowCount >= viewModel.SelectedCompactOverlayMaximumColumns;
+        var calculationWorkAreaWidth = usesConfiguredGridBounds
+            ? workArea.Width
+            : layoutWorkAreaWidth;
+        var calculationWorkAreaHeight = usesConfiguredGridBounds
+            ? workArea.Height
+            : layoutWorkAreaHeight;
         var uiScale = viewModel.CompactOverlayUiScale;
         var mode = viewModel.SelectedViewMode;
         var cardWidth = mode switch
@@ -343,8 +351,8 @@ public partial class MainWindow : Window
         };
         var layout = SwitcherLayoutCalculator.Calculate(
             windowCount,
-            layoutWorkAreaWidth,
-            layoutWorkAreaHeight,
+            calculationWorkAreaWidth,
+            calculationWorkAreaHeight,
             uiScale,
             mode,
             viewModel.SelectedSizingPolicy,
@@ -360,8 +368,8 @@ public partial class MainWindow : Window
             WindowList,
             layout.RequiresVerticalScroll ? ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden);
         WindowState = WindowState.Normal;
-        Width = ScaleLayoutDimension(currentLayoutWidth, uiScale, layoutWorkAreaWidth);
-        Height = ScaleLayoutDimension(currentLayoutHeight, uiScale, layoutWorkAreaHeight);
+        Width = ScaleLayoutDimension(currentLayoutWidth, uiScale, calculationWorkAreaWidth);
+        Height = ScaleLayoutDimension(currentLayoutHeight, uiScale, calculationWorkAreaHeight);
         var placement = viewModel.IsCompactOverlayEnabled
             ? viewModel.SelectedCompactOverlayPlacement
             : OverlayPlacement.Center;

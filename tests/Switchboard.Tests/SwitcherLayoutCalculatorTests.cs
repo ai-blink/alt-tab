@@ -50,20 +50,22 @@ public sealed class SwitcherLayoutCalculatorTests
     public void Calculate_uses_the_selected_compact_column_limit_when_it_fits()
     {
         var layout = SwitcherLayoutCalculator.Calculate(
-            windowCount: 42,
-            workAreaWidth: 2400,
-            workAreaHeight: 1200,
-            uiScale: 1.0,
+            windowCount: 25,
+            workAreaWidth: 1536,
+            workAreaHeight: 816,
+            uiScale: 1.1,
             mode: SwitcherViewMode.Compact,
             sizingPolicy: SwitcherSizingPolicy.Auto,
             cardWidth: 224,
             cardHeight: 96,
-            maximumColumns: 7,
-            maximumRows: 6);
+            maximumColumns: 5,
+            maximumRows: 5);
 
-        Assert.Equal(7, layout.Columns);
-        Assert.Equal(6, layout.Rows);
+        Assert.Equal(5, layout.Columns);
+        Assert.Equal(5, layout.Rows);
         Assert.False(layout.RequiresVerticalScroll);
+        Assert.True(ToPhysicalSize(layout.Width, 1.1) <= 1536);
+        Assert.True(ToPhysicalSize(layout.Height, 1.1) <= 816);
     }
 
     [Fact]
