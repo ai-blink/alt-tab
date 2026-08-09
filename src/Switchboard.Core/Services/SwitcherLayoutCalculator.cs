@@ -14,7 +14,7 @@ public static class SwitcherLayoutCalculator
     private const double ItemVerticalGap = 8;
     private const double SelectionFramePadding = 8;
     private const double LayoutSafetyPadding = 24;
-    private const double MinLayoutWidth = 875;
+    public const double MinimumLayoutWidth = 875;
     private const double MinLayoutHeight = 500;
 
     public static SwitcherLayout Calculate(
@@ -30,8 +30,8 @@ public static class SwitcherLayoutCalculator
         windowCount = Math.Max(1, windowCount);
         appScale = appScale > 0 ? appScale : 1;
 
-        var logicalScreenWidth = workAreaWidth / appScale;
-        var logicalScreenHeight = workAreaHeight / appScale;
+        var logicalScreenWidth = ScaleWorkAreaToLogicalSize(workAreaWidth, appScale);
+        var logicalScreenHeight = ScaleWorkAreaToLogicalSize(workAreaHeight, appScale);
         var detailsHeaderHeight = mode == SwitcherViewMode.List ? ListDetailsHeaderHeight : 0;
         var itemWidth = cardWidth + ItemHorizontalGap + SelectionFramePadding;
         var availableColumns = Math.Max(
@@ -57,12 +57,28 @@ public static class SwitcherLayoutCalculator
         var desiredWidth = (OuterMargin * 2) + ContentHorizontalMargin + (columns * itemWidth) + LayoutSafetyPadding;
         var desiredHeight = CalculateDesiredHeight(windowCount, columns, cardHeight, detailsHeaderHeight);
 
+        var layoutWidth = Math.Min(logicalScreenWidth, Math.Max(MinimumLayoutWidth, desiredWidth));
+        var layoutHeight = Math.Min(logicalScreenHeight, Math.Max(MinLayoutHeight, desiredHeight));
+
         return new SwitcherLayout(
             columns,
             rows,
-            Math.Min(logicalScreenWidth, Math.Max(MinLayoutWidth, desiredWidth)),
-            Math.Min(logicalScreenHeight, Math.Max(MinLayoutHeight, desiredHeight)),
-            desiredHeight > logicalScreenHeight);
+            layoutWidth,
+            layoutHeight,
+            desiredHeight > layoutHeight);
+    }
+
+    public static double CalculateMinimumLayoutHeight(SwitcherViewMode mode, double cardHeight)
+    {
+        var detailsHeaderHeight = mode == SwitcherViewMode.List ? ListDetailsHeaderHeight : 0;
+        return CalculateDesiredHeight(windowCount: 1, columns: 1, cardHeight, detailsHeaderHeight);
+    }
+
+    public static double ScaleLayoutDimension(double logicalDimension, double appScale)
+    {
+        appScale = appScale > 0 ? appScale : 1;
+        var fixedMargin = OuterMargin * 2;
+        return fixedMargin + (Math.Max(0, logicalDimension - fixedMargin) * appScale);
     }
 
     private static int ChooseBestColumns(
@@ -120,6 +136,12 @@ public static class SwitcherLayoutCalculator
             detailsHeaderHeight +
             (rows * (cardHeight + ItemVerticalGap + SelectionFramePadding)) +
             LayoutSafetyPadding;
+    }
+
+    private static double ScaleWorkAreaToLogicalSize(double workAreaSize, double appScale)
+    {
+        var fixedMargin = OuterMargin * 2;
+        return fixedMargin + (Math.Max(1, workAreaSize - fixedMargin) / appScale);
     }
 
     private readonly record struct LayoutCandidate(int Columns, double Score);

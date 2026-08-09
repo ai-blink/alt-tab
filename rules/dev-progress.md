@@ -2,6 +2,10 @@
 
 ## Current
 
+- 2026-08-10: Replaced the prototype's compact-only `0.7` multiplier with one unified `80/100/125/150/200%` overlay scale; legacy JSON scale names normalize to the nearest new safe preset.
+- 2026-08-10: Compact bounds now expand beyond the 65% target when needed for a complete card row, calculated columns are bound to the actual WrapPanel width, and off-viewport DWM thumbnails are hidden.
+- 2026-08-10: Replaced the compact-position ComboBox with the shared segmented-radio visual language and equalized fixed-option setting rows.
+- 2026-08-10: User superseded the earlier independent window-size/UI-size Option 1. Manual maximum rows/columns and separate size controls remain out of scope.
 - 2026-08-09: User approved compact-overlay Option 1: selectable position, five window-size levels, five independent UI-size levels, and automatic card layout.
 - 2026-08-09: Added an interactive three-option HTML mock; Option 2 was corrected to remove its conflicting window-size control before Option 1 was selected.
 - 2026-08-09: Added a custom Switchboard icon for the tray and taskbar window; the Release app launched successfully.
@@ -24,7 +28,8 @@
 
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors.
 - `dotnet build Switchboard.slnx -c Release --nologo`: passed, 0 warnings, 0 errors.
-- `dotnet test Switchboard.slnx -c Release --nologo`: passed, 19 tests.
+- `dotnet test Switchboard.slnx -c Release --nologo`: passed, 40 tests.
+- Focused scale/layout/settings regressions are included in the passing Release suite.
 - `notes/mocks/2026-08-09_compact-overlay-controls/compact-overlay-controls-mocks.html`: inline JavaScript syntax and required control checks passed.
 - Runtime Alt+Tab smoke: 10 gestures produced `VHVHVHVHVH` with 0 visibility failures.
 - Runtime foreground smoke: 0 Switchboard foreground PID failures while visible and 0 previous-PID restoration failures while hidden.
@@ -37,7 +42,7 @@
 
 ## Next
 
-- Implement approved compact-overlay Option 1: five-step window size and UI size remain independent; card rows/columns stay automatic.
+- Run the new Release build on request and visually verify 80% compact recovery, 125% plus 1.2x thumbnail reflow, 200% compact bounds, DWM scrolling, and the position segments.
 
 ## Follow-Up
 

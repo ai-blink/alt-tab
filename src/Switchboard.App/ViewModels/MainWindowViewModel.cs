@@ -20,8 +20,6 @@ public enum OverlayThemeMode
 
 public sealed record HotkeyKeyOption(SwitcherHotkeyKey Value, string Label);
 
-public sealed record OverlayPlacementOption(OverlayPlacement Value, string Label);
-
 public partial class MainWindowViewModel : ObservableObject
 {
     private const double BaseGridCardWidth = 274;
@@ -90,20 +88,11 @@ public partial class MainWindowViewModel : ObservableObject
 
     public IReadOnlyList<OverlayScalePreset> OverlayScalePresets { get; } =
     [
-        OverlayScalePreset.Fifty,
-        OverlayScalePreset.Seventy,
-        OverlayScalePreset.Ninety,
+        OverlayScalePreset.Eighty,
         OverlayScalePreset.Hundred,
-        OverlayScalePreset.OneTwenty
-    ];
-
-    public IReadOnlyList<OverlayPlacementOption> CompactOverlayPlacementOptions { get; } =
-    [
-        new(OverlayPlacement.BottomLeft, "좌측 아래"),
-        new(OverlayPlacement.BottomRight, "우측 아래"),
-        new(OverlayPlacement.TopLeft, "좌측 위"),
-        new(OverlayPlacement.TopRight, "우측 위"),
-        new(OverlayPlacement.Center, "가운데")
+        OverlayScalePreset.OneTwentyFive,
+        OverlayScalePreset.OneFifty,
+        OverlayScalePreset.TwoHundred
     ];
 
     public IReadOnlyList<SwitcherSizingPolicy> SizingPolicies { get; } =
@@ -130,6 +119,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ItemSlotWidth))]
     [NotifyPropertyChangedFor(nameof(ItemSlotHeight))]
+    [NotifyPropertyChangedFor(nameof(WindowListContentWidth))]
     private SwitcherViewMode selectedViewMode = SwitcherViewMode.Grid;
 
     [ObservableProperty]
@@ -148,9 +138,10 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AppScale))]
     [NotifyPropertyChangedFor(nameof(PresentationScale))]
-    private OverlayScalePreset selectedOverlayScalePreset = OverlayScalePreset.Ninety;
+    private OverlayScalePreset selectedOverlayScalePreset = OverlayScalePreset.Hundred;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(WindowListContentWidth))]
     private int gridColumnCount = 3;
 
     [ObservableProperty]
@@ -165,6 +156,7 @@ public partial class MainWindowViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(ListPreviewColumnWidth))]
     [NotifyPropertyChangedFor(nameof(ItemSlotWidth))]
     [NotifyPropertyChangedFor(nameof(ItemSlotHeight))]
+    [NotifyPropertyChangedFor(nameof(WindowListContentWidth))]
     private ThumbnailScalePreset selectedThumbnailScalePreset = ThumbnailScalePreset.Normal;
 
     [ObservableProperty]
@@ -192,7 +184,6 @@ public partial class MainWindowViewModel : ObservableObject
     private bool isAlwaysOnTop = true;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(PresentationScale))]
     private bool isCompactOverlayEnabled;
 
     [ObservableProperty]
@@ -214,14 +205,15 @@ public partial class MainWindowViewModel : ObservableObject
 
     public double AppScale => SelectedOverlayScalePreset switch
     {
-        OverlayScalePreset.Fifty => 0.5,
-        OverlayScalePreset.Seventy => 0.7,
+        OverlayScalePreset.Eighty or OverlayScalePreset.Fifty or OverlayScalePreset.Seventy => 0.8,
         OverlayScalePreset.Hundred => 1.0,
-        OverlayScalePreset.OneTwenty => 1.2,
-        _ => 0.9
+        OverlayScalePreset.OneTwentyFive or OverlayScalePreset.OneTwenty => 1.25,
+        OverlayScalePreset.OneFifty => 1.5,
+        OverlayScalePreset.TwoHundred => 2.0,
+        _ => 1.0
     };
 
-    public double PresentationScale => AppScale * (IsCompactOverlayEnabled ? 0.7 : 1.0);
+    public double PresentationScale => AppScale;
 
     public double GridCardWidth => Math.Round(BaseGridCardWidth * ThumbnailScale);
 
@@ -250,6 +242,8 @@ public partial class MainWindowViewModel : ObservableObject
         SwitcherViewMode.List => ListRowHeight + ItemVerticalGap + SelectionFramePadding,
         _ => GridCardHeight + ItemVerticalGap + SelectionFramePadding
     };
+
+    public double WindowListContentWidth => GridColumnCount * ItemSlotWidth;
 
     public Brush ShellBackground => SelectedAppearanceMode switch
     {
@@ -472,7 +466,7 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedSortMode = settings.SelectedSortMode;
         SelectedAppearanceMode = settings.SelectedAppearanceMode;
         SelectedOverlayOpacityPreset = settings.SelectedOverlayOpacityPreset;
-        SelectedOverlayScalePreset = settings.SelectedOverlayScalePreset;
+        SelectedOverlayScalePreset = NormalizeOverlayScalePreset(settings.SelectedOverlayScalePreset);
         SelectedThumbnailScalePreset = settings.SelectedThumbnailScalePreset;
         SelectedSizingPolicy = settings.SelectedSizingPolicy;
         DefaultViewMode = settings.DefaultViewMode;
@@ -500,6 +494,19 @@ public partial class MainWindowViewModel : ObservableObject
         IsCompactOverlayEnabled = IsCompactOverlayEnabled,
         CompactOverlayPlacement = SelectedCompactOverlayPlacement,
         IsAlwaysOnTop = IsAlwaysOnTop
+    };
+
+    private static OverlayScalePreset NormalizeOverlayScalePreset(OverlayScalePreset preset) => preset switch
+    {
+        OverlayScalePreset.Fifty or OverlayScalePreset.Seventy => OverlayScalePreset.Eighty,
+        OverlayScalePreset.Ninety => OverlayScalePreset.Hundred,
+        OverlayScalePreset.OneTwenty => OverlayScalePreset.OneTwentyFive,
+        OverlayScalePreset.Eighty or
+        OverlayScalePreset.Hundred or
+        OverlayScalePreset.OneTwentyFive or
+        OverlayScalePreset.OneFifty or
+        OverlayScalePreset.TwoHundred => preset,
+        _ => OverlayScalePreset.Hundred
     };
 
     private void EnsureDistinctHotkeyModifiers(bool changedFirstModifier)

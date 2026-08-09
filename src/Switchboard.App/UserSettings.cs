@@ -13,7 +13,7 @@ public sealed record UserSettings
 
     public OverlayOpacityPreset SelectedOverlayOpacityPreset { get; init; } = OverlayOpacityPreset.Ninety;
 
-    public OverlayScalePreset SelectedOverlayScalePreset { get; init; } = OverlayScalePreset.Ninety;
+    public OverlayScalePreset SelectedOverlayScalePreset { get; init; } = OverlayScalePreset.Hundred;
 
     public ThumbnailScalePreset SelectedThumbnailScalePreset { get; init; } = ThumbnailScalePreset.Normal;
 

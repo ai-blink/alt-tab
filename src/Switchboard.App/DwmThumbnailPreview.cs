@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 
@@ -129,8 +130,14 @@ public sealed class DwmThumbnailPreview : FrameworkElement
 
     private void UpdateThumbnail()
     {
-        if (thumbnail == 0 || !IsLoaded || !IsPreviewVisible || ActualWidth <= 0 || ActualHeight <= 0)
+        if (thumbnail == 0 || !IsLoaded || !IsPreviewVisible)
         {
+            return;
+        }
+
+        if (ActualWidth <= 0 || ActualHeight <= 0 || !IsFullyInsideScrollViewport())
+        {
+            SetThumbnailVisibility(false);
             return;
         }
 
@@ -153,6 +160,7 @@ public sealed class DwmThumbnailPreview : FrameworkElement
 
         if (width <= 0 || height <= 0)
         {
+            SetThumbnailVisibility(false);
             return;
         }
 
@@ -168,6 +176,55 @@ public sealed class DwmThumbnailPreview : FrameworkElement
         };
 
         _ = DwmUpdateThumbnailProperties(thumbnail, ref properties);
+    }
+
+    private bool IsFullyInsideScrollViewport()
+    {
+        var viewport = FindVisualAncestor<ScrollContentPresenter>(this);
+
+        if (viewport is null || viewport.ActualWidth <= 0 || viewport.ActualHeight <= 0)
+        {
+            return false;
+        }
+
+        var bounds = TransformToAncestor(viewport).TransformBounds(new Rect(0, 0, ActualWidth, ActualHeight));
+        const double tolerance = 0.5;
+        return bounds.Left >= -tolerance &&
+            bounds.Top >= -tolerance &&
+            bounds.Right <= viewport.ActualWidth + tolerance &&
+            bounds.Bottom <= viewport.ActualHeight + tolerance;
+    }
+
+    private void SetThumbnailVisibility(bool isVisible)
+    {
+        if (thumbnail == 0)
+        {
+            return;
+        }
+
+        var properties = new DwmThumbnailProperties
+        {
+            Flags = DwmTnpVisible,
+            Visible = isVisible
+        };
+
+        _ = DwmUpdateThumbnailProperties(thumbnail, ref properties);
+    }
+
+    private static T? FindVisualAncestor<T>(DependencyObject? source)
+        where T : DependencyObject
+    {
+        while (source is not null)
+        {
+            if (source is T match)
+            {
+                return match;
+            }
+
+            source = VisualTreeHelper.GetParent(source);
+        }
+
+        return null;
     }
 
     private DwmRect CreateFittedDestinationRect(int left, int top, int width, int height)

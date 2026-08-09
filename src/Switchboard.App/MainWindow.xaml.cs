@@ -19,6 +19,8 @@ public partial class MainWindow : Window
     private const int SwitchboardHotkeyId = 0x5342;
     private const int AltTabHotkeyId = 0x5343;
     private const double CompactWorkAreaRatio = 0.65;
+    private const double SettingsPanelWidth = 386;
+    private const double SettingsWorkAreaInset = 12;
     private readonly MainWindowViewModel viewModel;
     private HwndSource? hwndSource;
     private GlobalHotkeyRegistration? hotkeyRegistration;
@@ -322,12 +324,6 @@ public partial class MainWindow : Window
     {
         var windowCount = Math.Max(1, viewModel.VisibleWindows.Count);
         var workArea = SystemParameters.WorkArea;
-        var layoutWorkAreaWidth = viewModel.IsCompactOverlayEnabled
-            ? workArea.Width * CompactWorkAreaRatio
-            : workArea.Width;
-        var layoutWorkAreaHeight = viewModel.IsCompactOverlayEnabled
-            ? workArea.Height * CompactWorkAreaRatio
-            : workArea.Height;
         var appScale = viewModel.PresentationScale;
         var mode = viewModel.SelectedViewMode;
         var cardWidth = mode switch
@@ -342,6 +338,18 @@ public partial class MainWindow : Window
             SwitcherViewMode.List => viewModel.ListRowHeight,
             _ => viewModel.GridCardHeight
         };
+        var minimumCompactWidth = SwitcherLayoutCalculator.ScaleLayoutDimension(
+            SwitcherLayoutCalculator.MinimumLayoutWidth,
+            appScale);
+        var minimumCompactHeight = SwitcherLayoutCalculator.ScaleLayoutDimension(
+            SwitcherLayoutCalculator.CalculateMinimumLayoutHeight(mode, cardHeight),
+            appScale);
+        var layoutWorkAreaWidth = viewModel.IsCompactOverlayEnabled
+            ? Math.Min(workArea.Width, Math.Max(workArea.Width * CompactWorkAreaRatio, minimumCompactWidth))
+            : workArea.Width;
+        var layoutWorkAreaHeight = viewModel.IsCompactOverlayEnabled
+            ? Math.Min(workArea.Height, Math.Max(workArea.Height * CompactWorkAreaRatio, minimumCompactHeight))
+            : workArea.Height;
         var layout = SwitcherLayoutCalculator.Calculate(
             windowCount,
             layoutWorkAreaWidth,
@@ -359,8 +367,13 @@ public partial class MainWindow : Window
             WindowList,
             layout.RequiresVerticalScroll ? ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden);
         WindowState = WindowState.Normal;
-        Width = Math.Min(layoutWorkAreaWidth, currentLayoutWidth * appScale);
-        Height = Math.Min(layoutWorkAreaHeight, currentLayoutHeight * appScale);
+        Width = Math.Min(
+            layoutWorkAreaWidth,
+            SwitcherLayoutCalculator.ScaleLayoutDimension(currentLayoutWidth, appScale));
+        Height = Math.Min(
+            layoutWorkAreaHeight,
+            SwitcherLayoutCalculator.ScaleLayoutDimension(currentLayoutHeight, appScale));
+        ConstrainSettingsPopup(workArea, appScale);
         var placement = viewModel.IsCompactOverlayEnabled
             ? viewModel.SelectedCompactOverlayPlacement
             : OverlayPlacement.Center;
@@ -374,6 +387,17 @@ public partial class MainWindow : Window
             placement);
         Left = position.Left;
         Top = position.Top;
+    }
+
+    private void ConstrainSettingsPopup(Rect workArea, double appScale)
+    {
+        var availablePhysicalWidth = Math.Max(1, workArea.Width - (SettingsWorkAreaInset * 2));
+        var availablePhysicalHeight = Math.Max(1, workArea.Height - (SettingsWorkAreaInset * 2));
+        SettingsPanel.Width = Math.Min(SettingsPanelWidth, availablePhysicalWidth / appScale);
+        SettingsPanel.MaxHeight = availablePhysicalHeight / appScale;
+        SettingsPopup.HorizontalOffset = -Math.Max(
+            0,
+            (SettingsPanel.Width - SettingsButton.ActualWidth) * appScale);
     }
 
     private void OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

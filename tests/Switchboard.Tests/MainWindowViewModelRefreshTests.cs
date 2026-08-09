@@ -85,6 +85,64 @@ public sealed class MainWindowViewModelRefreshTests
         Assert.Equal(OverlayPlacement.BottomRight, settingsStore.CurrentSettings.CompactOverlayPlacement);
     }
 
+    [Theory]
+    [InlineData(OverlayScalePreset.Eighty, 0.8)]
+    [InlineData(OverlayScalePreset.Hundred, 1.0)]
+    [InlineData(OverlayScalePreset.OneTwentyFive, 1.25)]
+    [InlineData(OverlayScalePreset.OneFifty, 1.5)]
+    [InlineData(OverlayScalePreset.TwoHundred, 2.0)]
+    public void Overlay_scale_presets_apply_to_the_entire_presentation(
+        OverlayScalePreset preset,
+        double expectedScale)
+    {
+        var viewModel = CreateViewModel(new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]));
+
+        viewModel.SelectedOverlayScalePreset = preset;
+        viewModel.IsCompactOverlayEnabled = false;
+        var regularScale = viewModel.PresentationScale;
+        viewModel.IsCompactOverlayEnabled = true;
+
+        Assert.Equal(expectedScale, regularScale);
+        Assert.Equal(expectedScale, viewModel.PresentationScale);
+    }
+
+    [Fact]
+    public void Overlay_scale_options_use_the_approved_five_presets()
+    {
+        var viewModel = CreateViewModel(new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]));
+
+        Assert.Equal(
+            [
+                OverlayScalePreset.Eighty,
+                OverlayScalePreset.Hundred,
+                OverlayScalePreset.OneTwentyFive,
+                OverlayScalePreset.OneFifty,
+                OverlayScalePreset.TwoHundred
+            ],
+            viewModel.OverlayScalePresets);
+    }
+
+    [Theory]
+    [InlineData(OverlayScalePreset.Fifty, OverlayScalePreset.Eighty)]
+    [InlineData(OverlayScalePreset.Seventy, OverlayScalePreset.Eighty)]
+    [InlineData(OverlayScalePreset.Ninety, OverlayScalePreset.Hundred)]
+    [InlineData(OverlayScalePreset.OneTwenty, OverlayScalePreset.OneTwentyFive)]
+    public void Legacy_overlay_scale_is_normalized_when_settings_are_loaded(
+        OverlayScalePreset storedPreset,
+        OverlayScalePreset expectedPreset)
+    {
+        var settingsStore = new StubSettingsStore(new UserSettings
+        {
+            SelectedOverlayScalePreset = storedPreset
+        });
+
+        var viewModel = CreateViewModel(
+            new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]),
+            settingsStore: settingsStore);
+
+        Assert.Equal(expectedPreset, viewModel.SelectedOverlayScalePreset);
+    }
+
     private static MainWindowViewModel CreateViewModel(
         IWindowCatalog catalog,
         IWindowCloser? closer = null,
