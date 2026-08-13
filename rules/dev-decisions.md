@@ -16,7 +16,9 @@
 - D-006: Borrow search/keyboard hints from command-palette, long-title handling from dense-list, and monitor headers from monitor-grouped.
 - D-008: Alt+Tab toggles Switchboard visibility; plain Tab/arrows navigate cards and Enter activates the selected window.
 - D-009: `IsAlwaysOnTop` is the sole persistent topmost policy; foreground presentation may pulse topmost only when it immediately restores normal z-order.
-- D-010: Overall UI scale is a single 80/100/125/150/200% setting. Compact mode controls position and available bounds only; it adds no separate scale and exposes no manual row/column limits.
+- D-010: Overall UI scale is a single 60/70/80/100/125/150/200% setting. Compact mode controls available bounds only; it adds no separate scale and exposes no manual row/column limits.
+- D-011: Persist overlay position only after direct drag, using the nearest 3×3 work-area anchor plus offset. The picture remote performs one-shot movement and never replaces the saved position.
+- D-012: Replace the anchored settings popup with an owner-modal settings window whose left sidebar switches Position & Move, Appearance & Size, and Behavior content.
 
 ## Workflow
 

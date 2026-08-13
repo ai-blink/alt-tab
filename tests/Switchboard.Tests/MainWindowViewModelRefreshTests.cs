@@ -86,6 +86,8 @@ public sealed class MainWindowViewModelRefreshTests
     }
 
     [Theory]
+    [InlineData(OverlayScalePreset.Sixty, 0.6)]
+    [InlineData(OverlayScalePreset.Seventy, 0.7)]
     [InlineData(OverlayScalePreset.Eighty, 0.8)]
     [InlineData(OverlayScalePreset.Hundred, 1.0)]
     [InlineData(OverlayScalePreset.OneTwentyFive, 1.25)]
@@ -107,12 +109,14 @@ public sealed class MainWindowViewModelRefreshTests
     }
 
     [Fact]
-    public void Overlay_scale_options_use_the_approved_five_presets()
+    public void Overlay_scale_options_include_compact_sixty_and_seventy_presets()
     {
         var viewModel = CreateViewModel(new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]));
 
         Assert.Equal(
             [
+                OverlayScalePreset.Sixty,
+                OverlayScalePreset.Seventy,
                 OverlayScalePreset.Eighty,
                 OverlayScalePreset.Hundred,
                 OverlayScalePreset.OneTwentyFive,
@@ -123,8 +127,7 @@ public sealed class MainWindowViewModelRefreshTests
     }
 
     [Theory]
-    [InlineData(OverlayScalePreset.Fifty, OverlayScalePreset.Eighty)]
-    [InlineData(OverlayScalePreset.Seventy, OverlayScalePreset.Eighty)]
+    [InlineData(OverlayScalePreset.Fifty, OverlayScalePreset.Sixty)]
     [InlineData(OverlayScalePreset.Ninety, OverlayScalePreset.Hundred)]
     [InlineData(OverlayScalePreset.OneTwenty, OverlayScalePreset.OneTwentyFive)]
     public void Legacy_overlay_scale_is_normalized_when_settings_are_loaded(
@@ -141,6 +144,32 @@ public sealed class MainWindowViewModelRefreshTests
             settingsStore: settingsStore);
 
         Assert.Equal(expectedPreset, viewModel.SelectedOverlayScalePreset);
+    }
+
+    [Fact]
+    public void Saved_overlay_position_is_loaded_and_saved()
+    {
+        var savedPosition = new OverlayPositionPreference
+        {
+            MonitorDeviceName = "DISPLAY2",
+            Anchor = OverlayAnchor.BottomRight,
+            OffsetX = -12,
+            OffsetY = 8
+        };
+        var settingsStore = new StubSettingsStore(new UserSettings
+        {
+            SavedOverlayPosition = savedPosition
+        });
+        var viewModel = CreateViewModel(
+            new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]),
+            settingsStore: settingsStore);
+
+        Assert.Equal(savedPosition, viewModel.SavedOverlayPosition);
+
+        var updatedPosition = savedPosition with { Anchor = OverlayAnchor.TopLeft, OffsetX = 4 };
+        viewModel.SavedOverlayPosition = updatedPosition;
+
+        Assert.Equal(updatedPosition, settingsStore.CurrentSettings.SavedOverlayPosition);
     }
 
     private static MainWindowViewModel CreateViewModel(

@@ -2,6 +2,7 @@
 
 | Status | Milestone | Evidence |
 |---|---|---|
+| implemented — UI check pending | Replace the settings popup with a sidebar modal and persist overlay drag position with a one-shot 10-action picture remote. | 2026-08-14 Release build: 0 warnings/errors, 57 tests pass; `notes/brainstorm/20260814_settings-window-overhaul_design.md` |
 | done | Initialize `.NET 10 + WPF` App/Core/Native/Tests structure and preserve Stitch references. | `dotnet build`, `dotnet test`, `references/stitch/` |
 | done | Deliver the compact transparent WPF overlay with Grid/Compact/List views and settings. | `notes/runs/2026-07-02_*`, `notes/runs/2026-07-03_*` |
 | done | Enumerate all candidate Win32 windows and render full-source DWM thumbnails. | Native provider, `DwmThumbnailPreview`, visual smoke artifacts |

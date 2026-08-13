@@ -84,6 +84,8 @@ public partial class MainWindowViewModel : ObservableObject
 
     public IReadOnlyList<OverlayScalePreset> OverlayScalePresets { get; } =
     [
+        OverlayScalePreset.Sixty,
+        OverlayScalePreset.Seventy,
         OverlayScalePreset.Eighty,
         OverlayScalePreset.Hundred,
         OverlayScalePreset.OneTwentyFive,
@@ -167,7 +169,7 @@ public partial class MainWindowViewModel : ObservableObject
     private SwitcherHotkeyKey selectedHotkeyKey = SwitcherHotkeyKey.Space;
 
     [ObservableProperty]
-    private bool isSettingsOpen;
+    private SettingsTab selectedSettingsTab = SettingsTab.Position;
 
     [ObservableProperty]
     private bool isAlwaysOnTop = true;
@@ -177,6 +179,10 @@ public partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private OverlayPlacement selectedCompactOverlayPlacement = OverlayPlacement.BottomLeft;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SavedOverlayPositionLabel))]
+    private OverlayPositionPreference? savedOverlayPosition;
 
     public IReadOnlyList<WindowSnapshot> VisibleWindows =>
         WindowQuery.Apply(allWindows, SearchText, SelectedSortMode).ToList();
@@ -194,7 +200,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     public double AppScale => SelectedOverlayScalePreset switch
     {
-        OverlayScalePreset.Eighty or OverlayScalePreset.Fifty or OverlayScalePreset.Seventy => 0.8,
+        OverlayScalePreset.Sixty or OverlayScalePreset.Fifty => 0.6,
+        OverlayScalePreset.Seventy => 0.7,
+        OverlayScalePreset.Eighty => 0.8,
         OverlayScalePreset.Hundred => 1.0,
         OverlayScalePreset.OneTwentyFive or OverlayScalePreset.OneTwenty => 1.25,
         OverlayScalePreset.OneFifty => 1.5,
@@ -203,6 +211,19 @@ public partial class MainWindowViewModel : ObservableObject
     };
 
     public double PresentationScale => AppScale;
+
+    public string SavedOverlayPositionLabel => SavedOverlayPosition?.Anchor switch
+    {
+        OverlayAnchor.TopLeft => "왼쪽 위",
+        OverlayAnchor.TopCenter => "위쪽 중앙",
+        OverlayAnchor.TopRight => "오른쪽 위",
+        OverlayAnchor.MiddleLeft => "왼쪽 중앙",
+        OverlayAnchor.MiddleRight => "오른쪽 중앙",
+        OverlayAnchor.BottomLeft => "왼쪽 아래",
+        OverlayAnchor.BottomCenter => "아래쪽 중앙",
+        OverlayAnchor.BottomRight => "오른쪽 아래",
+        _ => "화면 중앙"
+    };
 
     public double GridCardWidth => Math.Round(BaseGridCardWidth * ThumbnailScale);
 
@@ -357,12 +378,6 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void ToggleSettings() => IsSettingsOpen = !IsSettingsOpen;
-
-    [RelayCommand]
-    private void CloseSettings() => IsSettingsOpen = false;
-
-    [RelayCommand]
     private void Refresh()
     {
         RefreshWindows();
@@ -431,6 +446,7 @@ public partial class MainWindowViewModel : ObservableObject
             nameof(SelectedHotkeyKey) or
             nameof(IsCompactOverlayEnabled) or
             nameof(SelectedCompactOverlayPlacement) or
+            nameof(SavedOverlayPosition) or
             nameof(IsAlwaysOnTop);
 
     private void ApplyUserSettings(UserSettings settings)
@@ -448,6 +464,13 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedHotkeyKey = settings.SelectedHotkeyKey;
         IsCompactOverlayEnabled = settings.IsCompactOverlayEnabled;
         SelectedCompactOverlayPlacement = settings.CompactOverlayPlacement;
+        SavedOverlayPosition = settings.SavedOverlayPosition ?? new OverlayPositionPreference
+        {
+            Anchor = OverlayPositionCalculator.ToAnchor(
+                settings.IsCompactOverlayEnabled
+                    ? settings.CompactOverlayPlacement
+                    : OverlayPlacement.Center)
+        };
         IsAlwaysOnTop = settings.IsAlwaysOnTop;
     }
 
@@ -466,14 +489,17 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedHotkeyKey = SelectedHotkeyKey,
         IsCompactOverlayEnabled = IsCompactOverlayEnabled,
         CompactOverlayPlacement = SelectedCompactOverlayPlacement,
+        SavedOverlayPosition = SavedOverlayPosition,
         IsAlwaysOnTop = IsAlwaysOnTop
     };
 
     private static OverlayScalePreset NormalizeOverlayScalePreset(OverlayScalePreset preset) => preset switch
     {
-        OverlayScalePreset.Fifty or OverlayScalePreset.Seventy => OverlayScalePreset.Eighty,
+        OverlayScalePreset.Fifty => OverlayScalePreset.Sixty,
         OverlayScalePreset.Ninety => OverlayScalePreset.Hundred,
         OverlayScalePreset.OneTwenty => OverlayScalePreset.OneTwentyFive,
+        OverlayScalePreset.Sixty or
+        OverlayScalePreset.Seventy or
         OverlayScalePreset.Eighty or
         OverlayScalePreset.Hundred or
         OverlayScalePreset.OneTwentyFive or

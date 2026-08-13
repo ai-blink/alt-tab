@@ -31,5 +31,7 @@ public sealed record UserSettings
 
     public OverlayPlacement CompactOverlayPlacement { get; init; } = OverlayPlacement.BottomLeft;
 
+    public OverlayPositionPreference? SavedOverlayPosition { get; init; }
+
     public bool IsAlwaysOnTop { get; init; } = true;
 }

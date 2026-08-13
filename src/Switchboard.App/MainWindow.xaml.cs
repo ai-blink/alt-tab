@@ -19,9 +19,8 @@ public partial class MainWindow : Window
     private const int SwitchboardHotkeyId = 0x5342;
     private const int AltTabHotkeyId = 0x5343;
     private const double CompactWorkAreaRatio = 0.65;
-    private const double SettingsPanelWidth = 386;
-    private const double SettingsWorkAreaInset = 12;
     private readonly MainWindowViewModel viewModel;
+    private readonly IWorkAreaProvider workAreaProvider;
     private HwndSource? hwndSource;
     private GlobalHotkeyRegistration? hotkeyRegistration;
     private GlobalHotkeyRegistration? altTabHotkeyRegistration;
@@ -30,10 +29,14 @@ public partial class MainWindow : Window
     private nint previousForegroundWindow;
     private double currentLayoutWidth = 955;
     private double currentLayoutHeight = 540;
+    private SettingsWindow? settingsWindow;
+    private OverlayPosition? temporaryOverlayPosition;
+    private OverlayWorkArea? temporaryOverlayWorkArea;
 
-    public MainWindow(MainWindowViewModel viewModel)
+    public MainWindow(MainWindowViewModel viewModel, IWorkAreaProvider workAreaProvider)
     {
         this.viewModel = viewModel;
+        this.workAreaProvider = workAreaProvider;
         refreshTimer = new DispatcherTimer(DispatcherPriority.Background)
         {
             Interval = TimeSpan.FromSeconds(1)
@@ -101,6 +104,8 @@ public partial class MainWindow : Window
 
     private void OnClosed(object? sender, EventArgs e)
     {
+        settingsWindow?.Close();
+        settingsWindow = null;
         StopRefreshTimer();
         refreshTimer.Tick -= OnRefreshTimerTick;
         altTabHotkeyRegistration?.Dispose();
@@ -153,7 +158,8 @@ public partial class MainWindow : Window
             nameof(MainWindowViewModel.SelectedThumbnailScalePreset) or
             nameof(MainWindowViewModel.SelectedSizingPolicy) or
             nameof(MainWindowViewModel.IsCompactOverlayEnabled) or
-            nameof(MainWindowViewModel.SelectedCompactOverlayPlacement))
+            nameof(MainWindowViewModel.SelectedCompactOverlayPlacement) or
+            nameof(MainWindowViewModel.SavedOverlayPosition))
         {
             Dispatcher.BeginInvoke(ApplyContentSizedBounds, DispatcherPriority.Loaded);
         }
@@ -278,6 +284,8 @@ public partial class MainWindow : Window
 
     private void HideOverlay(bool restorePreviousWindow)
     {
+        temporaryOverlayPosition = null;
+        temporaryOverlayWorkArea = null;
         ShowInTaskbar = false;
         StopRefreshTimer();
         Hide();
@@ -323,7 +331,7 @@ public partial class MainWindow : Window
     private void ApplyContentSizedBounds()
     {
         var windowCount = Math.Max(1, viewModel.VisibleWindows.Count);
-        var workArea = SystemParameters.WorkArea;
+        var workArea = ResolveSavedPositionWorkArea();
         var appScale = viewModel.PresentationScale;
         var mode = viewModel.SelectedViewMode;
         var cardWidth = mode switch
@@ -373,31 +381,55 @@ public partial class MainWindow : Window
         Height = Math.Min(
             layoutWorkAreaHeight,
             SwitcherLayoutCalculator.ScaleLayoutDimension(currentLayoutHeight, appScale));
-        ConstrainSettingsPopup(workArea, appScale);
-        var placement = viewModel.IsCompactOverlayEnabled
-            ? viewModel.SelectedCompactOverlayPlacement
-            : OverlayPlacement.Center;
-        var position = OverlayPositionCalculator.Calculate(
-            workArea.Left,
-            workArea.Top,
-            workArea.Width,
-            workArea.Height,
-            Width,
-            Height,
-            placement);
+        var position = temporaryOverlayPosition is { } temporaryPosition
+            ? OverlayPositionCalculator.Constrain(
+                temporaryOverlayWorkArea ?? workArea,
+                temporaryPosition,
+                Width,
+                Height)
+            : OverlayPositionCalculator.Calculate(
+                workArea,
+                Width,
+                Height,
+                viewModel.SavedOverlayPosition ?? new OverlayPositionPreference());
         Left = position.Left;
         Top = position.Top;
     }
 
-    private void ConstrainSettingsPopup(Rect workArea, double appScale)
+    private OverlayWorkArea ResolveSavedPositionWorkArea()
     {
-        var availablePhysicalWidth = Math.Max(1, workArea.Width - (SettingsWorkAreaInset * 2));
-        var availablePhysicalHeight = Math.Max(1, workArea.Height - (SettingsWorkAreaInset * 2));
-        SettingsPanel.Width = Math.Min(SettingsPanelWidth, availablePhysicalWidth / appScale);
-        SettingsPanel.MaxHeight = availablePhysicalHeight / appScale;
-        SettingsPopup.HorizontalOffset = -Math.Max(
-            0,
-            (SettingsPanel.Width - SettingsButton.ActualWidth) * appScale);
+        var savedMonitor = viewModel.SavedOverlayPosition?.MonitorDeviceName;
+
+        return workAreaProvider.TryGetWorkArea(savedMonitor, out var savedWorkArea)
+            ? ToLogicalWorkArea(savedWorkArea)
+            : GetCurrentWorkArea();
+    }
+
+    private OverlayWorkArea GetCurrentWorkArea()
+    {
+        var windowHandle = new WindowInteropHelper(this).Handle;
+        var physicalWorkArea = windowHandle == 0
+            ? workAreaProvider.GetPrimaryWorkArea()
+            : workAreaProvider.GetWorkAreaForWindow(windowHandle);
+
+        return ToLogicalWorkArea(physicalWorkArea);
+    }
+
+    private OverlayWorkArea ToLogicalWorkArea(OverlayWorkArea physicalWorkArea)
+    {
+        var source = PresentationSource.FromVisual(this) as HwndSource;
+        var transform = source?.CompositionTarget is { } target
+            ? target.TransformFromDevice
+            : Matrix.Identity;
+        var topLeft = transform.Transform(new System.Windows.Point(physicalWorkArea.Left, physicalWorkArea.Top));
+        var bottomRight = transform.Transform(new System.Windows.Point(physicalWorkArea.Right, physicalWorkArea.Bottom));
+
+        return new OverlayWorkArea(
+            physicalWorkArea.DeviceName,
+            topLeft.X,
+            topLeft.Y,
+            Math.Max(0, bottomRight.X - topLeft.X),
+            Math.Max(0, bottomRight.Y - topLeft.Y));
     }
 
     private void OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -476,24 +508,110 @@ public partial class MainWindow : Window
         e.Handled = true;
     }
 
-    private void OnChromeMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void OnSettingsButtonClick(object sender, RoutedEventArgs e)
     {
-        if (e.ButtonState != MouseButtonState.Pressed)
+        if (settingsWindow is { IsVisible: true } openSettingsWindow)
         {
+            openSettingsWindow.Activate();
             return;
         }
 
-        if (e.OriginalSource is DependencyObject source && IsInteractiveHeaderElement(source))
+        viewModel.SelectedSettingsTab = SettingsTab.Position;
+        var newSettingsWindow = new SettingsWindow(viewModel)
         {
-            return;
-        }
-
-        DragMove();
+            Owner = this
+        };
+        newSettingsWindow.RemoteMoveRequested += OnRemoteMoveRequested;
+        newSettingsWindow.ReturnToSavedPositionRequested += OnReturnToSavedPositionRequested;
+        newSettingsWindow.Closed += OnSettingsWindowClosed;
+        settingsWindow = newSettingsWindow;
+        newSettingsWindow.ShowDialog();
     }
 
-    private static bool IsInteractiveHeaderElement(DependencyObject source) =>
+    private void OnSettingsWindowClosed(object? sender, EventArgs e)
+    {
+        if (sender is not SettingsWindow closedSettingsWindow)
+        {
+            return;
+        }
+
+        closedSettingsWindow.RemoteMoveRequested -= OnRemoteMoveRequested;
+        closedSettingsWindow.ReturnToSavedPositionRequested -= OnReturnToSavedPositionRequested;
+        closedSettingsWindow.Closed -= OnSettingsWindowClosed;
+
+        if (ReferenceEquals(settingsWindow, closedSettingsWindow))
+        {
+            settingsWindow = null;
+        }
+
+        if (IsVisible)
+        {
+            Dispatcher.BeginInvoke(
+                new Action(() =>
+                {
+                    Activate();
+                    Focus();
+                    WindowList.Focus();
+                }),
+                DispatcherPriority.ApplicationIdle);
+        }
+    }
+
+    private void OnRemoteMoveRequested(OverlayAnchor anchor)
+    {
+        var workArea = GetCurrentWorkArea();
+        temporaryOverlayWorkArea = workArea;
+        temporaryOverlayPosition = OverlayPositionCalculator.Calculate(workArea, Width, Height, anchor);
+        Left = temporaryOverlayPosition.Value.Left;
+        Top = temporaryOverlayPosition.Value.Top;
+    }
+
+    private void OnReturnToSavedPositionRequested()
+    {
+        temporaryOverlayPosition = null;
+        temporaryOverlayWorkArea = null;
+        ApplyContentSizedBounds();
+    }
+
+    private void OnWindowSurfaceMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton != MouseButton.Left ||
+            e.OriginalSource is not DependencyObject source ||
+            IsInteractiveSurface(source))
+        {
+            return;
+        }
+
+        try
+        {
+            DragMove();
+            SaveDraggedOverlayPosition();
+        }
+        catch (InvalidOperationException)
+        {
+            // WPF can cancel DragMove when the pointer is released before it starts.
+        }
+    }
+
+    private void SaveDraggedOverlayPosition()
+    {
+        var workArea = GetCurrentWorkArea();
+        viewModel.SavedOverlayPosition = OverlayPositionCalculator.Capture(
+            workArea,
+            new OverlayPosition(Left, Top),
+            Width,
+            Height);
+        temporaryOverlayPosition = null;
+        temporaryOverlayWorkArea = null;
+    }
+
+    private static bool IsInteractiveSurface(DependencyObject source) =>
         FindAncestor<System.Windows.Controls.Primitives.ButtonBase>(source) is not null ||
-        FindAncestor<System.Windows.Controls.Primitives.TextBoxBase>(source) is not null;
+        FindAncestor<System.Windows.Controls.Primitives.TextBoxBase>(source) is not null ||
+        FindAncestor<Selector>(source) is not null ||
+        FindAncestor<System.Windows.Controls.Primitives.ScrollBar>(source) is not null ||
+        FindAncestor<Thumb>(source) is not null ||
+        FindAncestor<ListBoxItem>(source) is not null;
 
     private static T? FindAncestor<T>(DependencyObject? source)
         where T : DependencyObject

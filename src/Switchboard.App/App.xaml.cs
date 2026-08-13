@@ -24,6 +24,7 @@ public partial class App : System.Windows.Application
         base.OnStartup(e);
 
         var services = new ServiceCollection();
+        services.AddSingleton<IWorkAreaProvider, Win32WorkAreaProvider>();
         services.AddSingleton<Win32NativeWindowProvider>();
         services.AddSingleton<IWindowCatalog>(provider => provider.GetRequiredService<Win32NativeWindowProvider>());
         services.AddSingleton<IWindowActivator>(provider => provider.GetRequiredService<Win32NativeWindowProvider>());

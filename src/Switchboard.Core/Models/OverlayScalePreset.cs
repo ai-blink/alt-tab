@@ -10,5 +10,6 @@ public enum OverlayScalePreset
     Eighty = 5,
     OneTwentyFive = 6,
     OneFifty = 7,
-    TwoHundred = 8
+    TwoHundred = 8,
+    Sixty = 9
 }

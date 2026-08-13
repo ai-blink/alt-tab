@@ -15,6 +15,12 @@ public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCa
     private const int DwmwaCloaked = 14;
     private const int SwRestore = 9;
     private const uint WmClose = 0x0010;
+    private readonly IWorkAreaProvider workAreaProvider;
+
+    public Win32NativeWindowProvider(IWorkAreaProvider workAreaProvider)
+    {
+        this.workAreaProvider = workAreaProvider;
+    }
 
     public IReadOnlyList<WindowSnapshot> GetOpenWindows() => GetTopLevelWindows();
 
@@ -161,22 +167,9 @@ public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCa
         }
     }
 
-    private static string GetMonitorName(nint hwnd)
+    private string GetMonitorName(nint hwnd)
     {
-        var monitor = MonitorFromWindow(hwnd, MonitorDefaultToNearest);
-        var info = new MonitorInfoEx();
-        info.Size = Marshal.SizeOf<MonitorInfoEx>();
-
-        if (monitor == 0 || !GetMonitorInfo(monitor, ref info))
-        {
-            return "Display";
-        }
-
-        var deviceName = info.DeviceName.TrimEnd('\0');
-        var slashIndex = deviceName.LastIndexOf('\\');
-        return slashIndex >= 0 && slashIndex < deviceName.Length - 1
-            ? deviceName[(slashIndex + 1)..]
-            : deviceName;
+        return workAreaProvider.GetWorkAreaForWindow(hwnd).DeviceName;
     }
 
     private static string CreateLabel(string appName)
@@ -206,8 +199,6 @@ public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCa
     }
 
     private delegate bool EnumWindowsProc(nint hwnd, nint lParam);
-
-    private const uint MonitorDefaultToNearest = 2;
 
     [DllImport("user32.dll")]
     private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, nint lParam);
@@ -254,33 +245,6 @@ public sealed class Win32NativeWindowProvider : INativeWindowProvider, IWindowCa
     [DllImport("user32.dll", EntryPoint = "GetWindowLongPtrW")]
     private static extern nint GetWindowLongPtr(nint hWnd, int nIndex);
 
-    [DllImport("user32.dll")]
-    private static extern nint MonitorFromWindow(nint hwnd, uint dwFlags);
-
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    private static extern bool GetMonitorInfo(nint hMonitor, ref MonitorInfoEx lpmi);
-
     [DllImport("dwmapi.dll")]
     private static extern int DwmGetWindowAttribute(nint hwnd, int dwAttribute, ref int pvAttribute, int cbAttribute);
-
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    private struct MonitorInfoEx
-    {
-        public int Size;
-        public Rect Monitor;
-        public Rect WorkArea;
-        public uint Flags;
-
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-        public string DeviceName;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct Rect
-    {
-        public int Left;
-        public int Top;
-        public int Right;
-        public int Bottom;
-    }
 }
