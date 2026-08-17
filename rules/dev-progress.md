@@ -2,6 +2,7 @@
 
 ## Current
 
+- 2026-08-17: Prepared the `v0.3.0` self-contained win-x64 Portable ZIP with the settings-window, persistent-position, 60/70% scale, and modal clipping fixes. SHA-256: `A3A84823263E04267120D5EA20FFA3F505F503DCC1C2934C0DA08C20F9640A73`.
 - 2026-08-10: Approved the blue-violet four-pane Switchboard icon, generated a transparent-corner multi-resolution `.ico`, and replaced the procedural tray/window icon with the shared application asset for the `v0.2.1` patch release.
 - 2026-08-10: Built the self-contained `v0.2.1` win-x64 single executable and packaged `Switchboard-v0.2.1-win-x64-Portable.zip` (SHA-256 `25EA0A84275CC320934001669DD087305ABE00454E8D4D5C896520C19333DCBB`).
 - 2026-08-10: Reviewed all 42 commits through `7841f76` and scoped the `v0.2.0` release delta to the six commits after `v0.1.1`; superseded independent size and manual row/column experiments are excluded from the final patch notes.
@@ -32,6 +33,9 @@
 
 ## Verification
 
+- `dotnet build Switchboard.slnx -c Release --nologo`: passed for the `v0.3.0` release, 0 warnings, 0 errors.
+- `dotnet test Switchboard.slnx -c Release --nologo`: passed for the `v0.3.0` release, 57 tests.
+- `dotnet publish` for the `v0.3.0` self-contained win-x64 single file: passed; ZIP contains `Switchboard.App.exe` and `읽어주세요.txt`.
 - `dotnet build Switchboard.slnx --nologo`: passed, 0 warnings, 0 errors.
 - `dotnet build Switchboard.slnx -c Release --nologo`: passed for the `v0.2.1` icon patch, 0 warnings, 0 errors.
 - `dotnet test Switchboard.slnx -c Release --nologo`: passed for the `v0.2.1` icon patch, 41 tests.
