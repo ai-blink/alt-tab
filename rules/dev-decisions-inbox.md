@@ -2,6 +2,7 @@
 
 | ID | Date | One-liner | Section | Status |
 |---|---|---|---|---|
+| D-013 | 2026-08-17 | Keep the fixed-size settings modal independent of overlay scale to prevent clipping. | UX | integrated |
 | D-012 | 2026-08-14 | Replace the settings popup with an owner-modal window and sidebar tabs. | UX | integrated |
 | D-011 | 2026-08-14 | Persist only drag-complete position; the picture remote is one-shot. | UX | integrated |
 | D-009 | 2026-07-13 | Separate transient foreground presentation from persistent always-on-top state. | UX | integrated |

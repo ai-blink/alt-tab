@@ -19,6 +19,7 @@
 - D-010: Overall UI scale is a single 60/70/80/100/125/150/200% setting. Compact mode controls available bounds only; it adds no separate scale and exposes no manual row/column limits.
 - D-011: Persist overlay position only after direct drag, using the nearest 3×3 work-area anchor plus offset. The picture remote performs one-shot movement and never replaces the saved position.
 - D-012: Replace the anchored settings popup with an owner-modal settings window whose left sidebar switches Position & Move, Appearance & Size, and Behavior content.
+- D-013: Apply the configurable scale to the overlay only; keep the fixed-size settings modal untransformed so its content cannot outgrow its window frame.
 
 ## Workflow
 

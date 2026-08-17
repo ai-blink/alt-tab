@@ -118,9 +118,6 @@
     </Window.Resources>
 
     <Grid Background="{Binding ShellBackground}">
-        <Grid.LayoutTransform>
-            <ScaleTransform ScaleX="{Binding PresentationScale}" ScaleY="{Binding PresentationScale}" />
-        </Grid.LayoutTransform>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="210" />
             <ColumnDefinition Width="*" />
