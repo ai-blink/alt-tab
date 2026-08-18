@@ -2,6 +2,7 @@
 
 ## Current
 
+- 2026-08-18: Prepared the `v0.3.1` self-contained win-x64 Portable ZIP for the settings-sidebar status-card layout fix. SHA-256: `B1144AE4C5F6322C4C35F0CF2BE9B1FC7E72AD078744B81FD3EF64B8D35F10C6`.
 - 2026-08-17: Published the `v0.3.0` Windows 11 x64 Portable GitHub release with `Switchboard-v0.3.0-win-x64-Portable.zip`.
 - 2026-08-17: Prepared the `v0.3.0` self-contained win-x64 Portable ZIP with the settings-window, persistent-position, 60/70% scale, and modal clipping fixes. SHA-256: `A3A84823263E04267120D5EA20FFA3F505F503DCC1C2934C0DA08C20F9640A73`.
 - 2026-08-10: Approved the blue-violet four-pane Switchboard icon, generated a transparent-corner multi-resolution `.ico`, and replaced the procedural tray/window icon with the shared application asset for the `v0.2.1` patch release.
@@ -34,6 +35,9 @@
 
 ## Verification
 
+- `dotnet build Switchboard.slnx -c Release --nologo`: passed for the `v0.3.1` patch, 0 warnings, 0 errors.
+- `dotnet test Switchboard.slnx -c Release --nologo`: passed for the `v0.3.1` patch, 57 tests.
+- `dotnet publish` for the `v0.3.1` self-contained win-x64 single file: passed; ZIP contains `Switchboard.App.exe` and `읽어주세요.txt` and reports file version `0.3.1.0`.
 - GitHub Release `v0.3.0`: published with one uploaded ZIP asset whose GitHub SHA-256 digest matches the local package.
 - `dotnet build Switchboard.slnx -c Release --nologo`: passed for the `v0.3.0` release, 0 warnings, 0 errors.
 - `dotnet test Switchboard.slnx -c Release --nologo`: passed for the `v0.3.0` release, 57 tests.

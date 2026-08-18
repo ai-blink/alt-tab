@@ -2,7 +2,7 @@
 
 | Status | Milestone | Evidence |
 |---|---|---|
-| released — UI check pending | Replace the settings popup with a sidebar modal and persist overlay drag position with a one-shot 10-action picture remote. | `v0.3.0` GitHub Portable release; 2026-08-17 Release build: 0 warnings/errors, 57 tests pass; fixed settings-modal scale clipping. |
+| released — UI check pending | Replace the settings popup with a sidebar modal and persist overlay drag position with a one-shot 10-action picture remote. | `v0.3.1` GitHub Portable patch; 2026-08-18 Release build: 0 warnings/errors, 57 tests pass; settings-modal clipping and sidebar status-card expansion fixed. |
 | done | Initialize `.NET 10 + WPF` App/Core/Native/Tests structure and preserve Stitch references. | `dotnet build`, `dotnet test`, `references/stitch/` |
 | done | Deliver the compact transparent WPF overlay with Grid/Compact/List views and settings. | `notes/runs/2026-07-02_*`, `notes/runs/2026-07-03_*` |
 | done | Enumerate all candidate Win32 windows and render full-source DWM thumbnails. | Native provider, `DwmThumbnailPreview`, visual smoke artifacts |

@@ -2,7 +2,7 @@
 
 Switchboard는 Windows 11의 창 전환을 더 선명하고 안정적으로 보여 주는 데스크톱 오버레이입니다. 열려 있는 창을 읽기 쉬운 제목과 잘리지 않는 미리보기로 표시하고, 창 개수와 화면 크기에 맞춰 레이아웃을 자동으로 조절합니다.
 
-**현재 버전:** `v0.3.0` · **배포 형식:** Windows 11 x64 Portable
+**현재 버전:** `v0.3.1` · **배포 형식:** Windows 11 x64 Portable
 
 > 설치 프로그램 없이 압축을 풀어 실행하는 포터블 프리뷰입니다. 코드 서명이 적용되지 않은 빌드는 Windows SmartScreen 경고가 표시될 수 있습니다.
 
@@ -22,7 +22,7 @@ Switchboard는 Windows 11의 창 전환을 더 선명하고 안정적으로 보�
 
 ## 설치 및 실행
 
-1. `Switchboard-v0.3.0-win-x64-Portable.zip`의 압축을 새 폴더에 풉니다.
+1. `Switchboard-v0.3.1-win-x64-Portable.zip`의 압축을 새 폴더에 풉니다.
 2. `Switchboard.App.exe`를 실행합니다.
 3. SmartScreen 경고가 나오면 출처를 확인한 뒤 **추가 정보 → 실행**을 선택합니다.
 4. 종료하려면 작업 표시줄 알림 영역의 Switchboard 아이콘을 우클릭하고 **Exit**를 선택합니다.

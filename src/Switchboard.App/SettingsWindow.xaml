@@ -133,6 +133,18 @@
                     <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="설정" />
                     <TextBlock Margin="0,4,0,0" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="Switchboard를 내 작업 방식에 맞춥니다" TextWrapping="Wrap" />
                 </StackPanel>
+                <Border DockPanel.Dock="Bottom"
+                        Margin="0,18,0,0"
+                        Padding="10"
+                        Background="{Binding SegmentBackground}"
+                        BorderBrush="{Binding BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="7">
+                    <StackPanel>
+                        <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="{Binding AccentBrush}" Text="● 변경 내용 저장됨" />
+                        <TextBlock Margin="0,4,0,0" FontSize="10" Foreground="{Binding MutedTextBrush}" Text="바꾼 값은 다음 실행에도 유지됩니다." TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
                 <StackPanel>
                     <RadioButton Content="⌖  위치와 이동"
                                  GroupName="SettingsTab"
@@ -147,18 +159,6 @@
                                  IsChecked="{Binding SelectedSettingsTab, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Behavior}"
                                  Style="{StaticResource SidebarTabStyle}" />
                 </StackPanel>
-                <Border DockPanel.Dock="Bottom"
-                        Margin="0,18,0,0"
-                        Padding="10"
-                        Background="{Binding SegmentBackground}"
-                        BorderBrush="{Binding BorderBrush}"
-                        BorderThickness="1"
-                        CornerRadius="7">
-                    <StackPanel>
-                        <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="{Binding AccentBrush}" Text="● 변경 내용 저장됨" />
-                        <TextBlock Margin="0,4,0,0" FontSize="10" Foreground="{Binding MutedTextBrush}" Text="바꾼 값은 다음 실행에도 유지됩니다." TextWrapping="Wrap" />
-                    </StackPanel>
-                </Border>
             </DockPanel>
         </Border>
 
