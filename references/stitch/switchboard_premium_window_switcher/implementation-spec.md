@@ -2,6 +2,8 @@
 
 Source folder: `references/stitch/switchboard_premium_window_switcher`
 
+Role: WPF visual-translation notes for the imported Stitch reference. Current product behavior is defined by `README.md`, `rules/`, and the application code; the imported [`DESIGN.md`](switchboard_desktop_utility/DESIGN.md) remains unchanged.
+
 ## Candidate Decision
 
 - Primary: `switchboard_thumbnail_grid_view`
@@ -11,10 +13,11 @@ Source folder: `references/stitch/switchboard_premium_window_switcher`
 
 ## WPF Translation
 
-- Use `Window` + top toolbar + optional left rail + content area.
-- Use `ListBox` or `ItemsControl` with `WrapPanel` for the Grid view.
-- Use `DataTemplate` per view mode once Compact/List become distinct.
-- Keep Win32/DWM thumbnails behind model-bound host controls later; initial shell may use mock thumbnail surfaces.
+- Use a borderless `Window` with a compact top toolbar and a content-sized switcher surface.
+- Use one `ListBox` with an exact-column `UniformGrid`; bind the calculated column count so layout and rendering agree.
+- Keep distinct `DataTemplate` instances for Grid, Compact, and List views.
+- Render Win32/DWM thumbnails through a model-bound WPF host control and keep raw interop in `Switchboard.Native`.
+- Keep infrequent settings in a fixed-size owner-modal sidebar window so overlay scaling does not clip its contents.
 
 ## Tokens
 

@@ -2,7 +2,7 @@
 
 Switchboard는 Windows 11의 창 전환을 더 선명하고 안정적으로 보여 주는 데스크톱 오버레이입니다. 열려 있는 창을 읽기 쉬운 제목과 잘리지 않는 미리보기로 표시하고, 창 개수와 화면 크기에 맞춰 레이아웃을 자동으로 조절합니다.
 
-**현재 버전:** `v0.3.1` · **배포 형식:** Windows 11 x64 Portable
+**현재 버전:** [`v0.3.1`](https://github.com/ai-blink/alt-tab/releases/tag/v0.3.1) · **배포 형식:** Windows 11 x64 Portable
 
 > 설치 프로그램 없이 압축을 풀어 실행하는 포터블 프리뷰입니다. 코드 서명이 적용되지 않은 빌드는 Windows SmartScreen 경고가 표시될 수 있습니다.
 
@@ -12,7 +12,7 @@ Switchboard는 Windows 11의 창 전환을 더 선명하고 안정적으로 보�
 - 원본 전체가 보이는 DWM 창 미리보기
 - 25개를 넘는 창도 표시하는 반응형 행·열 및 스크롤
 - 격자, 압축, 목록 보기
-- 빈 공간 드래그로 저장되는 오버레이 위치와 9방향 일회성 위치 리모컨
+- 빈 공간 드래그로 저장되는 오버레이 위치, 9방향 일회성 리모컨, 저장 위치 복귀
 - 최근 사용, 앱, 모니터, 제목, 즐겨찾기 정렬
 - 투명/어두움/밝음 테마와 투명도·전체 UI 배율(`60/70/80/100/125/150/200%`)·섬네일 크기 설정
 - 사용자 지정 보조 단축키(기본값 `Ctrl+Alt+Space`)
@@ -59,6 +59,7 @@ Switchboard는 Windows 11의 창 전환을 더 선명하고 안정적으로 보�
 
 - 관리자 권한 창과 보안 데스크톱에서는 Windows의 포커스 제한 때문에 창 활성화가 실패할 수 있습니다.
 - 현재 배포 파일에는 디지털 코드 서명이 없어 SmartScreen 경고가 표시될 수 있습니다.
+- 현재는 Alt+Tab 가로채기를 끄는 별도 설정이 없습니다. 기본 Windows Alt+Tab을 사용하려면 Switchboard를 종료해야 합니다.
 - V1에서는 가상 데스크톱 관리, 창 자동 배치, 타임라인 기능을 제공하지 않습니다.
 
 ## 개발 환경
@@ -94,6 +95,15 @@ dotnet publish src/Switchboard.App/Switchboard.App.csproj `
 ```
 
 배포 ZIP 이름은 `Switchboard-v{버전}-win-x64-Portable.zip` 형식을 사용합니다. 버전별 변경 사항은 [CHANGELOG.md](CHANGELOG.md)에서 확인할 수 있습니다.
+
+## 문서 안내
+
+| 문서 | 역할 |
+| --- | --- |
+| [CLAUDE.md](CLAUDE.md) | 프로젝트 작업 규칙과 표준 명령의 유일한 정본 진입점 |
+| [현재 컨텍스트](rules/dev-context.md) · [진행](rules/dev-progress.md) · [로드맵](rules/dev-roadmap.md) | 현재 슬라이스, 검증 상태, 다음 작업 |
+| [아키텍처](rules/dev-arch.md) · [UX 원칙](rules/dev-ux.md) · [결정](rules/dev-decisions.md) | 지속적으로 적용할 구현 경계와 제품 결정 |
+| [계획](notes/plans/) · [실행 기록](notes/runs/) · [Stitch 참고자료](references/stitch/) | 과거 계획과 검증 근거, 시각 원본; 현재 상태의 정본은 아님 |
 
 ## 프로젝트 구조
 

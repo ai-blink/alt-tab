@@ -7,7 +7,7 @@ This file is the canonical project instruction entrypoint. Do not create a compe
 ## Product Target
 
 - Build a commercial-quality Windows desktop overlay for general Windows users.
-- First version: `.NET 10 LTS + WPF`, mock-data UI, clean Core/Native/App boundaries, and a path toward Win32/DWM integration.
+- Implementation baseline: `.NET 10 LTS + WPF`, live Win32/DWM integration, JSON settings, and clean Core/Native/App boundaries.
 - Primary view direction comes from `references/stitch/switchboard_premium_window_switcher`.
 
 ## Non-Goals For V1
@@ -37,6 +37,6 @@ For non-trivial work:
 - `src/Switchboard.App`: WPF shell, ViewModels, resources, overlay UI.
 - `src/Switchboard.Core`: window models, filtering, sorting, settings-domain logic.
 - `src/Switchboard.Native`: Win32, DWM, hotkey, and foreground activation boundaries.
-- `tests/Switchboard.Tests`: unit tests for Core behavior first.
+- `tests/Switchboard.Tests`: Core logic plus pure App/Native boundary regressions; live HWND behavior stays in runtime smoke checks.
 - `rules/`: live development docs and roadmap.
 - `references/stitch/`: Stitch design exports and WPF handoff notes.

@@ -1,7 +1,9 @@
 # Technical Plan
 
-- Goal:
-- Scope:
+- Finish line:
+- Acceptance checks:
+- Scope limit:
 - Approach:
-- Verification:
 - Risks:
+- Review budget:
+- Stop rule:

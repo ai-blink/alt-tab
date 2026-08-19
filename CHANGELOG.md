@@ -126,3 +126,10 @@ Switchboard의 앱 식별성을 정리하는 아이콘 패치 릴리즈입니다
 
 - 관리자 권한 창과 보안 데스크톱은 Windows 포커스 제한으로 활성화되지 않을 수 있음
 - 디지털 코드 서명이 없어 SmartScreen 경고가 표시될 수 있음
+
+[0.3.1]: https://github.com/ai-blink/alt-tab/releases/tag/v0.3.1
+[0.3.0]: https://github.com/ai-blink/alt-tab/releases/tag/v0.3.0
+[0.2.1]: https://github.com/ai-blink/alt-tab/releases/tag/v0.2.1
+[0.2.0]: https://github.com/ai-blink/alt-tab/releases/tag/v0.2.0
+[0.1.1]: https://github.com/ai-blink/alt-tab/releases/tag/v0.1.1
+[0.1.0]: https://github.com/ai-blink/alt-tab/releases/tag/v0.1.0

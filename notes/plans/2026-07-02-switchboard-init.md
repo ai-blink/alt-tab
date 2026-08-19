@@ -1,5 +1,7 @@
 # Switchboard Init Plan
 
+Status: completed on 2026-07-02; retained as historical scope. Current state lives in `rules/dev-context.md`.
+
 ## 1. Goal
 
 Create the first buildable Switchboard app skeleton: `.NET 10 + WPF` solution, clean App/Core/Native/Test boundaries, preserved Stitch references, and a mock window switcher shell.

@@ -1,12 +1,5 @@
 # Dev Decisions Inbox
 
-| ID | Date | One-liner | Section | Status |
-|---|---|---|---|---|
-| D-013 | 2026-08-17 | Keep the fixed-size settings modal independent of overlay scale to prevent clipping. | UX | integrated |
-| D-012 | 2026-08-14 | Replace the settings popup with an owner-modal window and sidebar tabs. | UX | integrated |
-| D-011 | 2026-08-14 | Persist only drag-complete position; the picture remote is one-shot. | UX | integrated |
-| D-009 | 2026-07-13 | Separate transient foreground presentation from persistent always-on-top state. | UX | integrated |
-| D-008 | 2026-07-13 | Alt+Tab toggles the overlay instead of cycling card selection. | UX | integrated |
-| D-007 | 2026-07-02 | `CLAUDE.md` is canonical; no competing AGENTS.md. | Workflow | integrated |
-| D-006 | 2026-07-02 | Borrow secondary Stitch patterns without copying HTML into product code. | UX | integrated |
-| D-005 | 2026-07-02 | Use thumbnail grid as primary visual direction. | UX | integrated |
+현재 미통합 결정은 없습니다.
+
+승인·통합된 결정의 정본은 [`dev-decisions.md`](dev-decisions.md)입니다. 새 결정 후보만 이 파일에 추가하고, 통합한 항목은 정본으로 옮긴 뒤 제거합니다.
