@@ -1,86 +1,88 @@
 # Switchboard
 
-Switchboard는 Windows 11의 창 전환을 더 선명하고 안정적으로 보여 주는 데스크톱 오버레이입니다. 열려 있는 창을 읽기 쉬운 제목과 잘리지 않는 미리보기로 표시하고, 창 개수와 화면 크기에 맞춰 레이아웃을 자동으로 조절합니다.
+[English](README.md) | [한국어](README.ko.md) | [中文](README.zh-CN.md) | [日本語](README.ja.md)
 
-**현재 버전:** [`v0.3.1`](https://github.com/ai-blink/alt-tab/releases/tag/v0.3.1) · **배포 형식:** Windows 11 x64 Portable
+Switchboard is a Windows 11 desktop overlay that makes switching between windows clearer and more dependable. It shows open windows with readable titles and uncropped previews, then adapts its layout to the number of windows and the available screen space.
 
-> 설치 프로그램 없이 압축을 풀어 실행하는 포터블 프리뷰입니다. 코드 서명이 적용되지 않은 빌드는 Windows SmartScreen 경고가 표시될 수 있습니다.
+**Current version:** [v0.3.1](https://github.com/ai-blink/alt-tab/releases/tag/v0.3.1) · **Distribution:** Windows 11 x64 Portable
 
-## 주요 기능
+> This is a portable preview: extract the archive and run it without an installer. Builds without code signing may trigger a Windows SmartScreen warning.
 
-- `Alt+Tab` 한 번으로 Switchboard 표시/숨김 전환
-- 원본 전체가 보이는 DWM 창 미리보기
-- 25개를 넘는 창도 표시하는 반응형 행·열 및 스크롤
-- 격자, 압축, 목록 보기
-- 빈 공간 드래그로 저장되는 오버레이 위치, 9방향 일회성 리모컨, 저장 위치 복귀
-- 최근 사용, 앱, 모니터, 제목, 즐겨찾기 정렬
-- 투명/어두움/밝음 테마와 투명도·전체 UI 배율(`60/70/80/100/125/150/200%`)·섬네일 크기 설정
-- 사용자 지정 보조 단축키(기본값 `Ctrl+Alt+Space`)
-- 항상 위에 표시 설정과 시스템 트레이 상주, 창 전환을 나타내는 전용 앱 아이콘
-- 각 창 카드에서 대상 창을 정상 종료하는 닫기 버튼
-- 변경되지 않은 창 목록은 다시 그리지 않아 폴링 깜빡임 최소화
+## Features
 
-## 설치 및 실행
+- Toggle Switchboard with one Alt+Tab press
+- DWM previews that show each source window in full
+- Responsive rows, columns, and scrolling for more than 25 windows
+- Grid, compact, and list views
+- Saved overlay position from dragging empty space, a one-time nine-position remote, and return to the saved position
+- Sorting by most recently used, app, monitor, title, or favorites
+- Transparent, dark, and light themes; opacity; UI scale (60/70/80/100/125/150/200%); and thumbnail-size settings
+- Custom secondary hotkey (Ctrl+Alt+Space by default)
+- Always-on-top option, system-tray presence, and a dedicated app icon that signals window switching
+- A close button on every window card that requests a normal application close
+- Refreshes only when the window list changes to minimize polling flicker
 
-1. `Switchboard-v0.3.1-win-x64-Portable.zip`의 압축을 새 폴더에 풉니다.
-2. `Switchboard.App.exe`를 실행합니다.
-3. SmartScreen 경고가 나오면 출처를 확인한 뒤 **추가 정보 → 실행**을 선택합니다.
-4. 종료하려면 작업 표시줄 알림 영역의 Switchboard 아이콘을 우클릭하고 **Exit**를 선택합니다.
+## Install and run
 
-자체 포함 배포본에는 .NET 런타임이 포함되므로 별도 설치가 필요하지 않습니다.
+1. Extract Switchboard-v0.3.1-win-x64-Portable.zip into a new folder.
+2. Run Switchboard.App.exe.
+3. If SmartScreen appears, verify the source, then choose **More info → Run anyway**.
+4. To exit, right-click the Switchboard icon in the taskbar notification area and choose **Exit**.
 
-## 조작법
+The self-contained distribution includes the .NET runtime, so no separate runtime installation is required.
 
-| 입력 | 동작 |
+## Controls
+
+| Input | Action |
 | --- | --- |
-| `Alt+Tab` | 오버레이 표시/숨김 전환 |
-| `Ctrl+Alt+Space` | 오버레이 표시(기본 보조 단축키) |
-| `Tab` 또는 방향키 | 창 카드 선택 이동 |
-| `Enter` | 선택한 창 활성화 |
-| `Esc` | 오버레이 숨기기 |
-| 마우스 더블 클릭 | 해당 창 활성화 |
-| 창 카드의 `X` 버튼 | 해당 창에 정상 종료 요청 |
+| Alt+Tab | Toggle the overlay |
+| Ctrl+Alt+Space | Show the overlay (default secondary hotkey) |
+| Tab or arrow keys | Move the window-card selection |
+| Enter | Activate the selected window |
+| Esc | Hide the overlay |
+| Double-click | Activate that window |
+| X button on a window card | Request that window to close normally |
 
-상단의 설정 버튼은 별도 모달 창을 열고, 왼쪽 탭에서 위치와 이동·모양과 크기·기본 동작을 나눠 조절합니다. 오버레이의 빈 공간을 드래그하면 위치가 자동 저장되며, 위치 리모컨은 저장 위치를 바꾸지 않고 한 번만 이동합니다. 전체 배율은 글씨·버튼·여백과 창 크기를 함께 조절하며, 컴팩트 모드에서도 별도의 축소 배율을 더하지 않습니다. 핀 버튼은 **항상 위에 표시**를 켜거나 끕니다.
+The settings button at the top opens a separate modal window. Its left tabs organize position and movement, appearance and size, and default behavior. Dragging empty overlay space saves the new position automatically; the position remote only moves the overlay once and does not change the saved position. The UI-scale setting changes text, buttons, spacing, and window size together, and compact mode does not apply an additional scale reduction. The pin button toggles **Always on top**.
 
-창 닫기 버튼은 강제 종료가 아닌 Windows 표준 종료 요청을 사용합니다. 저장하지 않은 작업이 있으면 대상 앱의 저장 확인창이 그대로 표시될 수 있습니다.
+The close button sends the standard Windows close request; it does not force-quit an application. If the target application has unsaved work, its usual save-confirmation dialog may appear.
 
-## 설정 파일
+## Settings file
 
-설정은 다음 위치에 자동 저장됩니다.
+Settings are saved automatically at:
 
-```text
+~~~
 %APPDATA%\Switchboard\settings.json
-```
+~~~
 
-기본값으로 초기화하려면 Switchboard를 종료한 뒤 위 파일을 삭제하고 다시 실행하세요.
+To restore defaults, exit Switchboard, delete that file, and start Switchboard again.
 
-## 알려진 제한 사항
+## Known limitations
 
-- 관리자 권한 창과 보안 데스크톱에서는 Windows의 포커스 제한 때문에 창 활성화가 실패할 수 있습니다.
-- 현재 배포 파일에는 디지털 코드 서명이 없어 SmartScreen 경고가 표시될 수 있습니다.
-- 현재는 Alt+Tab 가로채기를 끄는 별도 설정이 없습니다. 기본 Windows Alt+Tab을 사용하려면 Switchboard를 종료해야 합니다.
-- V1에서는 가상 데스크톱 관리, 창 자동 배치, 타임라인 기능을 제공하지 않습니다.
+- Activating administrator-elevated windows or windows on the secure desktop can fail because of Windows focus restrictions.
+- The current distribution is not digitally code-signed, so SmartScreen may appear.
+- There is currently no setting to disable the Alt+Tab hook. Exit Switchboard to use the default Windows Alt+Tab behavior.
+- Virtual-desktop management, automatic window placement, and timeline features are outside V1 scope.
 
-## 개발 환경
+## Development
 
 - Windows 11
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - WPF / Win32 / DWM
 
-```powershell
+~~~powershell
 git clone https://github.com/ai-blink/alt-tab.git
 cd alt-tab
 dotnet build Switchboard.slnx --nologo
 dotnet test Switchboard.slnx --nologo
 dotnet run --project src/Switchboard.App/Switchboard.App.csproj
-```
+~~~
 
-## 배포 빌드
+## Release build
 
-Windows x64 자체 포함 단일 실행 파일을 만들려면 다음 명령을 사용합니다.
+Create a Windows x64, self-contained, single-file executable with:
 
-```powershell
+~~~powershell
 dotnet publish src/Switchboard.App/Switchboard.App.csproj `
   -c Release `
   -r win-x64 `
@@ -92,24 +94,24 @@ dotnet publish src/Switchboard.App/Switchboard.App.csproj `
   -p:PublishTrimmed=false `
   -p:DebugType=None `
   -p:DebugSymbols=false
-```
+~~~
 
-배포 ZIP 이름은 `Switchboard-v{버전}-win-x64-Portable.zip` 형식을 사용합니다. 버전별 변경 사항은 [CHANGELOG.md](CHANGELOG.md)에서 확인할 수 있습니다.
+Release ZIP files use the Switchboard-v{version}-win-x64-Portable.zip naming convention. See [CHANGELOG.md](CHANGELOG.md) for version-by-version changes.
 
-## 문서 안내
+## Project documentation
 
-| 문서 | 역할 |
+| Document | Purpose |
 | --- | --- |
-| [CLAUDE.md](CLAUDE.md) | 프로젝트 작업 규칙과 표준 명령의 유일한 정본 진입점 |
-| [현재 컨텍스트](rules/dev-context.md) · [진행](rules/dev-progress.md) · [로드맵](rules/dev-roadmap.md) | 현재 슬라이스, 검증 상태, 다음 작업 |
-| [아키텍처](rules/dev-arch.md) · [UX 원칙](rules/dev-ux.md) · [결정](rules/dev-decisions.md) | 지속적으로 적용할 구현 경계와 제품 결정 |
-| [계획](notes/plans/) · [실행 기록](notes/runs/) · [Stitch 참고자료](references/stitch/) | 과거 계획과 검증 근거, 시각 원본; 현재 상태의 정본은 아님 |
+| [CLAUDE.md](CLAUDE.md) | The sole canonical entry point for project working rules and standard commands |
+| [Current context](rules/dev-context.md) · [Progress](rules/dev-progress.md) · [Roadmap](rules/dev-roadmap.md) | Current slice, validation status, and next work |
+| [Architecture](rules/dev-arch.md) · [UX principles](rules/dev-ux.md) · [Decisions](rules/dev-decisions.md) | Implementation boundaries and product decisions that remain in effect |
+| [Plans](notes/plans/) · [Run records](notes/runs/) · [Stitch references](references/stitch/) | Historical plans and validation evidence; not the source of truth for current status |
 
-## 프로젝트 구조
+## Project structure
 
-- `src/Switchboard.App`: WPF 셸, 화면, ViewModel, 사용자 설정
-- `src/Switchboard.Core`: 창 모델, 필터링, 정렬, 레이아웃 계산
-- `src/Switchboard.Native`: Win32/DWM 창 열거, 단축키, 전경 활성화
-- `tests/Switchboard.Tests`: Core 및 입력·갱신 동작 테스트
+- src/Switchboard.App: WPF shell, views, view models, and user settings
+- src/Switchboard.Core: Window models, filtering, sorting, and layout calculations
+- src/Switchboard.Native: Win32/DWM window enumeration, hotkeys, and foreground activation
+- tests/Switchboard.Tests: Core plus input and refresh behavior tests
 
-문제 제보는 [GitHub Issues](https://github.com/ai-blink/alt-tab/issues)에 재현 절차와 Windows 버전을 함께 남겨 주세요.
+Please report issues in [GitHub Issues](https://github.com/ai-blink/alt-tab/issues) with reproduction steps and your Windows version.
