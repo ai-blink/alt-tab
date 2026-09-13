@@ -1,131 +1,140 @@
-# 변경 기록
+# Changelog
 
-이 프로젝트의 주요 변경 사항을 버전별로 기록합니다.
+All notable project changes are recorded here by version.
+
+## Release notes and languages
+
+This file is the canonical, detailed English changelog. For every GitHub Release, use the [multilingual release-notes template](doc/templates/release-notes.md).
+
+- **English:** include the complete user-facing change list.
+- **Korean, Simplified Chinese, and Japanese:** translate the user-impacting summary for ordinary releases.
+- **Security notices, data-loss risks, breaking changes, installation changes, and required user actions:** provide the complete information in all four languages.
+- **Internal refactors, test-only work, and developer-tooling changes:** may remain in the English changelog when they do not affect users.
 
 ## [0.3.1] - 2026-08-18
 
-설정 창 사이드바의 레이아웃 안정성 패치 릴리즈입니다.
+A patch release that stabilizes the settings-window sidebar layout.
 
-### 수정
+### Fixed
 
-- 사이드바의 `변경 내용 저장됨` 카드가 남은 세로 공간을 모두 차지하던 DockPanel 자식 순서를 바로잡음
-- 위치·모양·기본 동작 탭은 상단에 유지하고, 상태 카드는 하단의 정상 크기로 고정
+- Corrected the DockPanel child order that caused the “Changes saved” card to consume all remaining vertical space.
+- Kept the Position, Appearance, and Default behavior tabs at the top and fixed the status card at its intended size at the bottom.
 
-### 검증
+### Verification
 
-- Release 빌드: 경고 0개, 오류 0개
-- 테스트: 57/57 통과
-- 자체 포함 Windows 11 x64 단일 실행 파일 패키지 확인
+- Release build: 0 warnings, 0 errors
+- Tests: 57/57 passed
+- Verified the self-contained Windows 11 x64 single-file package
 
 ## [0.3.0] - 2026-08-17
 
-설정 흐름을 전면 개편하고, 사용자가 정한 오버레이 위치를 영구적으로 복원하는 기능 릴리즈입니다.
+A feature release that overhauls the settings flow and persistently restores the overlay position chosen by the user.
 
-### 추가
+### Added
 
-- 별도 소유 모달 설정창과 `위치와 이동 / 모양과 크기 / 기본 동작` 사이드바 탭
-- 빈 배경 드래그 완료 시 현재 모니터·9방향 앵커·여백을 JSON 설정에 저장하는 영구 위치 복원
-- 9방향 그림 리모컨과 저장 위치 복귀 버튼의 일회성 창 이동
-- 전체 오버레이 배율 `60%`, `70%` 선택지와 기존 배율 호환 마이그레이션
+- A separately owned modal settings window with Position and movement, Appearance and size, and Default behavior sidebar tabs
+- Persistent position restoration: when an empty background drag ends, the current monitor, nine-position anchor, and margins are saved in JSON settings
+- A nine-position visual remote and a Return to saved position button for one-time window movement
+- 60% and 70% full-overlay scale options, plus a compatibility migration for existing scale values
 
-### 변경
+### Changed
 
-- 크기·보기 모드·배율 변경 뒤에도 저장된 가까운 화면 가장자리·모서리를 유지하도록 위치 계산을 변경
-- 저장 모니터가 없으면 현재 작업 영역 안으로 안전하게 보정
+- Changed position calculation to retain the nearest saved screen edge or corner after changing size, view mode, or scale.
+- Safely corrects the overlay into the current work area when its saved monitor is unavailable.
 
-### 수정
+### Fixed
 
-- 고정 크기 설정 모달에 오버레이 배율이 중복 적용되어 내용이 잘리던 문제 수정
+- Fixed clipping caused by applying the overlay scale twice to the fixed-size settings modal.
 
-### 검증
+### Verification
 
-- Release 빌드: 경고 0개, 오류 0개
-- 테스트: 57/57 통과
-- 자체 포함 Windows 11 x64 단일 실행 파일 패키지 확인
+- Release build: 0 warnings, 0 errors
+- Tests: 57/57 passed
+- Verified the self-contained Windows 11 x64 single-file package
 
 ## [0.2.1] - 2026-08-10
 
-Switchboard의 앱 식별성을 정리하는 아이콘 패치 릴리즈입니다.
+An icon patch release that improves Switchboard’s application identity.
 
-### 변경
+### Changed
 
-- 네 개 창과 양방향 전환 화살표를 결합한 새 Switchboard 아이콘을 추가
-- 차콜 타일 바깥을 알파 투명 처리한 다중 해상도 Windows `.ico` 자산으로 트레이, 작업 표시줄 창, 실행 파일 아이콘을 통일
+- Added a new Switchboard icon that combines four windows with bidirectional switching arrows.
+- Standardized the tray, taskbar window, and executable icons on a multi-resolution Windows .ico asset with transparent pixels outside the charcoal tile.
 
-### 검증
+### Verification
 
-- Release 빌드: 경고 0개, 오류 0개
-- 테스트: 41/41 통과
+- Release build: 0 warnings, 0 errors
+- Tests: 41/41 passed
 
 ## [0.2.0] - 2026-08-10
 
-컴팩트 오버레이와 안전한 전체 UI 배율을 추가하고, 많은 창을 표시할 때 생기던 빈 열과 미리보기 넘침을 수정한 기능 릴리즈입니다.
+A feature release that adds a compact overlay and safe full-UI scaling, and fixes empty columns and preview overflow with many windows.
 
-### 추가
+### Added
 
-- 컴팩트 오버레이 켜기/끄기와 좌상·우상·중앙·좌하·우하 표시 위치 선택 및 JSON 설정 저장
-- 시스템 트레이와 작업 표시줄에서 식별할 수 있는 Switchboard 전용 아이콘
+- A compact-overlay toggle, top-left, top-right, center, bottom-left, and bottom-right position choices, and JSON settings persistence
+- A dedicated Switchboard icon identifiable in the system tray and taskbar
 
-### 변경
+### Changed
 
-- 전체 UI 배율을 `80%`, `100%`, `125%`, `150%`, `200%`의 다섯 단계로 통일하고 기본값을 `100%`로 유지
-- 기존 `50%`, `70%`, `90%`, `120%` 설정값을 가장 가까운 안전한 새 배율로 자동 정규화
-- 컴팩트 모드가 작업 영역의 65%를 목표로 하되 완전한 카드 한 행을 표시할 만큼 자동 확장하고, 행·열은 창 수와 실제 표시 영역에서 자동 계산
-- 컴팩트 표시 위치 선택 UI를 다른 고정 옵션과 같은 분할 버튼 형식으로 통일
+- Unified full UI scale to 80%, 100%, 125%, 150%, and 200%, with 100% retained as the default.
+- Automatically normalizes legacy 50%, 70%, 90%, and 120% scale settings to the nearest safe new value.
+- Lets compact mode target 65% of the work area while expanding enough to show one complete card row; rows and columns are calculated from the window count and actual display area.
+- Standardized the compact-position UI with the split-button style used for other fixed options.
 
-### 수정
+### Fixed
 
-- 계산된 열 수와 실제 렌더링 열 수를 일치시켜 오른쪽 빈 공간과 예상보다 적은 열이 표시되던 문제 수정
-- 전체 배율과 섬네일 배율을 함께 변경할 때 창 크기와 카드 재배치가 어긋나던 문제 수정
-- 스크롤 영역 밖 DWM 미리보기를 숨겨 창 목록이 오버레이 밖으로 그려지던 문제 수정
-- 고배율에서 설정 패널과 컴팩트 오버레이가 작업 영역을 벗어나거나 잘리던 문제 수정
+- Matched the calculated and rendered column counts to fix unused right-side space and fewer-than-expected displayed columns.
+- Fixed window-size and card-relayout mismatches when changing full scale and thumbnail scale together.
+- Hid DWM previews outside the scroll area to prevent the window list from rendering outside the overlay.
+- Fixed the settings panel and compact overlay exceeding the work area or being clipped at high scale.
 
-### 알려진 제한
+### Known limitations
 
-- 작업 영역에 모든 창을 한 번에 표시할 수 없으면 자동 계산된 열을 유지한 채 세로 스크롤을 사용함
-- 대상 앱이 저장 확인창을 표시하거나 종료 요청을 거부하면 즉시 닫히지 않을 수 있음
-- 관리자 권한 앱과 보안 데스크톱에는 Windows 포커스·메시지 권한 제한이 적용될 수 있음
+- When all windows cannot fit in the work area at once, Switchboard retains the calculated column count and uses vertical scrolling.
+- A target application may not close immediately if it shows a save confirmation or rejects the close request.
+- Administrator-elevated applications and the secure desktop are subject to Windows focus and messaging restrictions.
 
 ## [0.1.1] - 2026-07-20
 
-창 전환 화면에서 대상 창을 바로 닫을 수 있는 패치 릴리즈입니다.
+A patch release that lets users close a target window directly from the window switcher.
 
-### 추가
+### Added
 
-- 격자, 압축, 목록 보기의 각 창 카드에 정상 종료 버튼 추가
-- Win32 `WM_CLOSE` 요청을 Core/Native/App 경계로 분리하고 명령 회귀 테스트 추가
+- Added a normal-close button to every window card in grid, compact, and list views.
+- Separated the Win32 WM_CLOSE request across the Core, Native, and App boundaries and added command regression tests.
 
-### 수정
+### Fixed
 
-- DWM 미리보기와 겹친 닫기 버튼이 뒤로 숨던 문제를 수정하고 버튼을 항상 보이는 캡션 영역에 배치
+- Fixed a close button that could be hidden behind the DWM preview; it now stays in the always-visible caption area.
 
-### 알려진 제한
+### Known limitations
 
-- 대상 앱이 저장 확인창을 표시하거나 종료 요청을 거부하면 즉시 닫히지 않을 수 있음
-- 관리자 권한 앱에는 Windows 메시지 권한 제한으로 종료 요청이 전달되지 않을 수 있음
+- A target application may not close immediately if it shows a save confirmation or rejects the close request.
+- Close requests to administrator-elevated applications can be blocked by Windows messaging permissions.
 
 ## [0.1.0] - 2026-07-13
 
-첫 Windows 11 x64 Portable 프리뷰입니다.
+The first Windows 11 x64 Portable preview.
 
-### 추가
+### Added
 
-- `Alt+Tab` 한 번으로 Switchboard 표시/숨김 전환
-- 격자, 압축, 목록 보기와 창 정렬 옵션
-- 투명도, 전체 배율, 섬네일 크기, 보조 단축키 설정 저장
-- 시스템 트레이 상주와 항상 위에 표시 설정
+- Toggle Switchboard with one Alt+Tab press.
+- Grid, compact, and list views with window-sorting options.
+- Saved opacity, full UI scale, thumbnail size, and secondary-hotkey settings.
+- System-tray presence and an always-on-top option.
 
-### 개선
+### Improved
 
-- DWM 섬네일이 잘리지 않고 원본 전체를 표시하도록 조정
-- 25개를 넘는 창도 표시하도록 반응형 행·열과 스크롤 적용
-- 변경 없는 창 목록 폴링에서 WPF/DWM 화면을 다시 만들지 않도록 최적화
-- 비활성 상태에서 오버레이를 열 때 일반 창 z-order의 맨 앞으로 표시
+- Adjusted DWM thumbnails to show the full source window without clipping.
+- Added responsive rows, columns, and scrolling for more than 25 windows.
+- Optimized polling so unchanged window lists do not recreate the WPF/DWM UI.
+- Brought the overlay in front of normal windows when it is opened while inactive.
 
-### 알려진 제한
+### Known limitations
 
-- 관리자 권한 창과 보안 데스크톱은 Windows 포커스 제한으로 활성화되지 않을 수 있음
-- 디지털 코드 서명이 없어 SmartScreen 경고가 표시될 수 있음
+- Administrator-elevated windows and the secure desktop may not activate because of Windows focus restrictions.
+- SmartScreen may appear because the distribution is not digitally code-signed.
 
 [0.3.1]: https://github.com/ai-blink/alt-tab/releases/tag/v0.3.1
 [0.3.0]: https://github.com/ai-blink/alt-tab/releases/tag/v0.3.0
