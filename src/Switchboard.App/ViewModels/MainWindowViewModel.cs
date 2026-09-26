@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Windows;
 using System.Windows.Media;
 using Switchboard.App;
+using Switchboard.App.Localization;
 using Switchboard.Core.Models;
 using Switchboard.Core.Services;
 using Brush = System.Windows.Media.Brush;
@@ -161,6 +162,10 @@ public partial class MainWindowViewModel : ObservableObject
     private WindowTitleScalePreset selectedWindowTitleScalePreset = WindowTitleScalePreset.Hundred;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SavedOverlayPositionLabel))]
+    private AppLanguage selectedLanguage = AppLanguage.Auto;
+
+    [ObservableProperty]
     private SwitcherSizingPolicy selectedSizingPolicy = SwitcherSizingPolicy.Auto;
 
     [ObservableProperty]
@@ -242,18 +247,18 @@ public partial class MainWindowViewModel : ObservableObject
 
     public double PresentationScale => AppScale;
 
-    public string SavedOverlayPositionLabel => SavedOverlayPosition?.Anchor switch
+    public string SavedOverlayPositionLabel => AppLocalizer.Get(SavedOverlayPosition?.Anchor switch
     {
-        OverlayAnchor.TopLeft => "왼쪽 위",
-        OverlayAnchor.TopCenter => "위쪽 중앙",
-        OverlayAnchor.TopRight => "오른쪽 위",
-        OverlayAnchor.MiddleLeft => "왼쪽 중앙",
-        OverlayAnchor.MiddleRight => "오른쪽 중앙",
-        OverlayAnchor.BottomLeft => "왼쪽 아래",
-        OverlayAnchor.BottomCenter => "아래쪽 중앙",
-        OverlayAnchor.BottomRight => "오른쪽 아래",
-        _ => "화면 중앙"
-    };
+        OverlayAnchor.TopLeft => "Position.Anchor.TopLeft",
+        OverlayAnchor.TopCenter => "Position.Anchor.TopCenter",
+        OverlayAnchor.TopRight => "Position.Anchor.TopRight",
+        OverlayAnchor.MiddleLeft => "Position.Anchor.MiddleLeft",
+        OverlayAnchor.MiddleRight => "Position.Anchor.MiddleRight",
+        OverlayAnchor.BottomLeft => "Position.Anchor.BottomLeft",
+        OverlayAnchor.BottomCenter => "Position.Anchor.BottomCenter",
+        OverlayAnchor.BottomRight => "Position.Anchor.BottomRight",
+        _ => "Position.Anchor.Center"
+    });
 
     public double GridCardWidth => Math.Round(BaseGridCardWidth * ThumbnailScale);
 
@@ -437,6 +442,8 @@ public partial class MainWindowViewModel : ObservableObject
 
     partial void OnSelectedSortModeChanged(WindowSortMode value) => EnsureSelectedWindowIsVisible();
 
+    partial void OnSelectedLanguageChanged(AppLanguage value) => AppLocalizer.Apply(value);
+
     partial void OnSelectedAppearanceModeChanged(OverlayThemeMode value)
     {
         RefreshOverlayBrushes();
@@ -478,7 +485,8 @@ public partial class MainWindowViewModel : ObservableObject
             nameof(IsCompactOverlayEnabled) or
             nameof(SelectedCompactOverlayPlacement) or
             nameof(SavedOverlayPosition) or
-            nameof(IsAlwaysOnTop);
+            nameof(IsAlwaysOnTop) or
+            nameof(SelectedLanguage);
 
     private void ApplyUserSettings(UserSettings settings)
     {
@@ -504,6 +512,7 @@ public partial class MainWindowViewModel : ObservableObject
                     : OverlayPlacement.Center)
         };
         IsAlwaysOnTop = settings.IsAlwaysOnTop;
+        SelectedLanguage = settings.SelectedLanguage;
     }
 
     private UserSettings CreateUserSettings() => new()
@@ -523,7 +532,8 @@ public partial class MainWindowViewModel : ObservableObject
         IsCompactOverlayEnabled = IsCompactOverlayEnabled,
         CompactOverlayPlacement = SelectedCompactOverlayPlacement,
         SavedOverlayPosition = SavedOverlayPosition,
-        IsAlwaysOnTop = IsAlwaysOnTop
+        IsAlwaysOnTop = IsAlwaysOnTop,
+        SelectedLanguage = SelectedLanguage
     };
 
     private static OverlayScalePreset NormalizeOverlayScalePreset(OverlayScalePreset preset) => preset switch

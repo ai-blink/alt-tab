@@ -1,0 +1,100 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <!-- Keys must match Strings.ko.xaml exactly (LocalizationResourceTests). -->
+
+    <!-- Overlay -->
+    <sys:String x:Key="Main.CloseWindowTooltip">Close window</sys:String>
+    <sys:String x:Key="Main.View.Grid">Grid</sys:String>
+    <sys:String x:Key="Main.View.Compact">Compact</sys:String>
+    <sys:String x:Key="Main.View.List">List</sys:String>
+    <sys:String x:Key="Main.Theme.Transparent">Clear</sys:String>
+    <sys:String x:Key="Main.Theme.Dark">Dark</sys:String>
+    <sys:String x:Key="Main.Theme.Light">Light</sys:String>
+    <sys:String x:Key="Main.SortTooltip">Sort windows</sys:String>
+    <sys:String x:Key="Main.Sort.Recent">Recent</sys:String>
+    <sys:String x:Key="Main.Sort.App">App</sys:String>
+    <sys:String x:Key="Main.Sort.Monitor">Monitor</sys:String>
+    <sys:String x:Key="Main.Sort.Title">Title</sys:String>
+    <sys:String x:Key="Main.Sort.Favorites">Favorites</sys:String>
+    <sys:String x:Key="Main.SettingsTooltip">Settings</sys:String>
+    <sys:String x:Key="Main.AlwaysOnTopTooltip">Always on top</sys:String>
+    <sys:String x:Key="Main.RefreshTooltip">Refresh</sys:String>
+    <sys:String x:Key="Main.CloseTooltip">Close</sys:String>
+    <sys:String x:Key="Main.ListHeader.App1">App 1</sys:String>
+    <sys:String x:Key="Main.ListHeader.Title1">Window title 1</sys:String>
+    <sys:String x:Key="Main.ListHeader.App2">App 2</sys:String>
+    <sys:String x:Key="Main.ListHeader.Title2">Window title 2</sys:String>
+    <sys:String x:Key="Main.Hint.Tab">Tab cycle</sys:String>
+    <sys:String x:Key="Main.Hint.Enter">Enter focus</sys:String>
+    <sys:String x:Key="Main.Hint.Esc">Esc close</sys:String>
+
+    <!-- Settings shell -->
+    <sys:String x:Key="Settings.WindowTitle">Switchboard Settings</sys:String>
+    <sys:String x:Key="Settings.Heading">Settings</sys:String>
+    <sys:String x:Key="Settings.Tagline">Tailor Switchboard to the way you work</sys:String>
+    <sys:String x:Key="Settings.SavedStatus">● Changes saved</sys:String>
+    <sys:String x:Key="Settings.SavedStatusDetail">Your changes carry over to the next launch.</sys:String>
+    <sys:String x:Key="Settings.Tab.Position">⌖  Position &amp; Move</sys:String>
+    <sys:String x:Key="Settings.Tab.Appearance">◐  Appearance &amp; Size</sys:String>
+    <sys:String x:Key="Settings.Tab.Behavior">⌨  Behavior</sys:String>
+    <sys:String x:Key="Settings.CloseTooltip">Close settings</sys:String>
+    <sys:String x:Key="Settings.Subtitle">Manage position, size, and behavior separately.</sys:String>
+
+    <!-- Position & Move -->
+    <sys:String x:Key="Position.HowItWorksLabel" xml:space="preserve">How it works: </sys:String>
+    <sys:String x:Key="Position.HowItWorks">Drag an empty area of the switcher to save its position right away. The remote below only moves it once.</sys:String>
+    <sys:String x:Key="Position.SavedHeading">My saved position</sys:String>
+    <sys:String x:Key="Position.SavedDetail">Stays anchored to the nearest corner or edge even when the window size or view mode changes.</sys:String>
+    <sys:String x:Key="Position.RemoteHeading">Position remote</sys:String>
+    <sys:String x:Key="Position.RemoteDetail">One-time move · saved position stays the same</sys:String>
+    <sys:String x:Key="Position.Remote.TopLeft">Top left</sys:String>
+    <sys:String x:Key="Position.Remote.TopCenter">Top</sys:String>
+    <sys:String x:Key="Position.Remote.TopRight">Top right</sys:String>
+    <sys:String x:Key="Position.Remote.MiddleLeft">Left</sys:String>
+    <sys:String x:Key="Position.Remote.Center">Center</sys:String>
+    <sys:String x:Key="Position.Remote.MiddleRight">Right</sys:String>
+    <sys:String x:Key="Position.Remote.BottomLeft">Bottom left</sys:String>
+    <sys:String x:Key="Position.Remote.BottomCenter">Bottom</sys:String>
+    <sys:String x:Key="Position.Remote.BottomRight">Bottom right</sys:String>
+    <sys:String x:Key="Position.ReturnSaved">Return to saved position</sys:String>
+    <sys:String x:Key="Position.Anchor.TopLeft">Top left</sys:String>
+    <sys:String x:Key="Position.Anchor.TopCenter">Top center</sys:String>
+    <sys:String x:Key="Position.Anchor.TopRight">Top right</sys:String>
+    <sys:String x:Key="Position.Anchor.MiddleLeft">Middle left</sys:String>
+    <sys:String x:Key="Position.Anchor.MiddleRight">Middle right</sys:String>
+    <sys:String x:Key="Position.Anchor.BottomLeft">Bottom left</sys:String>
+    <sys:String x:Key="Position.Anchor.BottomCenter">Bottom center</sys:String>
+    <sys:String x:Key="Position.Anchor.BottomRight">Bottom right</sys:String>
+    <sys:String x:Key="Position.Anchor.Center">Screen center</sys:String>
+
+    <!-- Appearance & Size -->
+    <sys:String x:Key="Appearance.ScaleHeading">Overall scale</sys:String>
+    <sys:String x:Key="Appearance.ScaleDetail">Scales text, cards, and spacing together.</sys:String>
+    <sys:String x:Key="Appearance.ThumbnailHeading">Preview size</sys:String>
+    <sys:String x:Key="Appearance.Thumbnail.Normal">Default</sys:String>
+    <sys:String x:Key="Appearance.Thumbnail.Large">Larger</sys:String>
+    <sys:String x:Key="Appearance.Thumbnail.ExtraLarge">Largest</sys:String>
+    <sys:String x:Key="Appearance.TitleScaleHeading">Window title size</sys:String>
+    <sys:String x:Key="Appearance.TitleScaleDetail">Makes only the titles on window cards smaller or larger. Applies to every view.</sys:String>
+    <sys:String x:Key="Appearance.ThemeHeading">Theme and opacity</sys:String>
+    <sys:String x:Key="Appearance.Theme.Transparent">Translucent</sys:String>
+    <sys:String x:Key="Appearance.Theme.Dark">Dark</sys:String>
+    <sys:String x:Key="Appearance.Theme.Light">Light</sys:String>
+
+    <!-- Behavior -->
+    <sys:String x:Key="Behavior.AlwaysOnTop">Always on top</sys:String>
+    <sys:String x:Key="Behavior.AlwaysOnTopDetail">Keeps the switcher in front of other windows while it is open.</sys:String>
+    <sys:String x:Key="Behavior.Compact">Use compact view</sys:String>
+    <sys:String x:Key="Behavior.CompactDetail">Uses a smaller part of the screen for a denser layout.</sys:String>
+    <sys:String x:Key="Behavior.SizingHeading">Sizing policy</sys:String>
+    <sys:String x:Key="Behavior.Sizing.Auto">Auto</sys:String>
+    <sys:String x:Key="Behavior.Sizing.Dense">Dense</sys:String>
+    <sys:String x:Key="Behavior.DefaultViewHeading">Default view</sys:String>
+    <sys:String x:Key="Behavior.HotkeyHeading">Shortcut</sys:String>
+    <sys:String x:Key="Behavior.LanguageHeading">Language</sys:String>
+    <sys:String x:Key="Behavior.LanguageDetail">Auto follows the Windows display language and falls back to English when it is not supported.</sys:String>
+    <sys:String x:Key="Behavior.Language.Auto">Auto</sys:String>
+    <sys:String x:Key="Behavior.Language.Korean">한국어</sys:String>
+    <sys:String x:Key="Behavior.Language.English">English</sys:String>
+</ResourceDictionary>

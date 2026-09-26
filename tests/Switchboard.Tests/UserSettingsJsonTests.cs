@@ -82,4 +82,42 @@ public sealed class UserSettingsJsonTests
             File.Delete(settingsPath);
         }
     }
+
+    [Theory]
+    [InlineData(AppLanguage.Auto)]
+    [InlineData(AppLanguage.Korean)]
+    [InlineData(AppLanguage.English)]
+    public void Language_round_trips_through_json(AppLanguage language)
+    {
+        var settingsPath = Path.Combine(Path.GetTempPath(), $"switchboard-settings-{Guid.NewGuid():N}.json");
+
+        try
+        {
+            var store = new JsonUserSettingsStore(settingsPath);
+            store.Save(new UserSettings { SelectedLanguage = language });
+
+            Assert.Equal(language, store.Load().SelectedLanguage);
+        }
+        finally
+        {
+            File.Delete(settingsPath);
+        }
+    }
+
+    [Fact]
+    public void Settings_without_language_default_to_auto()
+    {
+        var settingsPath = Path.Combine(Path.GetTempPath(), $"switchboard-settings-{Guid.NewGuid():N}.json");
+
+        try
+        {
+            File.WriteAllText(settingsPath, """{ "IsAlwaysOnTop": false }""");
+
+            Assert.Equal(AppLanguage.Auto, new JsonUserSettingsStore(settingsPath).Load().SelectedLanguage);
+        }
+        finally
+        {
+            File.Delete(settingsPath);
+        }
+    }
 }

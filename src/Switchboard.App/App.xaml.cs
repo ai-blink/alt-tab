@@ -1,6 +1,7 @@
 using System.IO;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using Switchboard.App.Localization;
 using Switchboard.App.ViewModels;
 using Switchboard.Core.Services;
 using Switchboard.Native;
@@ -34,6 +35,7 @@ public partial class App : System.Windows.Application
         services.AddSingleton<MainWindow>();
 
         serviceProvider = services.BuildServiceProvider();
+        AppLocalizer.Apply(serviceProvider.GetRequiredService<MainWindowViewModel>().SelectedLanguage);
 
         ShutdownMode = ShutdownMode.OnExplicitShutdown;
         InitializeTrayIcon();

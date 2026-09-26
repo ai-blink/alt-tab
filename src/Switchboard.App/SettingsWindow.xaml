@@ -4,7 +4,7 @@
         xmlns:app="clr-namespace:Switchboard.App"
         xmlns:models="clr-namespace:Switchboard.Core.Models;assembly=Switchboard.Core"
         xmlns:viewModels="clr-namespace:Switchboard.App.ViewModels"
-        Title="Switchboard 설정"
+        Title="{DynamicResource Settings.WindowTitle}"
         Width="920"
         Height="640"
         MinWidth="760"
@@ -130,8 +130,8 @@
                 Padding="14">
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Top" Margin="0,0,0,18">
-                    <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="설정" />
-                    <TextBlock Margin="0,4,0,0" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="Switchboard를 내 작업 방식에 맞춥니다" TextWrapping="Wrap" />
+                    <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Settings.Heading}" />
+                    <TextBlock Margin="0,4,0,0" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Settings.Tagline}" TextWrapping="Wrap" />
                 </StackPanel>
                 <Border DockPanel.Dock="Bottom"
                         Margin="0,18,0,0"
@@ -141,20 +141,20 @@
                         BorderThickness="1"
                         CornerRadius="7">
                     <StackPanel>
-                        <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="{Binding AccentBrush}" Text="● 변경 내용 저장됨" />
-                        <TextBlock Margin="0,4,0,0" FontSize="10" Foreground="{Binding MutedTextBrush}" Text="바꾼 값은 다음 실행에도 유지됩니다." TextWrapping="Wrap" />
+                        <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="{Binding AccentBrush}" Text="{DynamicResource Settings.SavedStatus}" />
+                        <TextBlock Margin="0,4,0,0" FontSize="10" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Settings.SavedStatusDetail}" TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>
                 <StackPanel>
-                    <RadioButton Content="⌖  위치와 이동"
+                    <RadioButton Content="{DynamicResource Settings.Tab.Position}"
                                  GroupName="SettingsTab"
                                  IsChecked="{Binding SelectedSettingsTab, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Position}"
                                  Style="{StaticResource SidebarTabStyle}" />
-                    <RadioButton Content="◐  모양과 크기"
+                    <RadioButton Content="{DynamicResource Settings.Tab.Appearance}"
                                  GroupName="SettingsTab"
                                  IsChecked="{Binding SelectedSettingsTab, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Appearance}"
                                  Style="{StaticResource SidebarTabStyle}" />
-                    <RadioButton Content="⌨  기본 동작"
+                    <RadioButton Content="{DynamicResource Settings.Tab.Behavior}"
                                  GroupName="SettingsTab"
                                  IsChecked="{Binding SelectedSettingsTab, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Behavior}"
                                  Style="{StaticResource SidebarTabStyle}" />
@@ -175,10 +175,10 @@
                         Click="OnCloseClick"
                         Content="×"
                         FontSize="18"
-                        ToolTip="설정 닫기" />
+                        ToolTip="{DynamicResource Settings.CloseTooltip}" />
                 <StackPanel>
-                    <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="설정" />
-                    <TextBlock FontSize="12" Foreground="{Binding MutedTextBrush}" Text="표시 위치, 화면 크기, 기본 동작을 나눠 관리합니다." />
+                    <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Settings.Heading}" />
+                    <TextBlock FontSize="12" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Settings.Subtitle}" />
                 </StackPanel>
             </DockPanel>
 
@@ -196,34 +196,34 @@
                             </Style>
                         </StackPanel.Style>
                         <Border Padding="13" Background="{Binding AccentSoftBrush}" BorderBrush="{Binding AccentBrush}" BorderThickness="1" CornerRadius="8">
-                            <TextBlock Foreground="{Binding TextBrush}" TextWrapping="Wrap"><Run FontWeight="SemiBold" Text="기본 방식: " /><Run Text="전환창의 빈 공간을 드래그하면 위치가 바로 저장됩니다. 아래 리모컨은 한 번만 옮기는 도구입니다." /></TextBlock>
+                            <TextBlock Foreground="{Binding TextBrush}" TextWrapping="Wrap"><Run FontWeight="SemiBold" Text="{DynamicResource Position.HowItWorksLabel}" /><Run Text="{DynamicResource Position.HowItWorks}" /></TextBlock>
                         </Border>
                         <Grid Margin="0,20,0,0">
                             <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Margin="0,0,12,0">
-                                <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="내가 저장한 위치" />
+                                <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Position.SavedHeading}" />
                                 <Border Margin="0,8,0,0" Padding="13" Background="{Binding SegmentBackground}" BorderBrush="{Binding BorderBrush}" BorderThickness="1" CornerRadius="8">
                                     <StackPanel>
                                         <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{Binding AccentBrush}" Text="{Binding SavedOverlayPositionLabel}" />
-                                        <TextBlock Margin="0,6,0,0" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="창 크기나 보기 모드가 바뀌어도 가까운 모서리·가장자리 기준을 유지합니다." TextWrapping="Wrap" />
+                                        <TextBlock Margin="0,6,0,0" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Position.SavedDetail}" TextWrapping="Wrap" />
                                     </StackPanel>
                                 </Border>
                             </StackPanel>
                             <StackPanel Grid.Column="1" Margin="12,0,0,0">
-                                <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="위치 리모컨" />
-                                <TextBlock Margin="0,4,0,8" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="한 번 이동 · 기본 위치는 바뀌지 않음" />
+                                <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Position.RemoteHeading}" />
+                                <TextBlock Margin="0,4,0,8" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Position.RemoteDetail}" />
                                 <UniformGrid Columns="3" Rows="3">
-                                    <Button Tag="TopLeft" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↖" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="좌상" /></StackPanel></Button>
-                                    <Button Tag="TopCenter" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↑" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="상단" /></StackPanel></Button>
-                                    <Button Tag="TopRight" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↗" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="우상" /></StackPanel></Button>
-                                    <Button Tag="MiddleLeft" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="←" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="좌측" /></StackPanel></Button>
-                                    <Button Tag="Center" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="●" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="중앙" /></StackPanel></Button>
-                                    <Button Tag="MiddleRight" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="→" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="우측" /></StackPanel></Button>
-                                    <Button Tag="BottomLeft" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↙" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="좌하" /></StackPanel></Button>
-                                    <Button Tag="BottomCenter" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↓" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="하단" /></StackPanel></Button>
-                                    <Button Tag="BottomRight" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↘" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="우하" /></StackPanel></Button>
+                                    <Button Tag="TopLeft" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↖" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="{DynamicResource Position.Remote.TopLeft}" /></StackPanel></Button>
+                                    <Button Tag="TopCenter" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↑" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="{DynamicResource Position.Remote.TopCenter}" /></StackPanel></Button>
+                                    <Button Tag="TopRight" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↗" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="{DynamicResource Position.Remote.TopRight}" /></StackPanel></Button>
+                                    <Button Tag="MiddleLeft" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="←" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="{DynamicResource Position.Remote.MiddleLeft}" /></StackPanel></Button>
+                                    <Button Tag="Center" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="●" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="{DynamicResource Position.Remote.Center}" /></StackPanel></Button>
+                                    <Button Tag="MiddleRight" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="→" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="{DynamicResource Position.Remote.MiddleRight}" /></StackPanel></Button>
+                                    <Button Tag="BottomLeft" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↙" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="{DynamicResource Position.Remote.BottomLeft}" /></StackPanel></Button>
+                                    <Button Tag="BottomCenter" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↓" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="{DynamicResource Position.Remote.BottomCenter}" /></StackPanel></Button>
+                                    <Button Tag="BottomRight" Click="OnRemoteMoveClick" Style="{StaticResource RemoteButtonStyle}"><StackPanel><TextBlock HorizontalAlignment="Center" FontSize="17" Text="↘" /><TextBlock HorizontalAlignment="Center" FontSize="10" Text="{DynamicResource Position.Remote.BottomRight}" /></StackPanel></Button>
                                 </UniformGrid>
-                                <Button Margin="3,10,3,0" Padding="10,8" Click="OnReturnSavedClick" Content="저장한 위치로 돌아가기" />
+                                <Button Margin="3,10,3,0" Padding="10,8" Click="OnReturnSavedClick" Content="{DynamicResource Position.ReturnSaved}" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -232,8 +232,8 @@
                         <StackPanel.Style>
                             <Style TargetType="StackPanel"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding SelectedSettingsTab}" Value="{x:Static viewModels:SettingsTab.Appearance}"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style>
                         </StackPanel.Style>
-                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="전체 배율" />
-                        <TextBlock Margin="0,4,0,10" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="글자, 카드, 간격을 함께 키우거나 줄입니다." />
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Appearance.ScaleHeading}" />
+                        <TextBlock Margin="0,4,0,10" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Appearance.ScaleDetail}" />
                         <WrapPanel>
                             <RadioButton Content="60%" GroupName="OverlayScale" IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Sixty}" Style="{StaticResource ChoiceRadioStyle}" />
                             <RadioButton Content="70%" GroupName="OverlayScale" IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Seventy}" Style="{StaticResource ChoiceRadioStyle}" />
@@ -244,26 +244,26 @@
                             <RadioButton Content="200%" GroupName="OverlayScale" IsChecked="{Binding SelectedOverlayScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=TwoHundred}" Style="{StaticResource ChoiceRadioStyle}" />
                         </WrapPanel>
                         <Separator Margin="0,14" />
-                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="미리 보기 크기" />
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Appearance.ThumbnailHeading}" />
                         <WrapPanel Margin="0,10,0,0">
-                            <RadioButton Content="기본" GroupName="ThumbnailScale" IsChecked="{Binding SelectedThumbnailScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Normal}" Style="{StaticResource ChoiceRadioStyle}" />
-                            <RadioButton Content="조금 크게" GroupName="ThumbnailScale" IsChecked="{Binding SelectedThumbnailScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Large}" Style="{StaticResource ChoiceRadioStyle}" />
-                            <RadioButton Content="크게" GroupName="ThumbnailScale" IsChecked="{Binding SelectedThumbnailScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=ExtraLarge}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Appearance.Thumbnail.Normal}" GroupName="ThumbnailScale" IsChecked="{Binding SelectedThumbnailScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Normal}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Appearance.Thumbnail.Large}" GroupName="ThumbnailScale" IsChecked="{Binding SelectedThumbnailScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Large}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Appearance.Thumbnail.ExtraLarge}" GroupName="ThumbnailScale" IsChecked="{Binding SelectedThumbnailScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=ExtraLarge}" Style="{StaticResource ChoiceRadioStyle}" />
                         </WrapPanel>
                         <Separator Margin="0,14" />
-                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="창 제목 크기" />
-                        <TextBlock Margin="0,4,0,10" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="창 카드의 제목만 작게 또는 크게 표시합니다. 모든 보기 방식에 함께 적용됩니다." TextWrapping="Wrap" />
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Appearance.TitleScaleHeading}" />
+                        <TextBlock Margin="0,4,0,10" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Appearance.TitleScaleDetail}" TextWrapping="Wrap" />
                         <WrapPanel>
                             <RadioButton Content="80%" GroupName="WindowTitleScale" IsChecked="{Binding SelectedWindowTitleScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Eighty}" Style="{StaticResource ChoiceRadioStyle}" />
                             <RadioButton Content="100%" GroupName="WindowTitleScale" IsChecked="{Binding SelectedWindowTitleScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Hundred}" Style="{StaticResource ChoiceRadioStyle}" />
                             <RadioButton Content="125%" GroupName="WindowTitleScale" IsChecked="{Binding SelectedWindowTitleScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=OneTwentyFive}" Style="{StaticResource ChoiceRadioStyle}" />
                             <RadioButton Content="150%" GroupName="WindowTitleScale" IsChecked="{Binding SelectedWindowTitleScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=OneFifty}" Style="{StaticResource ChoiceRadioStyle}" />
                         </WrapPanel>
-                        <TextBlock Margin="0,12,0,0" FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="화면 분위기와 투명도" />
+                        <TextBlock Margin="0,12,0,0" FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Appearance.ThemeHeading}" />
                         <WrapPanel Margin="0,10,0,0">
-                            <RadioButton Content="반투명" GroupName="Appearance" IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Transparent}" Style="{StaticResource ChoiceRadioStyle}" />
-                            <RadioButton Content="어둡게" GroupName="Appearance" IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Dark}" Style="{StaticResource ChoiceRadioStyle}" />
-                            <RadioButton Content="밝게" GroupName="Appearance" IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Light}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Appearance.Theme.Transparent}" GroupName="Appearance" IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Transparent}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Appearance.Theme.Dark}" GroupName="Appearance" IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Dark}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Appearance.Theme.Light}" GroupName="Appearance" IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Light}" Style="{StaticResource ChoiceRadioStyle}" />
                             <RadioButton Content="25%" GroupName="OverlayOpacity" IsChecked="{Binding SelectedOverlayOpacityPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=TwentyFive}" Style="{StaticResource ChoiceRadioStyle}" />
                             <RadioButton Content="50%" GroupName="OverlayOpacity" IsChecked="{Binding SelectedOverlayOpacityPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Fifty}" Style="{StaticResource ChoiceRadioStyle}" />
                             <RadioButton Content="75%" GroupName="OverlayOpacity" IsChecked="{Binding SelectedOverlayOpacityPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=SeventyFive}" Style="{StaticResource ChoiceRadioStyle}" />
@@ -275,16 +275,23 @@
                         <StackPanel.Style>
                             <Style TargetType="StackPanel"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding SelectedSettingsTab}" Value="{x:Static viewModels:SettingsTab.Behavior}"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style>
                         </StackPanel.Style>
-                        <CheckBox Content="항상 위에 표시" IsChecked="{Binding IsAlwaysOnTop}" FontWeight="SemiBold" Foreground="{Binding TextBrush}" />
-                        <TextBlock Margin="0,4,0,15" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="전환창이 열려 있는 동안 다른 일반 창보다 앞에 표시합니다." />
-                        <CheckBox Content="컴팩트 보기 사용" IsChecked="{Binding IsCompactOverlayEnabled}" FontWeight="SemiBold" Foreground="{Binding TextBrush}" />
-                        <TextBlock Margin="0,4,0,15" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="화면 작업 영역을 작게 사용해 촘촘하게 표시합니다." />
-                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="크기 정책" />
-                        <WrapPanel Margin="0,10,0,14"><RadioButton Content="자동" GroupName="Sizing" IsChecked="{Binding SelectedSizingPolicy, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Auto}" Style="{StaticResource ChoiceRadioStyle}" /><RadioButton Content="조밀" GroupName="Sizing" IsChecked="{Binding SelectedSizingPolicy, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Dense}" Style="{StaticResource ChoiceRadioStyle}" /></WrapPanel>
-                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="기본 보기" />
-                        <WrapPanel Margin="0,10,0,14"><RadioButton Content="격자" GroupName="DefaultView" IsChecked="{Binding DefaultViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Grid}" Style="{StaticResource ChoiceRadioStyle}" /><RadioButton Content="압축" GroupName="DefaultView" IsChecked="{Binding DefaultViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Compact}" Style="{StaticResource ChoiceRadioStyle}" /><RadioButton Content="목록" GroupName="DefaultView" IsChecked="{Binding DefaultViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=List}" Style="{StaticResource ChoiceRadioStyle}" /></WrapPanel>
-                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="단축키" />
+                        <CheckBox Content="{DynamicResource Behavior.AlwaysOnTop}" IsChecked="{Binding IsAlwaysOnTop}" FontWeight="SemiBold" Foreground="{Binding TextBrush}" />
+                        <TextBlock Margin="0,4,0,15" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Behavior.AlwaysOnTopDetail}" />
+                        <CheckBox Content="{DynamicResource Behavior.Compact}" IsChecked="{Binding IsCompactOverlayEnabled}" FontWeight="SemiBold" Foreground="{Binding TextBrush}" />
+                        <TextBlock Margin="0,4,0,15" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Behavior.CompactDetail}" />
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Behavior.SizingHeading}" />
+                        <WrapPanel Margin="0,10,0,14"><RadioButton Content="{DynamicResource Behavior.Sizing.Auto}" GroupName="Sizing" IsChecked="{Binding SelectedSizingPolicy, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Auto}" Style="{StaticResource ChoiceRadioStyle}" /><RadioButton Content="{DynamicResource Behavior.Sizing.Dense}" GroupName="Sizing" IsChecked="{Binding SelectedSizingPolicy, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Dense}" Style="{StaticResource ChoiceRadioStyle}" /></WrapPanel>
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Behavior.DefaultViewHeading}" />
+                        <WrapPanel Margin="0,10,0,14"><RadioButton Content="{DynamicResource Main.View.Grid}" GroupName="DefaultView" IsChecked="{Binding DefaultViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Grid}" Style="{StaticResource ChoiceRadioStyle}" /><RadioButton Content="{DynamicResource Main.View.Compact}" GroupName="DefaultView" IsChecked="{Binding DefaultViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Compact}" Style="{StaticResource ChoiceRadioStyle}" /><RadioButton Content="{DynamicResource Main.View.List}" GroupName="DefaultView" IsChecked="{Binding DefaultViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=List}" Style="{StaticResource ChoiceRadioStyle}" /></WrapPanel>
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Behavior.HotkeyHeading}" />
                         <Grid Margin="0,10,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="110" /><ColumnDefinition Width="110" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><ComboBox Grid.Column="0" Margin="0,0,8,0" ItemsSource="{Binding HotkeyModifiers}" SelectedItem="{Binding SelectedFirstHotkeyModifier}" /><ComboBox Grid.Column="1" Margin="0,0,8,0" ItemsSource="{Binding HotkeyModifiers}" SelectedItem="{Binding SelectedSecondHotkeyModifier}" /><ComboBox Grid.Column="2" DisplayMemberPath="Label" ItemsSource="{Binding HotkeyKeyOptions}" SelectedValue="{Binding SelectedHotkeyKey}" SelectedValuePath="Value" /></Grid>
+                        <TextBlock Margin="0,18,0,0" FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Behavior.LanguageHeading}" />
+                        <TextBlock Margin="0,4,0,0" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Behavior.LanguageDetail}" TextWrapping="Wrap" />
+                        <WrapPanel Margin="0,10,0,0">
+                            <RadioButton Content="{DynamicResource Behavior.Language.Auto}" GroupName="Language" IsChecked="{Binding SelectedLanguage, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Auto}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Behavior.Language.Korean}" GroupName="Language" IsChecked="{Binding SelectedLanguage, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Korean}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Behavior.Language.English}" GroupName="Language" IsChecked="{Binding SelectedLanguage, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=English}" Style="{StaticResource ChoiceRadioStyle}" />
+                        </WrapPanel>
                     </StackPanel>
                 </Grid>
             </ScrollViewer>

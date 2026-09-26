@@ -36,7 +36,7 @@
             <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
             <Setter Property="FontSize" Value="10" />
             <Setter Property="Content" Value="&#xE8BB;" />
-            <Setter Property="ToolTip" Value="창 종료" />
+            <Setter Property="ToolTip" Value="{DynamicResource Main.CloseWindowTooltip}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -635,15 +635,15 @@
                                     CornerRadius="7"
                                     Padding="1">
                                 <StackPanel Orientation="Horizontal">
-                                    <RadioButton Content="격자"
+                                    <RadioButton Content="{DynamicResource Main.View.Grid}"
                                                  GroupName="ViewMode"
                                                  IsChecked="{Binding SelectedViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Grid}"
                                                  Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="압축"
+                                    <RadioButton Content="{DynamicResource Main.View.Compact}"
                                                  GroupName="ViewMode"
                                                  IsChecked="{Binding SelectedViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Compact}"
                                                  Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="목록"
+                                    <RadioButton Content="{DynamicResource Main.View.List}"
                                                  GroupName="ViewMode"
                                                  IsChecked="{Binding SelectedViewMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=List}"
                                                  Style="{StaticResource ModeRadioStyle}" />
@@ -658,15 +658,15 @@
                                     CornerRadius="7"
                                     Padding="1">
                                 <StackPanel Orientation="Horizontal">
-                                    <RadioButton Content="투명"
+                                    <RadioButton Content="{DynamicResource Main.Theme.Transparent}"
                                                  GroupName="Appearance"
                                                  IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Transparent}"
                                                  Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="다크"
+                                    <RadioButton Content="{DynamicResource Main.Theme.Dark}"
                                                  GroupName="Appearance"
                                                  IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Dark}"
                                                  Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="라이트"
+                                    <RadioButton Content="{DynamicResource Main.Theme.Light}"
                                                  GroupName="Appearance"
                                                  IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Light}"
                                                  Style="{StaticResource ModeRadioStyle}" />
@@ -680,29 +680,29 @@
                                     BorderThickness="1"
                                     CornerRadius="7"
                                     Padding="1"
-                                    ToolTip="Sort windows">
+                                    ToolTip="{DynamicResource Main.SortTooltip}">
                                 <StackPanel Orientation="Horizontal">
-                                    <RadioButton Content="최근"
+                                    <RadioButton Content="{DynamicResource Main.Sort.Recent}"
                                                  AutomationProperties.Name="Sort by recent"
                                                  GroupName="SortMode"
                                                  IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Recent}"
                                                  Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="앱"
+                                    <RadioButton Content="{DynamicResource Main.Sort.App}"
                                                  AutomationProperties.Name="Sort by app"
                                                  GroupName="SortMode"
                                                  IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=App}"
                                                  Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="모니터"
+                                    <RadioButton Content="{DynamicResource Main.Sort.Monitor}"
                                                  AutomationProperties.Name="Sort by monitor"
                                                  GroupName="SortMode"
                                                  IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Monitor}"
                                                  Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="제목"
+                                    <RadioButton Content="{DynamicResource Main.Sort.Title}"
                                                  AutomationProperties.Name="Sort by title"
                                                  GroupName="SortMode"
                                                  IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Title}"
                                                  Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="즐겨찾기"
+                                    <RadioButton Content="{DynamicResource Main.Sort.Favorites}"
                                                  AutomationProperties.Name="Sort by favorites"
                                                  GroupName="SortMode"
                                                  IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Favorites}"
@@ -716,22 +716,22 @@
                                     Click="OnSettingsButtonClick"
                                     Margin="0,0,8,0"
                                     Style="{StaticResource ChromeButtonStyle}"
-                                    ToolTip="Settings" />
+                                    ToolTip="{DynamicResource Main.SettingsTooltip}" />
                             <ToggleButton Content="&#xE718;"
                                           AutomationProperties.Name="Always on top"
                                           IsChecked="{Binding IsAlwaysOnTop}"
                                           Margin="0,0,8,0"
                                           Style="{StaticResource ChromeToggleButtonStyle}"
-                                          ToolTip="Always on top" />
+                                          ToolTip="{DynamicResource Main.AlwaysOnTopTooltip}" />
                             <Button Content="&#xE72C;"
                                     Command="{Binding RefreshCommand}"
                                     Margin="0,0,8,0"
                                     Style="{StaticResource ChromeButtonStyle}"
-                                    ToolTip="Refresh" />
+                                    ToolTip="{DynamicResource Main.RefreshTooltip}" />
                             <Button Content="&#xE8BB;"
                                     Click="OnCloseClick"
                                     Style="{StaticResource ChromeButtonStyle}"
-                                    ToolTip="Close" />
+                                    ToolTip="{DynamicResource Main.CloseTooltip}" />
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -772,22 +772,22 @@
                                        FontSize="10"
                                        FontWeight="SemiBold"
                                        Foreground="{Binding MutedTextBrush}"
-                                       Text="앱 1" />
+                                       Text="{DynamicResource Main.ListHeader.App1}" />
                             <TextBlock Grid.Column="1"
                                        FontSize="10"
                                        FontWeight="SemiBold"
                                        Foreground="{Binding MutedTextBrush}"
-                                       Text="창 제목 1" />
+                                       Text="{DynamicResource Main.ListHeader.Title1}" />
                             <TextBlock Grid.Column="2"
                                        FontSize="10"
                                        FontWeight="SemiBold"
                                        Foreground="{Binding MutedTextBrush}"
-                                       Text="앱 2" />
+                                       Text="{DynamicResource Main.ListHeader.App2}" />
                             <TextBlock Grid.Column="3"
                                        FontSize="10"
                                        FontWeight="SemiBold"
                                        Foreground="{Binding MutedTextBrush}"
-                                       Text="창 제목 2" />
+                                       Text="{DynamicResource Main.ListHeader.Title2}" />
                         </Grid>
                     </Border>
 
@@ -811,18 +811,18 @@
                                        FontFamily="Cascadia Mono, Consolas"
                                        FontSize="10"
                                        Foreground="{Binding MutedTextBrush}"
-                                       Text="Tab cycle" />
+                                       Text="{DynamicResource Main.Hint.Tab}" />
                             <StackPanel DockPanel.Dock="Right"
                                     Orientation="Horizontal">
                             <TextBlock Margin="0,0,14,0"
                                        FontFamily="Cascadia Mono, Consolas"
                                        FontSize="10"
                                        Foreground="{Binding MutedTextBrush}"
-                                       Text="Enter focus" />
+                                       Text="{DynamicResource Main.Hint.Enter}" />
                             <TextBlock FontFamily="Cascadia Mono, Consolas"
                                        FontSize="10"
                                        Foreground="{Binding MutedTextBrush}"
-                                       Text="Esc close" />
+                                       Text="{DynamicResource Main.Hint.Esc}" />
                         </StackPanel>
                     </DockPanel>
                 </Border>

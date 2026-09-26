@@ -11,6 +11,17 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 - **Security notices, data-loss risks, breaking changes, installation changes, and required user actions:** provide the complete information in all four languages.
 - **Internal refactors, test-only work, and developer-tooling changes:** may remain in the English changelog when they do not affect users.
 
+## [Unreleased]
+
+### Added
+
+- English app UI alongside Korean, with a Language setting (Auto, 한국어, English) in the Behavior tab. Auto follows the Windows display language and uses English for unsupported languages; switching applies immediately without restarting.
+- Window title size setting (80/100/125/150%) that scales window titles and app labels in Grid, Compact, and List views.
+
+### Changed
+
+- Overlay toolbar tooltips and footer key hints are now localized instead of always showing English.
+
 ## [0.3.1] - 2026-08-18
 
 A patch release that stabilizes the settings-window sidebar layout.

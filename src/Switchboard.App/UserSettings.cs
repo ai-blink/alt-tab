@@ -36,4 +36,6 @@ public sealed record UserSettings
     public OverlayPositionPreference? SavedOverlayPosition { get; init; }
 
     public bool IsAlwaysOnTop { get; init; } = true;
+
+    public AppLanguage SelectedLanguage { get; init; } = AppLanguage.Auto;
 }

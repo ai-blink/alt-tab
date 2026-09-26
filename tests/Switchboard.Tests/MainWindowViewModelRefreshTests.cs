@@ -218,6 +218,21 @@ public sealed class MainWindowViewModelRefreshTests
         Assert.Equal(13.75, viewModel.GridTitleLabelFontSize);
     }
 
+    [Fact]
+    public void Language_is_loaded_from_and_saved_to_user_settings()
+    {
+        var settingsStore = new StubSettingsStore(new UserSettings { SelectedLanguage = AppLanguage.English });
+        var viewModel = CreateViewModel(
+            new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]),
+            settingsStore: settingsStore);
+
+        Assert.Equal(AppLanguage.English, viewModel.SelectedLanguage);
+
+        viewModel.SelectedLanguage = AppLanguage.Korean;
+
+        Assert.Equal(AppLanguage.Korean, settingsStore.CurrentSettings.SelectedLanguage);
+    }
+
     private static MainWindowViewModel CreateViewModel(
         IWindowCatalog catalog,
         IWindowCloser? closer = null,

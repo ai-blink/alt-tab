@@ -2,6 +2,8 @@
 
 | Status | Milestone | Evidence |
 |---|---|---|
+| done — UI check pending | Localize the app UI into Korean and English with a live Language setting (Auto/한국어/English). | 2026-09-27 build 0 warnings/errors, 81 tests incl. `LocalizationTests` key parity |
+| done — UI check pending | Add an 80/100/125/150% window title label scale preset across Grid/Compact/List. | `048d7fc`; `MainWindowViewModelRefreshTests`, `UserSettingsJsonTests` |
 | released — UI check pending | Replace the settings popup with a sidebar modal and persist overlay drag position with one-shot 9-direction movement plus saved-position return. | Public `v0.3.1` Portable release; 2026-08-18 Release build: 0 warnings/errors, 57 tests pass; settings-modal clipping and sidebar status-card expansion fixed. |
 | done | Initialize `.NET 10 + WPF` App/Core/Native/Tests structure and preserve Stitch references. | `dotnet build`, `dotnet test`, `references/stitch/` |
 | done | Deliver the compact transparent WPF overlay with Grid/Compact/List views and settings. | `notes/runs/2026-07-02_*`, `notes/runs/2026-07-03_*` |
@@ -14,6 +16,7 @@
 | done | Add always-visible per-card window close controls using standard `WM_CLOSE`. | `IWindowCloser`, `CloseWindowCommand`, 13 passing tests |
 | done | Unify overlay scaling at 60/70/80/100/125/150/200%, keep Compact layout automatic, and prevent DWM previews from escaping the list viewport. | `MainWindowViewModelRefreshTests`, `SwitcherLayoutCalculatorTests`, 57 passing Release tests |
 | done | Package the completed compact-overlay slice as the `v0.2.0` Windows 11 x64 Portable release. | Version metadata, changelog, 0-warning Release build, 41 tests, packaged executable smoke |
+| next | Add Simplified Chinese and Japanese UI dictionaries promised by the READMEs. | Add `Strings.zh.xaml`/`Strings.ja.xaml`; key-parity test catches gaps |
 | later | Add a visible opt-out for low-level Alt+Tab capture. | Let users return to the default Windows switcher without exiting Switchboard |
 | later | Add user-visible configurable-hotkey collision feedback. | Report reserved/already-registered Win32 combinations |
 | later | Replace visible-state polling with Win32 event-driven catalog updates. | Preserve stable visual identity while reducing background work |
