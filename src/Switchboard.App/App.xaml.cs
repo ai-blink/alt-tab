@@ -1,4 +1,5 @@
 using System.IO;
+using System.Runtime;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Switchboard.App.Localization;
@@ -12,6 +13,10 @@ namespace Switchboard.App;
 
 public partial class App : System.Windows.Application
 {
+    // One Switchboard per session: two instances would both toggle on the same Alt+Tab and cancel out.
+    // Opening the mutex of an elevated instance from a standard one throws UnauthorizedAccessException.
+    private const string SingleInstanceMutexName = @"Local\Switchboard.App.SingleInstance";
+    private Mutex? singleInstanceMutex;
     private ServiceProvider? serviceProvider;
     private Forms.NotifyIcon? notifyIcon;
     private Drawing.Icon? trayIcon;
@@ -20,7 +25,18 @@ public partial class App : System.Windows.Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        if (!TryAcquireSingleInstance())
+        {
+            Shutdown();
+            return;
+        }
+
         EnsureWindowsEnvironmentVariables();
+
+        // The Alt+Tab hook must answer within LowLevelHooksTimeout; long blocking GCs or EcoQoS
+        // throttling would hand that key press to the Windows switcher instead.
+        GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+        _ = ProcessResponsiveness.DisableExecutionSpeedThrottling();
 
         base.OnStartup(e);
 
@@ -48,6 +64,7 @@ public partial class App : System.Windows.Application
     {
         DisposeTrayIcon();
         serviceProvider?.Dispose();
+        ReleaseSingleInstance();
         base.OnExit(e);
     }
 
@@ -64,6 +81,54 @@ public partial class App : System.Windows.Application
         IsExitRequested = true;
         DisposeTrayIcon();
         Shutdown();
+    }
+
+    // Hands over to the elevated logon task: the mutex is released first so the new instance can start.
+    public bool RestartElevatedViaLogonTask()
+    {
+        ReleaseSingleInstance();
+
+        if (!ElevatedLogonTask.RunNow())
+        {
+            _ = TryAcquireSingleInstance();
+            return false;
+        }
+
+        ExitFromTray();
+        return true;
+    }
+
+    private bool TryAcquireSingleInstance()
+    {
+        try
+        {
+            singleInstanceMutex = new Mutex(initiallyOwned: true, SingleInstanceMutexName, out var createdNew);
+
+            if (createdNew)
+            {
+                return true;
+            }
+
+            singleInstanceMutex.Dispose();
+            singleInstanceMutex = null;
+            return false;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
+
+    private void ReleaseSingleInstance()
+    {
+        if (singleInstanceMutex is null)
+        {
+            return;
+        }
+
+        singleInstanceMutex.ReleaseMutex();
+        singleInstanceMutex.Dispose();
+        singleInstanceMutex = null;
     }
 
     private void InitializeTrayIcon()

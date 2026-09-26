@@ -25,6 +25,7 @@ public partial class MainWindow : Window
     private GlobalHotkeyRegistration? hotkeyRegistration;
     private GlobalHotkeyRegistration? altTabHotkeyRegistration;
     private LowLevelAltTabHookRegistration? altTabHookRegistration;
+    private AltTabMissWatcher? altTabMissWatcher;
     private readonly DispatcherTimer refreshTimer;
     private nint previousForegroundWindow;
     private double currentLayoutWidth = 955;
@@ -112,6 +113,8 @@ public partial class MainWindow : Window
         altTabHotkeyRegistration = null;
         altTabHookRegistration?.Dispose();
         altTabHookRegistration = null;
+        altTabMissWatcher?.Dispose();
+        altTabMissWatcher = null;
         hotkeyRegistration?.Dispose();
         hotkeyRegistration = null;
         hwndSource?.RemoveHook(WndProc);
@@ -193,6 +196,8 @@ public partial class MainWindow : Window
         hwndSource?.AddHook(WndProc);
         RegisterAltTabHook();
         RegisterAltTabHotkeyFallback();
+        altTabMissWatcher ??= AltTabMissWatcher.Start(detail =>
+            AltTabDiagnosticsLog.Write($"windows-switcher-shown {detail}"));
         RegisterGlobalHotkey();
     }
 
@@ -200,8 +205,9 @@ public partial class MainWindow : Window
     {
         altTabHookRegistration?.Dispose();
         altTabHookRegistration = null;
-        altTabHookRegistration = LowLevelAltTabHookRegistration.TryRegister(() =>
-            Dispatcher.BeginInvoke(ToggleOverlay, DispatcherPriority.Input));
+        altTabHookRegistration = LowLevelAltTabHookRegistration.TryRegister(
+            () => Dispatcher.BeginInvoke(ToggleOverlay, DispatcherPriority.Input),
+            delayMs => AltTabDiagnosticsLog.Write($"late-hook-delivery delay={delayMs}ms"));
     }
 
     private void RegisterAltTabHotkeyFallback()
@@ -506,6 +512,25 @@ public partial class MainWindow : Window
         WindowList.SelectedItem = item.DataContext;
         ActivateSelectedWindowAndClose();
         e.Handled = true;
+    }
+
+    private void OnSortMenuButtonClick(object sender, RoutedEventArgs e)
+    {
+        if (SortMenuButton.ContextMenu is { } menu)
+        {
+            menu.PlacementTarget = SortMenuButton;
+            menu.IsOpen = true;
+        }
+    }
+
+    // Menu items are not checkable: clicking the current mode must not uncheck it.
+    private void OnSortMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is FrameworkElement { Tag: string text } &&
+            Enum.TryParse<WindowSortMode>(text, out var sortMode))
+        {
+            viewModel.SelectedSortMode = sortMode;
+        }
     }
 
     private void OnSettingsButtonClick(object sender, RoutedEventArgs e)

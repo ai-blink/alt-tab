@@ -4,13 +4,19 @@
     <!-- Keys must match Strings.en.xaml exactly (LocalizationResourceTests). -->
 
     <!-- Overlay -->
+    <sys:String x:Key="Main.WindowCount">창 {0}개</sys:String>
+    <sys:String x:Key="Main.WindowCount.Single">창 1개</sys:String>
+    <sys:String x:Key="Main.SearchPlaceholder">창 제목이나 앱 이름으로 검색</sys:String>
+    <sys:String x:Key="Main.SortButton">정렬: {0}</sys:String>
+    <sys:String x:Key="Appearance.AppNameLengthHeading">앱 이름 길이</sys:String>
+    <sys:String x:Key="Appearance.AppNameLengthDetail">창 카드에서 아이콘 옆에 보여 줄 앱 이름의 최대 글자수입니다. 앱 이름이 창 제목과 겹치면 표시하지 않습니다.</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Five">5자</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Six">6자</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Seven">7자</sys:String>
     <sys:String x:Key="Main.CloseWindowTooltip">창 종료</sys:String>
     <sys:String x:Key="Main.View.Grid">격자</sys:String>
     <sys:String x:Key="Main.View.Compact">압축</sys:String>
     <sys:String x:Key="Main.View.List">목록</sys:String>
-    <sys:String x:Key="Main.Theme.Transparent">투명</sys:String>
-    <sys:String x:Key="Main.Theme.Dark">다크</sys:String>
-    <sys:String x:Key="Main.Theme.Light">라이트</sys:String>
     <sys:String x:Key="Main.SortTooltip">창 정렬</sys:String>
     <sys:String x:Key="Main.Sort.Recent">최근</sys:String>
     <sys:String x:Key="Main.Sort.App">앱</sys:String>
@@ -83,6 +89,13 @@
     <sys:String x:Key="Appearance.Theme.Light">밝게</sys:String>
 
     <!-- Behavior -->
+    <sys:String x:Key="Behavior.ElevatedHeading">관리자 권한 창에서도 Alt+Tab 사용</sys:String>
+    <sys:String x:Key="Behavior.ElevatedAutoStart">로그인할 때 관리자 권한으로 자동 시작</sys:String>
+    <sys:String x:Key="Behavior.ElevatedDetail">작업 관리자처럼 관리자 권한으로 실행된 창이 앞에 있으면 Windows가 일반 권한 앱의 Alt+Tab 감지를 막습니다. 켜면 Windows 작업 스케줄러에 등록되며, 켜고 끌 때 권한 확인 창이 한 번 뜰 수 있습니다.</sys:String>
+    <sys:String x:Key="Behavior.RunningElevated">현재 관리자 권한으로 실행 중</sys:String>
+    <sys:String x:Key="Behavior.RunningNormal">현재 일반 권한으로 실행 중</sys:String>
+    <sys:String x:Key="Behavior.RestartElevated">지금 관리자 권한으로 다시 시작</sys:String>
+    <sys:String x:Key="Behavior.ElevatedChangeFailed">작업 스케줄러를 변경하지 못했습니다.</sys:String>
     <sys:String x:Key="Behavior.AlwaysOnTop">항상 위에 표시</sys:String>
     <sys:String x:Key="Behavior.AlwaysOnTopDetail">전환창이 열려 있는 동안 다른 일반 창보다 앞에 표시합니다.</sys:String>
     <sys:String x:Key="Behavior.Compact">컴팩트 보기 사용</sys:String>

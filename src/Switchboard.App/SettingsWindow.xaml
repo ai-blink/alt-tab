@@ -259,6 +259,14 @@
                             <RadioButton Content="125%" GroupName="WindowTitleScale" IsChecked="{Binding SelectedWindowTitleScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=OneTwentyFive}" Style="{StaticResource ChoiceRadioStyle}" />
                             <RadioButton Content="150%" GroupName="WindowTitleScale" IsChecked="{Binding SelectedWindowTitleScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=OneFifty}" Style="{StaticResource ChoiceRadioStyle}" />
                         </WrapPanel>
+                        <Separator Margin="0,14" />
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Appearance.AppNameLengthHeading}" />
+                        <TextBlock Margin="0,4,0,10" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Appearance.AppNameLengthDetail}" TextWrapping="Wrap" />
+                        <WrapPanel>
+                            <RadioButton Content="{DynamicResource Appearance.AppNameLength.Five}" GroupName="AppNameLength" IsChecked="{Binding SelectedAppNameLengthPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Five}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Appearance.AppNameLength.Six}" GroupName="AppNameLength" IsChecked="{Binding SelectedAppNameLengthPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Six}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Appearance.AppNameLength.Seven}" GroupName="AppNameLength" IsChecked="{Binding SelectedAppNameLengthPreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Seven}" Style="{StaticResource ChoiceRadioStyle}" />
+                        </WrapPanel>
                         <TextBlock Margin="0,12,0,0" FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Appearance.ThemeHeading}" />
                         <WrapPanel Margin="0,10,0,0">
                             <RadioButton Content="{DynamicResource Appearance.Theme.Transparent}" GroupName="Appearance" IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Transparent}" Style="{StaticResource ChoiceRadioStyle}" />
@@ -275,6 +283,13 @@
                         <StackPanel.Style>
                             <Style TargetType="StackPanel"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding SelectedSettingsTab}" Value="{x:Static viewModels:SettingsTab.Behavior}"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style>
                         </StackPanel.Style>
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="{DynamicResource Behavior.ElevatedHeading}" />
+                        <CheckBox x:Name="ElevatedAutoStartCheckBox" Margin="0,10,0,0" Click="OnElevatedAutoStartClick" Content="{DynamicResource Behavior.ElevatedAutoStart}" FontWeight="SemiBold" Foreground="{Binding TextBrush}" />
+                        <TextBlock Margin="0,4,0,0" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Behavior.ElevatedDetail}" TextWrapping="Wrap" />
+                        <StackPanel Margin="0,8,0,15" Orientation="Horizontal">
+                            <TextBlock x:Name="ElevationStatusText" VerticalAlignment="Center" FontSize="11" Foreground="{Binding AccentBrush}" />
+                            <Button x:Name="RestartElevatedButton" Margin="12,0,0,0" Padding="10,4" Click="OnRestartElevatedClick" Content="{DynamicResource Behavior.RestartElevated}" Visibility="Collapsed" />
+                        </StackPanel>
                         <CheckBox Content="{DynamicResource Behavior.AlwaysOnTop}" IsChecked="{Binding IsAlwaysOnTop}" FontWeight="SemiBold" Foreground="{Binding TextBrush}" />
                         <TextBlock Margin="0,4,0,15" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="{DynamicResource Behavior.AlwaysOnTopDetail}" />
                         <CheckBox Content="{DynamicResource Behavior.Compact}" IsChecked="{Binding IsCompactOverlayEnabled}" FontWeight="SemiBold" Foreground="{Binding TextBrush}" />

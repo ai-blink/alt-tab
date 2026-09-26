@@ -23,18 +23,22 @@
         UseLayoutRounding="True">
     <Window.Resources>
         <app:EnumEqualsConverter x:Key="EnumEqualsConverter" />
+        <app:WindowIconConverter x:Key="WindowIconConverter" />
+        <app:AppNameLabelConverter x:Key="AppNameLabelConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
+        <!-- 24px target shown only on the hovered or selected card; hidden (not collapsed) so the title does not re-trim on hover. -->
         <Style x:Key="WindowCloseButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="20" />
-            <Setter Property="Height" Value="20" />
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Visibility" Value="Hidden" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Background" Value="#CC252B35" />
             <Setter Property="BorderBrush" Value="#99AAB5C5" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Foreground" Value="#DDE4EE" />
             <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
-            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontSize" Value="11" />
             <Setter Property="Content" Value="&#xE8BB;" />
             <Setter Property="ToolTip" Value="{DynamicResource Main.CloseWindowTooltip}" />
             <Setter Property="Template">
@@ -61,6 +65,14 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
 
         <DataTemplate x:Key="GridWindowTemplate">
@@ -74,7 +86,7 @@
                 <Grid Background="{Binding ThumbnailBrush}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="28" />
+                        <RowDefinition Height="32" />
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0"
@@ -122,19 +134,45 @@
                             Padding="8,3">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0"
+                            <StackPanel Grid.Column="0"
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center">
+                                <Image Width="16"
+                                       Height="16"
                                        VerticalAlignment="Center"
-                                       FontSize="{Binding DataContext.GridAppLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
-                                       FontWeight="SemiBold"
-                                       Foreground="#B8C2D3"
-                                       Text="{Binding AppName}"
-                                       TextTrimming="CharacterEllipsis" />
+                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                       Source="{Binding Handle, Converter={StaticResource WindowIconConverter}}" />
+                                <TextBlock Margin="6,0,0,0"
+                                           VerticalAlignment="Center"
+                                           FontSize="{Binding DataContext.GridAppLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
+                                           FontWeight="SemiBold"
+                                           Foreground="#B8C2D3"
+                                           ToolTip="{Binding AppName}">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource AppNameLabelConverter}">
+                                            <Binding Path="AppName" />
+                                            <Binding Path="Title" />
+                                            <Binding Path="DataContext.AppNameMaxLength" RelativeSource="{RelativeSource AncestorType=Window}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <Trigger Property="Text" Value="">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
                             <TextBlock Grid.Column="1"
+                                       Margin="8,0,0,0"
                                        VerticalAlignment="Center"
                                        FontSize="{Binding DataContext.GridTitleLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
                                        FontWeight="SemiBold"
@@ -186,7 +224,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="26" />
+                        <RowDefinition Height="30" />
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0"
@@ -207,20 +245,46 @@
                             ClipToBounds="True">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="54" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
+                            <StackPanel Grid.Column="0"
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center">
+                                <Image Width="14"
+                                       Height="14"
                                        VerticalAlignment="Center"
-                                       FontSize="{Binding DataContext.CompactAppLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
-                                       FontWeight="SemiBold"
-                                       Foreground="#B8C2D3"
-                                       Text="{Binding AppName}"
-                                       TextTrimming="CharacterEllipsis" />
+                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                       Source="{Binding Handle, Converter={StaticResource WindowIconConverter}}" />
+                                <TextBlock Margin="6,0,0,0"
+                                           VerticalAlignment="Center"
+                                           FontSize="{Binding DataContext.CompactAppLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
+                                           FontWeight="SemiBold"
+                                           Foreground="#B8C2D3"
+                                           ToolTip="{Binding AppName}">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource AppNameLabelConverter}">
+                                            <Binding Path="AppName" />
+                                            <Binding Path="Title" />
+                                            <Binding Path="DataContext.AppNameMaxLength" RelativeSource="{RelativeSource AncestorType=Window}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <Trigger Property="Text" Value="">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
                             <TextBlock Grid.Column="1"
+                                       Margin="7,0,0,0"
                                        VerticalAlignment="Center"
                                        FontSize="{Binding DataContext.CompactTitleLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
                                        FontWeight="SemiBold"
@@ -298,13 +362,21 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0"
-                                       VerticalAlignment="Center"
-                                       FontSize="{Binding DataContext.ListAppLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
-                                       FontWeight="SemiBold"
-                                       Foreground="{Binding DataContext.TextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
-                                       Text="{Binding AppName}"
-                                       TextTrimming="CharacterEllipsis" />
+                            <DockPanel Grid.Row="0"
+                                       VerticalAlignment="Center">
+                                <Image DockPanel.Dock="Left"
+                                       Width="20"
+                                       Height="20"
+                                       Margin="0,0,7,0"
+                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                       Source="{Binding Handle, Converter={StaticResource WindowIconConverter}}" />
+                                <TextBlock VerticalAlignment="Center"
+                                           FontSize="{Binding DataContext.ListAppLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
+                                           FontWeight="SemiBold"
+                                           Foreground="{Binding DataContext.TextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+                                           Text="{Binding AppName}"
+                                           TextTrimming="CharacterEllipsis" />
+                            </DockPanel>
                             <TextBlock Grid.Row="1"
                                        FontFamily="Cascadia Mono, Consolas"
                                        FontSize="9"
@@ -446,15 +518,45 @@
                                               VerticalAlignment="Center" />
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Root" Property="Background" Value="#4A54A3FF" />
-                                <Setter Property="Foreground" Value="White" />
-                            </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Root" Property="Background" Value="#2454A3FF" />
                             </Trigger>
+                            <!-- Declared after hover so a checked control keeps its solid accent; translucent accent made white text unreadable on Light. -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#FF1F6FD1" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="Root" Property="Background" Value="#3A54A3FF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SortMenuButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="11,0" />
+            <Setter Property="Background" Value="{Binding SegmentBackground}" />
+            <Setter Property="BorderBrush" Value="{Binding BorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="{Binding TextBrush}" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Root"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#2454A3FF" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -482,12 +584,13 @@
                                               VerticalAlignment="Center" />
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Root" Property="Background" Value="#4A54A3FF" />
-                                <Setter Property="Foreground" Value="White" />
-                            </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Root" Property="Background" Value="#2454A3FF" />
+                            </Trigger>
+                            <!-- Declared after hover so a checked control keeps its solid accent; translucent accent made white text unreadable on Light. -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#FF1F6FD1" />
+                                <Setter Property="Foreground" Value="White" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -503,24 +606,27 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
-                        <Border x:Name="SelectionFrame"
-                                Background="Transparent"
+                        <!-- Thick selection = 2px accent ring + 2px soft halo; same 4px footprint as before so layout math is unchanged. -->
+                        <Border x:Name="SelectionHalo"
                                 BorderBrush="Transparent"
                                 BorderThickness="2"
-                                CornerRadius="9"
-                                Padding="2">
-                            <ContentPresenter />
+                                CornerRadius="11">
+                            <Border x:Name="SelectionFrame"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="2"
+                                    CornerRadius="9">
+                                <ContentPresenter />
+                            </Border>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="SelectionFrame" Property="BorderBrush" Value="#6654A3FF" />
+                                <Setter TargetName="SelectionFrame" Property="BorderBrush" Value="#8854A3FF" />
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="SelectionFrame" Property="BorderBrush" Value="#FF54A3FF" />
-                                <Setter TargetName="SelectionFrame" Property="Background" Value="#2454A3FF" />
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                                <Setter TargetName="SelectionFrame" Property="BorderBrush" Value="#FF54A3FF" />
+                                <Setter TargetName="SelectionFrame" Property="Background" Value="#3354A3FF" />
+                                <Setter TargetName="SelectionHalo" Property="BorderBrush" Value="#6654A3FF" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -600,6 +706,27 @@
                                            FontSize="12"
                                            Foreground="{Binding MutedTextBrush}"
                                            Text="&#xE721;" />
+                                <TextBlock Grid.Column="1"
+                                           Margin="3,0,0,0"
+                                           VerticalAlignment="Center"
+                                           FontSize="13"
+                                           Foreground="{Binding MutedTextBrush}"
+                                           IsHitTestVisible="False"
+                                           Text="{DynamicResource Main.SearchPlaceholder}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SearchText}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding SearchText}" Value="">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <TextBox Grid.Column="1"
                                          VerticalContentAlignment="Center"
                                          Background="Transparent"
@@ -650,65 +777,28 @@
                                 </StackPanel>
                             </Border>
 
-                            <Border Height="30"
-                                    Margin="0,0,8,0"
-                                    Background="{Binding SegmentBackground}"
-                                    BorderBrush="{Binding BorderBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="7"
-                                    Padding="1">
-                                <StackPanel Orientation="Horizontal">
-                                    <RadioButton Content="{DynamicResource Main.Theme.Transparent}"
-                                                 GroupName="Appearance"
-                                                 IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Transparent}"
-                                                 Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="{DynamicResource Main.Theme.Dark}"
-                                                 GroupName="Appearance"
-                                                 IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Dark}"
-                                                 Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="{DynamicResource Main.Theme.Light}"
-                                                 GroupName="Appearance"
-                                                 IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Light}"
-                                                 Style="{StaticResource ModeRadioStyle}" />
-                                </StackPanel>
-                            </Border>
 
-                            <Border Height="30"
+                            <Button x:Name="SortMenuButton"
+                                    Height="30"
                                     Margin="0,0,8,0"
-                                    Background="{Binding SegmentBackground}"
-                                    BorderBrush="{Binding BorderBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="7"
-                                    Padding="1"
+                                    AutomationProperties.Name="Sort windows"
+                                    Click="OnSortMenuButtonClick"
+                                    Style="{StaticResource SortMenuButtonStyle}"
                                     ToolTip="{DynamicResource Main.SortTooltip}">
                                 <StackPanel Orientation="Horizontal">
-                                    <RadioButton Content="{DynamicResource Main.Sort.Recent}"
-                                                 AutomationProperties.Name="Sort by recent"
-                                                 GroupName="SortMode"
-                                                 IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Recent}"
-                                                 Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="{DynamicResource Main.Sort.App}"
-                                                 AutomationProperties.Name="Sort by app"
-                                                 GroupName="SortMode"
-                                                 IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=App}"
-                                                 Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="{DynamicResource Main.Sort.Monitor}"
-                                                 AutomationProperties.Name="Sort by monitor"
-                                                 GroupName="SortMode"
-                                                 IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Monitor}"
-                                                 Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="{DynamicResource Main.Sort.Title}"
-                                                 AutomationProperties.Name="Sort by title"
-                                                 GroupName="SortMode"
-                                                 IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Title}"
-                                                 Style="{StaticResource ModeRadioStyle}" />
-                                    <RadioButton Content="{DynamicResource Main.Sort.Favorites}"
-                                                 AutomationProperties.Name="Sort by favorites"
-                                                 GroupName="SortMode"
-                                                 IsChecked="{Binding SelectedSortMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Favorites}"
-                                                 Style="{StaticResource ModeRadioStyle}" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding SortModeLabel}" />
+                                    <TextBlock Margin="7,1,0,0" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" FontSize="9" Text="&#xE70D;" />
                                 </StackPanel>
-                            </Border>
+                                <Button.ContextMenu>
+                                    <ContextMenu Placement="Bottom">
+                                        <MenuItem Header="{DynamicResource Main.Sort.Recent}" Tag="Recent" Click="OnSortMenuItemClick" IsChecked="{Binding SelectedSortMode, Mode=OneWay, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Recent}" />
+                                        <MenuItem Header="{DynamicResource Main.Sort.App}" Tag="App" Click="OnSortMenuItemClick" IsChecked="{Binding SelectedSortMode, Mode=OneWay, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=App}" />
+                                        <MenuItem Header="{DynamicResource Main.Sort.Monitor}" Tag="Monitor" Click="OnSortMenuItemClick" IsChecked="{Binding SelectedSortMode, Mode=OneWay, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Monitor}" />
+                                        <MenuItem Header="{DynamicResource Main.Sort.Title}" Tag="Title" Click="OnSortMenuItemClick" IsChecked="{Binding SelectedSortMode, Mode=OneWay, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Title}" />
+                                        <MenuItem Header="{DynamicResource Main.Sort.Favorites}" Tag="Favorites" Click="OnSortMenuItemClick" IsChecked="{Binding SelectedSortMode, Mode=OneWay, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Favorites}" />
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
 
                             <Button x:Name="SettingsButton"
                                     Content="&#xE713;"

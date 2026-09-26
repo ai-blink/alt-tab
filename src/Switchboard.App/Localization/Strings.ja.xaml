@@ -4,13 +4,19 @@
     <!-- Keys must match Strings.ko.xaml exactly (LocalizationTests). -->
 
     <!-- Overlay -->
+    <sys:String x:Key="Main.WindowCount">{0} 個のウィンドウ</sys:String>
+    <sys:String x:Key="Main.WindowCount.Single">1 個のウィンドウ</sys:String>
+    <sys:String x:Key="Main.SearchPlaceholder">ウィンドウのタイトルやアプリ名で検索</sys:String>
+    <sys:String x:Key="Main.SortButton">並べ替え: {0}</sys:String>
+    <sys:String x:Key="Appearance.AppNameLengthHeading">アプリ名の長さ</sys:String>
+    <sys:String x:Key="Appearance.AppNameLengthDetail">ウィンドウカードのアイコンの横に表示するアプリ名の最大文字数です。ウィンドウタイトルがアプリ名で始まる場合は表示しません。</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Five">5 文字</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Six">6 文字</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Seven">7 文字</sys:String>
     <sys:String x:Key="Main.CloseWindowTooltip">ウィンドウを閉じる</sys:String>
     <sys:String x:Key="Main.View.Grid">グリッド</sys:String>
     <sys:String x:Key="Main.View.Compact">コンパクト</sys:String>
     <sys:String x:Key="Main.View.List">リスト</sys:String>
-    <sys:String x:Key="Main.Theme.Transparent">透明</sys:String>
-    <sys:String x:Key="Main.Theme.Dark">ダーク</sys:String>
-    <sys:String x:Key="Main.Theme.Light">ライト</sys:String>
     <sys:String x:Key="Main.SortTooltip">ウィンドウの並べ替え</sys:String>
     <sys:String x:Key="Main.Sort.Recent">最近</sys:String>
     <sys:String x:Key="Main.Sort.App">アプリ</sys:String>
@@ -83,6 +89,13 @@
     <sys:String x:Key="Appearance.Theme.Light">ライト</sys:String>
 
     <!-- Behavior -->
+    <sys:String x:Key="Behavior.ElevatedHeading">管理者ウィンドウでも Alt+Tab を使う</sys:String>
+    <sys:String x:Key="Behavior.ElevatedAutoStart">サインイン時に管理者権限で自動起動</sys:String>
+    <sys:String x:Key="Behavior.ElevatedDetail">タスク マネージャーなど管理者として実行中のウィンドウが前面にあると、Windows は通常の権限のアプリによる Alt+Tab の検出をブロックします。オンにすると Windows タスク スケジューラに登録され、オン・オフの際に権限の確認が一度表示されることがあります。</sys:String>
+    <sys:String x:Key="Behavior.RunningElevated">現在は管理者権限で実行中</sys:String>
+    <sys:String x:Key="Behavior.RunningNormal">現在は通常の権限で実行中</sys:String>
+    <sys:String x:Key="Behavior.RestartElevated">今すぐ管理者権限で再起動</sys:String>
+    <sys:String x:Key="Behavior.ElevatedChangeFailed">タスク スケジューラを更新できませんでした。</sys:String>
     <sys:String x:Key="Behavior.AlwaysOnTop">常に手前に表示</sys:String>
     <sys:String x:Key="Behavior.AlwaysOnTopDetail">切り替え画面を開いている間、ほかの通常のウィンドウより手前に表示します。</sys:String>
     <sys:String x:Key="Behavior.Compact">コンパクト表示を使う</sys:String>

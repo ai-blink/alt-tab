@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Switchboard 오버레이 UX 비교 목업 — 2026-09-27</title>
+<style>
+  :root {
+    --dark-shell: rgba(21,24,30,0.97);
+    --dark-header: rgba(28,31,38,0.94);
+    --dark-card: rgba(35,38,46,0.93);
+    --dark-search: rgba(16,19,25,1);
+    --dark-segment: rgba(11,14,20,1);
+    --dark-border: rgba(69,76,91,1);
+    --dark-text: rgba(246,248,252,1);
+    --dark-muted: rgba(183,192,207,1);
+    --accent: #54a3ff;
+    --accent-strong: #2f6fe0;
+    --accent-ink: #071021;
+
+    --shell: var(--dark-shell);
+    --header: var(--dark-header);
+    --card: var(--dark-card);
+    --search: var(--dark-search);
+    --segment: var(--dark-segment);
+    --border: var(--dark-border);
+    --text: var(--dark-text);
+    --muted: var(--dark-muted);
+  }
+
+  body.light-mode {
+    --shell: rgba(248,250,252,0.98);
+    --header: rgba(255,255,255,0.97);
+    --card: rgba(255,255,255,0.98);
+    --search: rgba(244,246,250,1);
+    --segment: rgba(236,239,245,1);
+    --border: rgba(196,202,214,1);
+    --text: rgba(25,28,34,1);
+    --muted: rgba(78,86,102,1);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #05060a;
+    color: #e7ecf5;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Malgun Gothic", sans-serif;
+    padding: 24px 28px 80px;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+  a { color: var(--accent); }
+
+  header.page-head {
+    border-bottom: 1px solid #262b36;
+    padding-bottom: 16px;
+    margin-bottom: 22px;
+  }
+  header.page-head h1 { font-size: 20px; margin: 0 0 6px; }
+  header.page-head p { margin: 4px 0; font-size: 13px; color: #aab4c6; line-height: 1.6; }
+
+  .gate-box {
+    background: #1a1408;
+    border: 1px solid #6a4c14;
+    color: #ffd98a;
+    font-size: 12.5px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 12px 0;
+    line-height: 1.6;
+  }
+  .advice-box {
+    background: #0d1c14;
+    border: 1px solid #235a3c;
+    color: #a9e6c4;
+    font-size: 12.5px;
+    padding: 9px 13px;
+    border-radius: 8px;
+    margin: 10px 0 16px;
+    line-height: 1.6;
+  }
+
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #aab4c6;
+    margin-top: 8px;
+  }
+  .theme-toggle button {
+    background: #171b24;
+    border: 1px solid #333a48;
+    color: #dfe6f2;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .theme-toggle button.active { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+
+  section.compare-section {
+    margin: 34px 0 42px;
+    padding-top: 6px;
+  }
+  section.compare-section > h2 {
+    font-size: 16px;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  section.compare-section > h2 .n { color: #6f7a8c; font-size: 12px; font-weight: 400; }
+  .problem-note {
+    font-size: 12.5px;
+    color: #ff9b9b;
+    background: #241212;
+    border: 1px solid #5a2323;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+
+  .variant-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .variant-grid.stacked { flex-direction: column; }
+
+  .variant {
+    border: 1px solid #262b36;
+    border-radius: 12px;
+    background: #0c0e13;
+    padding: 12px;
+  }
+  .variant .v-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .variant .v-tag {
+    font-family: "Cascadia Mono", Consolas, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: #22262f;
+    color: #cfd6e4;
+  }
+  .variant.is-current .v-tag { background: #402323; color: #ffb4b4; }
+  .variant .v-title { font-size: 13px; font-weight: 600; color: #e7ecf5; }
+  .variant .v-caption { font-size: 12px; color: #93a0b5; margin: 0 0 10px; line-height: 1.5; }
+
+  /* ---- shell surface for the switcher card grid ---- */
+  .stage {
+    background: var(--shell);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  /* ---- card grid (sections 1 & 3) ---- */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 132px);
+    gap: 8px;
+  }
+  .card {
+    position: relative;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    overflow: hidden;
+    height: 104px;
+    display: flex;
+    flex-direction: column;
+  }
+  .thumb {
+    flex: 1;
+    position: relative;
+  }
+  .thumb-dots { position: absolute; top: 5px; left: 6px; display: flex; gap: 3px; }
+  .thumb-dots i { width: 4px; height: 4px; border-radius: 50%; display: block; background: rgba(255,255,255,0.35); }
+  .thumb-wrap { position: relative; flex: 1; }
+  .icon-overlay {
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.6));
+  }
+
+  .app-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-weight: 700;
+    flex: none;
+    line-height: 1;
+  }
+
+  .cap {
+    background: rgba(11,15,22,0.86);
+    border-top: 1px solid rgba(108,122,144,0.2);
+    padding: 4px 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 26px;
+  }
+  .cap .title { color: #fff; font-size: 11px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cap .app-name { color: #b8c2d3; font-size: 11px; font-weight: 600; width: 62px; flex: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cap-b { align-items: flex-start; padding-top: 5px; }
+  .cap-b-lines { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .cap-b-lines .title { font-size: 11px; }
+  .cap-b-lines .app-sub { font-size: 9.5px; color: #8b96aa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .close-x {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 1px solid rgba(170,181,197,0.5);
+    background: rgba(37,43,53,0.8);
+    color: #dde4ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+  }
+  .close-x svg { width: 9px; height: 9px; }
+  .close-x.on-hover { opacity: 0; transition: opacity .15s ease; }
+  .card:hover .close-x.on-hover,
+  .s3-card:hover .close-x.on-hover,
+  .card.selected .close-x.on-hover,
+  .s3-card.selected .close-x.on-hover { opacity: 1; }
+
+  /* section 1: current baseline selection border reused for visual parity */
+  .sec1-cur { border-color: var(--border); }
+
+  /* ---- section 3: selection + close-button styling ---- */
+  .s3-stage {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 12px;
+    background: rgba(21,24,30,0.55);
+  }
+  .s3-stage.stage-opaque {
+    background: rgba(21,24,30,0.96);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  }
+  .ghost-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 12px;
+    padding: 14px;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+  .ghost-bg span {
+    font-size: 12px;
+    color: #d7dcea;
+    opacity: 0.75;
+    white-space: nowrap;
+    font-family: "Cascadia Mono", Consolas, monospace;
+  }
+  .s3-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 132px);
+    gap: 8px;
+  }
+  .s3-card {
+    position: relative;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: rgba(35,38,46,0.42);
+    overflow: hidden;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .s3-card.opaque-bg { background: rgba(35,38,46,0.95); }
+  .s3-card.blur-bg { backdrop-filter: blur(12px) saturate(1.3); -webkit-backdrop-filter: blur(12px) saturate(1.3); }
+  .s3-card .thumb { background: rgba(255,255,255,0.05); }
+  .s3-card .s3-cap {
+    background: rgba(11,15,22,0.88);
+    border-top: 1px solid rgba(108,122,144,0.2);
+    padding: 4px 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 24px;
+  }
+  .s3-card .s3-cap .title { color: #fff; font-size: 10.5px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .s3-card.ring-thin.selected { border: 2px solid var(--accent); }
+  .s3-card.ring-thick.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(84,163,255,0.55), 0 6px 14px rgba(0,0,0,0.45);
+    transform: translateY(-3px);
+  }
+  .s3-card.cap-filled.selected .s3-cap { background: var(--accent-strong); }
+  .s3-card.cap-filled.selected .s3-cap .title { color: #ffffff; }
+
+  /* ---- toolbar variants (section 2) ---- */
+  .toolbar-stage {
+    background: var(--dark-shell);
+    border: 1px solid var(--dark-border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    width: 100%;
+    max-width: 980px;
+  }
+  .toolbar-row { display: flex; align-items: center; gap: 10px; }
+  .tb-title { flex: none; min-width: 118px; }
+  .tb-title .name { font-size: 15px; font-weight: 600; color: var(--dark-text); }
+  .tb-title .count { font-family: "Cascadia Mono", Consolas, monospace; font-size: 10px; color: var(--dark-muted); }
+
+  .tb-search {
+    flex: 1;
+    min-width: 160px;
+    height: 32px;
+    background: var(--dark-search);
+    border: 1px solid var(--dark-border);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+    color: var(--dark-muted);
+  }
+  .tb-search svg { width: 14px; height: 14px; flex: none; }
+  .tb-search input {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    outline: none;
+    color: var(--dark-text);
+    font-size: 12.5px;
+  }
+  .tb-search input::placeholder { color: #6b7484; }
+  .tb-kbd {
+    flex: none;
+    font-family: "Cascadia Mono", Consolas, monospace;
+    font-size: 10px;
+    color: var(--dark-muted);
+    background: var(--dark-segment);
+    border-radius: 4px;
+    padding: 2px 6px;
+  }
+
+  .tb-segment {
+    display: flex;
+    background: var(--dark-segment);
+    border: 1px solid var(--dark-border);
+    border-radius: 7px;
+    padding: 2px;
+    gap: 2px;
+    flex: none;
+  }
+  .tb-seg-item {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: var(--dark-muted);
+    cursor: default;
+  }
+  .tb-seg-item.selected-lowcontrast { background: rgba(74,84,163,0.42); color: rgba(255,255,255,0.55); }
+  .tb-seg-item.selected-fixed { background: var(--accent); color: var(--accent-ink); }
+
+  .tb-icon-btn {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: 1px solid var(--dark-border);
+    background: transparent;
+    color: var(--dark-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tb-icon-btn svg { width: 14px; height: 14px; }
+
+  .tb-dropdown-btn {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 7px;
+    border: 1px solid var(--dark-border);
+    background: var(--dark-segment);
+    color: var(--dark-text);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tb-dropdown-btn svg { width: 13px; height: 13px; }
+  .tb-dropdown-panel {
+    display: none;
+    margin-top: 8px;
+    background: var(--dark-header);
+    border: 1px solid var(--dark-border);
+    border-radius: 8px;
+    padding: 10px;
+    gap: 14px;
+  }
+  .tb-dropdown-panel.open { display: flex; }
+  .tb-dropdown-panel .grp { display: flex; flex-direction: column; gap: 6px; }
+  .tb-dropdown-panel .grp-label { font-size: 10px; color: var(--dark-muted); font-weight: 700; }
+
+  /* ---- helper / footer ---- */
+  .pick-helper {
+    margin-top: 40px;
+    border-top: 1px solid #262b36;
+    padding-top: 18px;
+  }
+  .pick-helper h2 { font-size: 15px; margin: 0 0 10px; }
+  .pick-row { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; flex-wrap: wrap; }
+  .pick-row .pick-label { width: 90px; flex: none; font-size: 12.5px; color: #aab4c6; }
+  .pick-row label.opt {
+    font-size: 12px;
+    color: #d7dde8;
+    background: #171b24;
+    border: 1px solid #2b303c;
+    border-radius: 6px;
+    padding: 4px 9px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .pick-row input[type="radio"]:checked + span { color: #fff; }
+  .pick-row label.opt:has(input:checked) { background: var(--accent-strong); border-color: var(--accent-strong); }
+  #copyBtn {
+    margin-top: 10px;
+    background: var(--accent-strong);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #copyResult { margin-top: 8px; font-size: 12.5px; color: #9fe6b0; font-family: "Cascadia Mono", Consolas, monospace; }
+
+  svg.icon { stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <h1>Switchboard 오버레이 UX 비교 목업 — 아이콘·라벨 / 툴바 / 카드 표시</h1>
+  <p>현재 스크린샷(24개 창)에서 관찰된 문제 3가지를 각각 섹션으로 나눠, 현재 상태(CURRENT)와 2~3개 변형안(A/B/C)을 나란히 비교합니다.</p>
+  <div class="gate-box">
+    이 페이지는 아무것도 결정하지 않습니다. 세 섹션 모두 <b>사용자가 눈으로 보고 직접 고르는 용도</b>이며,
+    아래 "선택 결과" 라디오는 고른 값을 문자열로만 정리해 줄 뿐 채택 여부를 판단하지 않습니다.
+  </div>
+  <div class="theme-toggle">
+    미리보기 배경:
+    <button type="button" id="btnDark" class="active" onclick="setTheme('dark')">다크</button>
+    <button type="button" id="btnLight" onclick="setTheme('light')">라이트</button>
+    <span style="color:#6f7a8c;">(참고용 — 카드/툴바 자체 색은 프로젝트 다크 팔레트를 그대로 씀)</span>
+  </div>
+</header>
+
+<!-- ================= SECTION 1 ================= -->
+<section class="compare-section" id="sec1">
+  <h2>섹션 1 — 앱 아이콘 · 라벨 <span class="n">현재 + A/B/C</span></h2>
+  <div class="problem-note">
+    현재 문제: 카드에 앱 아이콘이 없고, 캡션이 "앱이름(8자 절단) + 제목"이라 "Hermes Hermes", "ChatGPT ChatGPT"처럼 같은 말이 반복되거나
+    "MiniCap…", "Everythi…"처럼 잘려서 무슨 앱인지 알아보기 어렵습니다.
+  </div>
+  <div class="advice-box">
+    체크포인트: 아이콘만 보고 앱을 바로 알아볼 수 있는지, 이름이 중복될 때 각 변형이 자연스럽게 처리하는지, 카드 폭이 좁아도 제목이 충분히 보이는지를 비교하세요.
+  </div>
+
+  <div class="variant-grid">
+    <div class="variant is-current">
+      <div class="v-label"><span class="v-tag">CURRENT</span><span class="v-title">아이콘 없음 · 이름+제목 항상 표시</span></div>
+      <p class="v-caption">아이콘 없이 "앱이름(절단) + 제목"을 항상 나란히 표시 → 중복·절단 문제 그대로 재현.</p>
+      <div class="stage"><div class="card-grid" id="sec1-current"></div></div>
+    </div>
+
+    <div class="variant">
+      <div class="v-label"><span class="v-tag">A</span><span class="v-title">아이콘 + 제목만, 앱이름은 툴팁</span></div>
+      <p class="v-caption">캡션엔 제목만 크게 표시. 앱이름은 카드에 마우스를 올렸을 때 툴팁으로만 노출 (카드에 title 속성 적용).</p>
+      <div class="stage"><div class="card-grid" id="sec1-a"></div></div>
+    </div>
+
+    <div class="variant">
+      <div class="v-label"><span class="v-tag">B</span><span class="v-title">아이콘 + 제목, 다를 때만 앱이름 2줄</span></div>
+      <p class="v-caption">제목이 1줄, 앱이름은 제목과 다를 때만 작은 2번째 줄로 추가 표시(중복 자동 제거).</p>
+      <div class="stage"><div class="card-grid" id="sec1-b"></div></div>
+    </div>
+
+    <div class="variant">
+      <div class="v-label"><span class="v-tag">C</span><span class="v-title">큰 아이콘을 썸네일 모서리에 overlay</span></div>
+      <p class="v-caption">아이콘을 썸네일 좌하단에 크게 겹쳐 표시하고, 캡션엔 제목만 남김.</p>
+      <div class="stage"><div class="card-grid" id="sec1-c"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECTION 2 ================= -->
+<section class="compare-section" id="sec2">
+  <h2>섹션 2 — 툴바 간소화 <span class="n">현재 + A/B</span></h2>
+  <div class="problem-note">
+    현재 문제: 검색창에 placeholder가 없고, 보기/테마/정렬 3개 세그먼트 + 아이콘 버튼 4개가 한 줄에 몰려 있으며,
+    선택된 세그먼트 텍스트(예: 라이트, 즐겨찾기)의 대비가 매우 낮아 어떤 게 선택됐는지 읽기 어렵습니다.
+  </div>
+  <div class="advice-box">
+    체크포인트: 선택된 세그먼트 글자가 확실히 읽히는지, 자주 안 쓰는 테마 전환이 툴바에서 빠져도 불편하지 않은지,
+    검색창에 placeholder가 생겨 첫 화면에서 무엇을 입력할 수 있는지 바로 아는지 비교하세요.
+  </div>
+
+  <div class="variant-grid stacked">
+    <div class="variant is-current">
+      <div class="v-label"><span class="v-tag">CURRENT</span><span class="v-title">검색 placeholder 없음 · 3단 세그먼트 · 저대비 선택</span></div>
+      <p class="v-caption">검색창에 안내 문구가 없고, 보기/테마/정렬 세그먼트가 모두 노출되며 선택 항목 글자가 흐릿합니다.</p>
+      <div class="toolbar-stage">
+        <div class="toolbar-row">
+          <div class="tb-title"><div class="name">Switchboard</div><div class="count">24 windows</div></div>
+          <div class="tb-search">
+            ##ICON_SEARCH##
+            <input type="text" placeholder="" readonly />
+            <span class="tb-kbd">Ctrl+K</span>
+          </div>
+          <div class="tb-segment">
+            <span class="tb-seg-item selected-lowcontrast">격자</span>
+            <span class="tb-seg-item">압축</span>
+            <span class="tb-seg-item">목록</span>
+          </div>
+          <div class="tb-segment">
+            <span class="tb-seg-item">투명</span>
+            <span class="tb-seg-item">다크</span>
+            <span class="tb-seg-item selected-lowcontrast">라이트</span>
+          </div>
+          <div class="tb-segment">
+            <span class="tb-seg-item">최근</span>
+            <span class="tb-seg-item">앱</span>
+            <span class="tb-seg-item">모니터</span>
+            <span class="tb-seg-item">제목</span>
+            <span class="tb-seg-item selected-lowcontrast">즐겨찾기</span>
+          </div>
+          <button class="tb-icon-btn" title="설정">##ICON_SETTINGS##</button>
+          <button class="tb-icon-btn" title="항상 위">##ICON_PIN##</button>
+          <button class="tb-icon-btn" title="새로 고침">##ICON_REFRESH##</button>
+          <button class="tb-icon-btn" title="닫기">##ICON_CLOSE##</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="variant">
+      <div class="v-label"><span class="v-tag">A</span><span class="v-title">검색 placeholder + 보기 세그먼트 + 정렬 드롭다운, 테마는 설정으로 이동</span></div>
+      <p class="v-caption">테마 전환은 설정 창으로 옮기고, 정렬은 5개 라디오 대신 드롭다운 1개로 축소. 선택 세그먼트는 고대비로 고정.</p>
+      <div class="toolbar-stage">
+        <div class="toolbar-row">
+          <div class="tb-title"><div class="name">Switchboard</div><div class="count">24 windows</div></div>
+          <div class="tb-search">
+            ##ICON_SEARCH##
+            <input type="text" placeholder="창 제목이나 앱 이름으로 검색" readonly />
+            <span class="tb-kbd">Ctrl+K</span>
+          </div>
+          <div class="tb-segment">
+            <span class="tb-seg-item selected-fixed">격자</span>
+            <span class="tb-seg-item">압축</span>
+            <span class="tb-seg-item">목록</span>
+          </div>
+          <button class="tb-dropdown-btn" type="button" onclick="toggleDropdown('ddA')">정렬: 최근 ##ICON_CHEVRON##</button>
+          <button class="tb-icon-btn" title="설정">##ICON_SETTINGS##</button>
+          <button class="tb-icon-btn" title="항상 위">##ICON_PIN##</button>
+          <button class="tb-icon-btn" title="새로 고침">##ICON_REFRESH##</button>
+          <button class="tb-icon-btn" title="닫기">##ICON_CLOSE##</button>
+        </div>
+        <div class="tb-dropdown-panel" id="ddA">
+          <div class="grp"><span class="grp-label">정렬</span>
+            <span class="tb-seg-item selected-fixed" style="width:fit-content;">최근</span>
+            <span class="tb-seg-item" style="width:fit-content;">앱</span>
+            <span class="tb-seg-item" style="width:fit-content;">모니터</span>
+            <span class="tb-seg-item" style="width:fit-content;">제목</span>
+            <span class="tb-seg-item" style="width:fit-content;">즐겨찾기</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="variant">
+      <div class="v-label"><span class="v-tag">B</span><span class="v-title">검색 중심 최소 바 + "보기·정렬" 통합 메뉴 버튼</span></div>
+      <p class="v-caption">검색창이 가장 넓고, 보기+테마+정렬을 버튼 하나로 묶어 눌렀을 때만 펼침. 평소엔 아이콘 버튼 4개만 남아 가장 한산함.</p>
+      <div class="toolbar-stage">
+        <div class="toolbar-row">
+          <div class="tb-title"><div class="name">Switchboard</div><div class="count">24 windows</div></div>
+          <div class="tb-search" style="flex:2;">
+            ##ICON_SEARCH##
+            <input type="text" placeholder="창 제목이나 앱 이름으로 검색" readonly />
+            <span class="tb-kbd">Ctrl+K</span>
+          </div>
+          <button class="tb-dropdown-btn" type="button" onclick="toggleDropdown('ddB')">##ICON_GRID## 보기·정렬 ##ICON_CHEVRON##</button>
+          <button class="tb-icon-btn" title="설정">##ICON_SETTINGS##</button>
+          <button class="tb-icon-btn" title="항상 위">##ICON_PIN##</button>
+          <button class="tb-icon-btn" title="새로 고침">##ICON_REFRESH##</button>
+          <button class="tb-icon-btn" title="닫기">##ICON_CLOSE##</button>
+        </div>
+        <div class="tb-dropdown-panel" id="ddB">
+          <div class="grp"><span class="grp-label">보기</span>
+            <span class="tb-seg-item selected-fixed" style="width:fit-content;">격자</span>
+            <span class="tb-seg-item" style="width:fit-content;">압축</span>
+            <span class="tb-seg-item" style="width:fit-content;">목록</span>
+          </div>
+          <div class="grp"><span class="grp-label">테마</span>
+            <span class="tb-seg-item selected-fixed" style="width:fit-content;">투명</span>
+            <span class="tb-seg-item" style="width:fit-content;">다크</span>
+            <span class="tb-seg-item" style="width:fit-content;">라이트</span>
+          </div>
+          <div class="grp"><span class="grp-label">정렬</span>
+            <span class="tb-seg-item selected-fixed" style="width:fit-content;">최근</span>
+            <span class="tb-seg-item" style="width:fit-content;">앱</span>
+            <span class="tb-seg-item" style="width:fit-content;">모니터</span>
+            <span class="tb-seg-item" style="width:fit-content;">제목</span>
+            <span class="tb-seg-item" style="width:fit-content;">즐겨찾기</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECTION 3 ================= -->
+<section class="compare-section" id="sec3">
+  <h2>섹션 3 — 카드 표시 <span class="n">현재 + A/B/C</span></h2>
+  <div class="problem-note">
+    현재 문제: 선택 표시가 얇은 파란 테두리뿐이라 눈에 잘 안 띄고, 24개 카드 전부에 닫기(X) 버튼이 항상 떠 있어 오클릭 위험이 크며,
+    반투명 배경 때문에 뒤에 있는 다른 창의 글자가 카드 사이로 비쳐 보입니다. 아래 4개 패널은 모두 같은 "번잡한 가짜 배경" 위에 올려 비침 정도를 비교할 수 있게 했습니다.
+  </div>
+  <div class="advice-box">
+    체크포인트: 선택된 카드(작업 관리자)가 한눈에 띄는지, 닫기 버튼이 실수로 눌릴 만큼 자주 보이는지, 카드/여백 사이로 뒤 글자가 얼마나 비치는지(특히 C)를 비교하세요.
+  </div>
+
+  <div class="variant-grid">
+    <div class="variant is-current">
+      <div class="v-label"><span class="v-tag">CURRENT</span><span class="v-title">얇은 테두리 선택 · X 항상 표시 · 반투명</span></div>
+      <p class="v-caption">선택 카드가 1px 파란 테두리뿐이라 잘 안 보이고, 모든 카드에 X가 항상 떠 있으며 배경 글자가 비칩니다.</p>
+      <div class="s3-stage" id="s3-stage-current"></div>
+    </div>
+
+    <div class="variant">
+      <div class="v-label"><span class="v-tag">A</span><span class="v-title">두꺼운 강조 링 + 살짝 들뜨는 효과, X는 호버 시만</span></div>
+      <p class="v-caption">선택 카드에 두꺼운 파란 링과 그림자로 확실히 띄우고, 닫기(X)는 마우스를 올리거나 선택된 카드에서만 나타남.</p>
+      <div class="s3-stage" id="s3-stage-a"></div>
+    </div>
+
+    <div class="variant">
+      <div class="v-label"><span class="v-tag">B</span><span class="v-title">선택 시 캡션 바를 강조색으로 채움, X는 호버 시만</span></div>
+      <p class="v-caption">테두리 대신 캡션 바 배경 전체를 강조색으로 채워 선택을 표시. 닫기(X)는 A와 동일하게 호버 시만.</p>
+      <div class="s3-stage" id="s3-stage-b"></div>
+    </div>
+
+    <div class="variant">
+      <div class="v-label"><span class="v-tag">C</span><span class="v-title">선택 스타일은 A와 동일 + 배경을 더 불투명하게(아크릴)</span></div>
+      <p class="v-caption">선택/닫기 동작은 A와 같고, 패널과 카드 배경 불투명도를 크게 올리고 블러를 더해 뒤 글자 비침을 크게 줄임 — 같은 배경 위 CURRENT와 직접 비교.</p>
+      <div class="s3-stage" id="s3-stage-c"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PICK HELPER ================= -->
+<div class="pick-helper">
+  <h2>선택 결과 (참고용 — 확정 아님)</h2>
+  <div class="pick-row">
+    <span class="pick-label">아이콘·라벨</span>
+    <label class="opt"><input type="radio" name="pick1" value="현재"><span>현재 유지</span></label>
+    <label class="opt"><input type="radio" name="pick1" value="A"><span>A</span></label>
+    <label class="opt"><input type="radio" name="pick1" value="B"><span>B</span></label>
+    <label class="opt"><input type="radio" name="pick1" value="C"><span>C</span></label>
+  </div>
+  <div class="pick-row">
+    <span class="pick-label">툴바</span>
+    <label class="opt"><input type="radio" name="pick2" value="현재"><span>현재 유지</span></label>
+    <label class="opt"><input type="radio" name="pick2" value="A"><span>A</span></label>
+    <label class="opt"><input type="radio" name="pick2" value="B"><span>B</span></label>
+  </div>
+  <div class="pick-row">
+    <span class="pick-label">카드 표시</span>
+    <label class="opt"><input type="radio" name="pick3" value="현재"><span>현재 유지</span></label>
+    <label class="opt"><input type="radio" name="pick3" value="A"><span>A</span></label>
+    <label class="opt"><input type="radio" name="pick3" value="B"><span>B</span></label>
+    <label class="opt"><input type="radio" name="pick3" value="C"><span>C</span></label>
+  </div>
+  <button id="copyBtn" type="button" onclick="copyPick()">선택 결과 복사</button>
+  <div id="copyResult"></div>
+</div>
+
+<script>
+  // ---- non-emoji inline icons ----
+  var ICONS = {
+    SEARCH: '<svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+    SETTINGS: '<svg class="icon" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"></line><circle cx="14" cy="6" r="1.8" fill="currentColor" stroke="none"></circle><line x1="4" y1="12" x2="20" y2="12"></line><circle cx="8" cy="12" r="1.8" fill="currentColor" stroke="none"></circle><line x1="4" y1="18" x2="20" y2="18"></line><circle cx="16" cy="18" r="1.8" fill="currentColor" stroke="none"></circle></svg>',
+    PIN: '<svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M8 3h8l-1 6 3 3H6l3-3-1-6z"></path></svg>',
+    REFRESH: '<svg class="icon" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"></path><polyline points="21 3 21 9 15 9"></polyline></svg>',
+    CLOSE: '<svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="5" x2="19" y2="19"></line><line x1="19" y1="5" x2="5" y2="19"></line></svg>',
+    CHEVRON: '<svg class="icon" viewBox="0 0 24 24" style="width:11px;height:11px;"><polyline points="6 9 12 15 18 9"></polyline></svg>',
+    GRID: '<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>'
+  };
+
+  function fillIconPlaceholders() {
+    document.body.innerHTML = document.body.innerHTML
+      .split('##ICON_SEARCH##').join(ICONS.SEARCH)
+      .split('##ICON_SETTINGS##').join(ICONS.SETTINGS)
+      .split('##ICON_PIN##').join(ICONS.PIN)
+      .split('##ICON_REFRESH##').join(ICONS.REFRESH)
+      .split('##ICON_CLOSE##').join(ICONS.CLOSE)
+      .split('##ICON_CHEVRON##').join(ICONS.CHEVRON)
+      .split('##ICON_GRID##').join(ICONS.GRID);
+  }
+
+  // ---- sample window data (shared across sections) ----
+  var WINDOWS = [
+    { app: '탐색기', title: '문서 - 파일 탐색기', glyph: '탐', color: '#ffb900', dark: false },
+    { app: '작업 관리자', title: '작업 관리자', glyph: '작', color: '#0078d4', dark: false, active: true, selected: true },
+    { app: 'Firefox', title: '줌 넓이 비교 — 원본 리서치', glyph: 'Fx', color: '#ff7139', dark: false },
+    { app: '카카오톡', title: '카카오톡', glyph: '카', color: '#ffe812', dark: true },
+    { app: '명령 프롬프트', title: 'ComfyUI C-Rig (실행 중)', glyph: 'C:', color: '#3a3a3a', dark: false },
+    { app: 'ChatGPT', title: 'ChatGPT', glyph: 'GPT', color: '#10a37f', dark: false },
+    { app: 'Hermes', title: 'Hermes', glyph: 'H', color: '#7c5cff', dark: false },
+    { app: 'Visual Studio Code', title: 'MainWindow.xaml — win-alttab', glyph: '</>', color: '#007acc', dark: false }
+  ];
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function trunc8(s) {
+    return s.length > 8 ? s.slice(0, 7) + '…' : s;
+  }
+  function hexToRgb(hex) {
+    hex = hex.replace('#', '');
+    var n = parseInt(hex, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function rgba(hex, a) {
+    var c = hexToRgb(hex);
+    return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
+  }
+  function appIcon(w, size) {
+    var textColor = w.dark ? '#1a1a1a' : '#ffffff';
+    var fontSize = Math.max(8, Math.round(size * 0.34));
+    return '<span class="app-icon" style="width:' + size + 'px;height:' + size + 'px;background:' + w.color +
+      ';color:' + textColor + ';font-size:' + fontSize + 'px;">' + esc(w.glyph) + '</span>';
+  }
+  function thumbEl(w) {
+    return '<div class="thumb" style="background:linear-gradient(160deg, ' + rgba(w.color, 0.32) + ', rgba(8,10,14,0.9));">' +
+      '<span class="thumb-dots"><i></i><i></i><i></i></span></div>';
+  }
+  function activeBadge(w) {
+    return w.active ? '<span style="position:absolute; top:5px; right:5px; font-family:Consolas,monospace; font-size:8px; font-weight:700; color:#84c0ff; background:rgba(74,163,255,0.28); border-radius:4px; padding:1px 4px;">ACTIVE</span>' : '';
+  }
+
+  // ---- section 1 renderers ----
+  function renderSec1Current() {
+    return WINDOWS.map(function (w) {
+      return '<div class="card sec1-cur">' + thumbEl(w) + activeBadge(w) +
+        '<div class="cap">' +
+        '<span class="app-name">' + esc(trunc8(w.app)) + '</span>' +
+        '<span class="title">' + esc(w.title) + '</span>' +
+        closeBtn('always') +
+        '</div></div>';
+    }).join('');
+  }
+  function renderSec1A() {
+    return WINDOWS.map(function (w) {
+      return '<div class="card" title="' + esc(w.app) + '">' + thumbEl(w) + activeBadge(w) +
+        '<div class="cap">' + appIcon(w, 18) +
+        '<span class="title">' + esc(w.title) + '</span>' +
+        closeBtn('always') +
+        '</div></div>';
+    }).join('');
+  }
+  function renderSec1B() {
+    return WINDOWS.map(function (w) {
+      var sub = (w.app !== w.title) ? '<span class="app-sub">' + esc(w.app) + '</span>' : '';
+      return '<div class="card">' + thumbEl(w) + activeBadge(w) +
+        '<div class="cap cap-b">' + appIcon(w, 18) +
+        '<div class="cap-b-lines"><span class="title">' + esc(w.title) + '</span>' + sub + '</div>' +
+        closeBtn('always') +
+        '</div></div>';
+    }).join('');
+  }
+  function renderSec1C() {
+    return WINDOWS.map(function (w) {
+      return '<div class="card"><div class="thumb-wrap">' + thumbEl(w) + activeBadge(w) +
+        '<div class="icon-overlay">' + appIcon(w, 28) + '</div></div>' +
+        '<div class="cap"><span class="title">' + esc(w.title) + '</span>' + closeBtn('always') + '</div></div>';
+    }).join('');
+  }
+
+  function closeBtn(mode) {
+    return '<button class="close-x ' + (mode === 'hover' ? 'on-hover' : 'always') + '" aria-label="창 닫기">' +
+      '<svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="3"><line x1="5" y1="5" x2="19" y2="19"></line><line x1="19" y1="5" x2="5" y2="19"></line></svg></button>';
+  }
+
+  // ---- section 3 ghost background + card renderer ----
+  var GHOST_PHRASES = [
+    '작업 관리자 - CPU 12%', 'Discord #project-log', '메모장 - 초안.txt', 'YouTube 실시간',
+    '다운로드 폴더', 'Outlook 받은편지함', 'Slack #dev', 'build.log 출력 중',
+    'Steam 라이브러리', 'Notion 프로젝트 노트', '회의록.docx', '원격 데스크톱 세션'
+  ];
+  function ghostBgHtml() {
+    return '<div class="ghost-bg">' + GHOST_PHRASES.map(function (p, i) {
+      var deg = ((i % 2) ? -1 : 1) * (2 + (i % 3));
+      return '<span style="transform:rotate(' + deg + 'deg)">' + esc(p) + '</span>';
+    }).join('') + '</div>';
+  }
+  function sec3Card(w, opts) {
+    var classes = ['s3-card'];
+    if (w.selected) classes.push('selected');
+    if (opts.ring === 'thin') classes.push('ring-thin');
+    if (opts.ring === 'thick') classes.push('ring-thick');
+    if (opts.capFilled) classes.push('cap-filled');
+    if (opts.opaque) classes.push('opaque-bg');
+    if (opts.blur) classes.push('blur-bg');
+    return '<div class="' + classes.join(' ') + '">' + thumbEl(w) + activeBadge(w) +
+      '<div class="s3-cap">' + appIcon(w, 15) +
+      '<span class="title">' + esc(w.title) + '</span>' +
+      closeBtn(opts.closeMode) +
+      '</div></div>';
+  }
+  function renderS3Stage(containerId, opts) {
+    var el = document.getElementById(containerId);
+    el.classList.add('s3-stage');
+    if (opts.stageOpaque) el.classList.add('stage-opaque');
+    var cardsHtml = WINDOWS.map(function (w) { return sec3Card(w, opts); }).join('');
+    el.innerHTML = ghostBgHtml() + '<div class="s3-grid">' + cardsHtml + '</div>';
+  }
+
+  function setTheme(mode) {
+    document.body.classList.toggle('light-mode', mode === 'light');
+    document.getElementById('btnDark').classList.toggle('active', mode !== 'light');
+    document.getElementById('btnLight').classList.toggle('active', mode === 'light');
+  }
+
+  function toggleDropdown(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function copyPick() {
+    function pickOf(name) {
+      var el = document.querySelector('input[name="' + name + '"]:checked');
+      return el ? el.value : '미선택';
+    }
+    var text = '아이콘:' + pickOf('pick1') + ', 툴바:' + pickOf('pick2') + ', 카드:' + pickOf('pick3');
+    var done = function () {
+      document.getElementById('copyResult').textContent = '복사됨 → ' + text;
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text, done); });
+    } else {
+      fallbackCopy(text, done);
+    }
+  }
+  function fallbackCopy(text, done) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) { /* noop */ }
+    document.body.removeChild(ta);
+    done();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    fillIconPlaceholders();
+
+    document.getElementById('sec1-current').innerHTML = renderSec1Current();
+    document.getElementById('sec1-a').innerHTML = renderSec1A();
+    document.getElementById('sec1-b').innerHTML = renderSec1B();
+    document.getElementById('sec1-c').innerHTML = renderSec1C();
+
+    renderS3Stage('s3-stage-current', { ring: 'thin', closeMode: 'always', opaque: false, blur: false, stageOpaque: false });
+    renderS3Stage('s3-stage-a', { ring: 'thick', closeMode: 'hover', opaque: false, blur: false, stageOpaque: false });
+    renderS3Stage('s3-stage-b', { ring: 'none', capFilled: true, closeMode: 'hover', opaque: false, blur: false, stageOpaque: false });
+    renderS3Stage('s3-stage-c', { ring: 'thick', closeMode: 'hover', opaque: true, blur: true, stageOpaque: true });
+  });
+</script>
+</body>
+</html>

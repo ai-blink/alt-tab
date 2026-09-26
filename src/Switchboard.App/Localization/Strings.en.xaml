@@ -4,13 +4,19 @@
     <!-- Keys must match Strings.ko.xaml exactly (LocalizationResourceTests). -->
 
     <!-- Overlay -->
+    <sys:String x:Key="Main.WindowCount">{0} windows</sys:String>
+    <sys:String x:Key="Main.WindowCount.Single">1 window</sys:String>
+    <sys:String x:Key="Main.SearchPlaceholder">Search by window title or app name</sys:String>
+    <sys:String x:Key="Main.SortButton">Sort: {0}</sys:String>
+    <sys:String x:Key="Appearance.AppNameLengthHeading">App name length</sys:String>
+    <sys:String x:Key="Appearance.AppNameLengthDetail">Maximum characters of the app name shown next to the icon on window cards. The name is hidden when the window title already starts with it.</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Five">5 chars</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Six">6 chars</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Seven">7 chars</sys:String>
     <sys:String x:Key="Main.CloseWindowTooltip">Close window</sys:String>
     <sys:String x:Key="Main.View.Grid">Grid</sys:String>
     <sys:String x:Key="Main.View.Compact">Compact</sys:String>
     <sys:String x:Key="Main.View.List">List</sys:String>
-    <sys:String x:Key="Main.Theme.Transparent">Clear</sys:String>
-    <sys:String x:Key="Main.Theme.Dark">Dark</sys:String>
-    <sys:String x:Key="Main.Theme.Light">Light</sys:String>
     <sys:String x:Key="Main.SortTooltip">Sort windows</sys:String>
     <sys:String x:Key="Main.Sort.Recent">Recent</sys:String>
     <sys:String x:Key="Main.Sort.App">App</sys:String>
@@ -83,6 +89,13 @@
     <sys:String x:Key="Appearance.Theme.Light">Light</sys:String>
 
     <!-- Behavior -->
+    <sys:String x:Key="Behavior.ElevatedHeading">Alt+Tab over administrator windows</sys:String>
+    <sys:String x:Key="Behavior.ElevatedAutoStart">Start with administrator rights at sign-in</sys:String>
+    <sys:String x:Key="Behavior.ElevatedDetail">When a window running as administrator (such as Task Manager) is in front, Windows blocks Alt+Tab detection for standard apps. Turning this on registers a Windows Task Scheduler task; Windows may ask for permission once when you turn it on or off.</sys:String>
+    <sys:String x:Key="Behavior.RunningElevated">Currently running as administrator</sys:String>
+    <sys:String x:Key="Behavior.RunningNormal">Currently running with standard rights</sys:String>
+    <sys:String x:Key="Behavior.RestartElevated">Restart as administrator now</sys:String>
+    <sys:String x:Key="Behavior.ElevatedChangeFailed">Could not update Task Scheduler.</sys:String>
     <sys:String x:Key="Behavior.AlwaysOnTop">Always on top</sys:String>
     <sys:String x:Key="Behavior.AlwaysOnTopDetail">Keeps the switcher in front of other windows while it is open.</sys:String>
     <sys:String x:Key="Behavior.Compact">Use compact view</sys:String>

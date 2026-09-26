@@ -2,6 +2,8 @@
 
 | Status | Milestone | Evidence |
 |---|---|---|
+| done — sign-in check pending | Keep Alt+Tab on Switchboard over elevated windows and during brief stalls (elevated sign-in task, single instance, hook responsiveness, diagnostics log, lost key-up recovery). | 2026-09-27 94 tests; elevated vs standard probe; task-verify register/delete |
+| done — UI check pending | Overlay UX from mocks: app icons + 5/6/7-char app names (duplicates hidden), simplified toolbar (2A), stronger selection with hover/selected 24px close (3A). | 2026-09-27 110 tests; Grid capture; `notes/mocks/2026-09-27_overlay-ux/` |
 | done — UI check pending | Localize the app UI into Korean, English, Simplified Chinese, and Japanese with a live Language setting. | 2026-09-27 build 0 warnings/errors, 87 tests incl. four-way `LocalizationTests` key parity; ja/zh-Hans startup smoke |
 | done — UI check pending | Add an 80/100/125/150% window title label scale preset across Grid/Compact/List. | `048d7fc`; `MainWindowViewModelRefreshTests`, `UserSettingsJsonTests` |
 | released — UI check pending | Replace the settings popup with a sidebar modal and persist overlay drag position with one-shot 9-direction movement plus saved-position return. | Public `v0.3.1` Portable release; 2026-08-18 Release build: 0 warnings/errors, 57 tests pass; settings-modal clipping and sidebar status-card expansion fixed. |

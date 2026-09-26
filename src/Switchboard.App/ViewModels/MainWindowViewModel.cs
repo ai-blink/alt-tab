@@ -25,7 +25,8 @@ public partial class MainWindowViewModel : ObservableObject
 {
     private const double BaseGridCardWidth = 274;
     private const double BaseGridPreviewHeight = 160;
-    private const double GridCaptionHeight = 28;
+    // Matches the caption row in GridWindowTemplate; sized for the 24px close button.
+    private const double GridCaptionHeight = 32;
     private const double BaseCompactCardWidth = 224;
     private const double BaseCompactCardHeight = 96;
     private const double BaseListWidth = 600;
@@ -120,6 +121,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(VisibleWindows))]
+    [NotifyPropertyChangedFor(nameof(SortModeLabel))]
     private WindowSortMode selectedSortMode = WindowSortMode.Recent;
 
     [ObservableProperty]
@@ -162,7 +164,13 @@ public partial class MainWindowViewModel : ObservableObject
     private WindowTitleScalePreset selectedWindowTitleScalePreset = WindowTitleScalePreset.Hundred;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AppNameMaxLength))]
+    private AppNameLengthPreset selectedAppNameLengthPreset = AppNameLengthPreset.Six;
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SavedOverlayPositionLabel))]
+    [NotifyPropertyChangedFor(nameof(WindowCountLabel))]
+    [NotifyPropertyChangedFor(nameof(SortModeLabel))]
     private AppLanguage selectedLanguage = AppLanguage.Auto;
 
     [ObservableProperty]
@@ -202,7 +210,22 @@ public partial class MainWindowViewModel : ObservableObject
     public IReadOnlyList<WindowSnapshot> VisibleWindows =>
         WindowQuery.Apply(allWindows, SearchText, SelectedSortMode).ToList();
 
-    public string WindowCountLabel => $"{VisibleWindows.Count} windows";
+    public int AppNameMaxLength => AppNameLabel.ToMaxLength(SelectedAppNameLengthPreset);
+
+    public string SortModeLabel => string.Format(
+        AppLocalizer.Get("Main.SortButton"),
+        AppLocalizer.Get(SelectedSortMode switch
+        {
+            WindowSortMode.App => "Main.Sort.App",
+            WindowSortMode.Monitor => "Main.Sort.Monitor",
+            WindowSortMode.Title => "Main.Sort.Title",
+            WindowSortMode.Favorites => "Main.Sort.Favorites",
+            _ => "Main.Sort.Recent"
+        }));
+
+    public string WindowCountLabel => VisibleWindows.Count == 1
+        ? AppLocalizer.Get("Main.WindowCount.Single")
+        : string.Format(AppLocalizer.Get("Main.WindowCount"), VisibleWindows.Count);
 
     public double ThumbnailScale => SelectedThumbnailScalePreset switch
     {
@@ -477,6 +500,7 @@ public partial class MainWindowViewModel : ObservableObject
             nameof(SelectedOverlayScalePreset) or
             nameof(SelectedThumbnailScalePreset) or
             nameof(SelectedWindowTitleScalePreset) or
+            nameof(SelectedAppNameLengthPreset) or
             nameof(SelectedSizingPolicy) or
             nameof(DefaultViewMode) or
             nameof(SelectedFirstHotkeyModifier) or
@@ -497,6 +521,7 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedOverlayScalePreset = NormalizeOverlayScalePreset(settings.SelectedOverlayScalePreset);
         SelectedThumbnailScalePreset = settings.SelectedThumbnailScalePreset;
         SelectedWindowTitleScalePreset = settings.SelectedWindowTitleScalePreset;
+        SelectedAppNameLengthPreset = settings.SelectedAppNameLengthPreset;
         SelectedSizingPolicy = settings.SelectedSizingPolicy;
         DefaultViewMode = settings.DefaultViewMode;
         SelectedFirstHotkeyModifier = settings.SelectedFirstHotkeyModifier;
@@ -524,6 +549,7 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedOverlayScalePreset = SelectedOverlayScalePreset,
         SelectedThumbnailScalePreset = SelectedThumbnailScalePreset,
         SelectedWindowTitleScalePreset = SelectedWindowTitleScalePreset,
+        SelectedAppNameLengthPreset = SelectedAppNameLengthPreset,
         SelectedSizingPolicy = SelectedSizingPolicy,
         DefaultViewMode = DefaultViewMode,
         SelectedFirstHotkeyModifier = SelectedFirstHotkeyModifier,

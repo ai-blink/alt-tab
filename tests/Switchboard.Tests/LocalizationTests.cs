@@ -26,7 +26,8 @@ public sealed class LocalizationTests
     [Theory]
     [InlineData("MainWindow.xaml", @"\{DynamicResource ((?:Main|Settings|Position|Appearance|Behavior)\.[\w.]+)\}")]
     [InlineData("SettingsWindow.xaml", @"\{DynamicResource ((?:Main|Settings|Position|Appearance|Behavior)\.[\w.]+)\}")]
-    [InlineData("ViewModels/MainWindowViewModel.cs", @"""(Position\.Anchor\.\w+)""")]
+    [InlineData("SettingsWindow.xaml.cs", @"""(Behavior\.[\w.]+)""")]
+    [InlineData("ViewModels/MainWindowViewModel.cs", @"""((?:Main|Position)\.[\w.]+)""")]
     public void Every_referenced_string_key_exists(string relativePath, string pattern)
     {
         var source = File.ReadAllText(Path.Combine(AppSourceDirectory(), relativePath));

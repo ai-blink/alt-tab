@@ -19,6 +19,8 @@ public sealed record UserSettings
 
     public WindowTitleScalePreset SelectedWindowTitleScalePreset { get; init; } = WindowTitleScalePreset.Hundred;
 
+    public AppNameLengthPreset SelectedAppNameLengthPreset { get; init; } = AppNameLengthPreset.Six;
+
     public SwitcherSizingPolicy SelectedSizingPolicy { get; init; } = SwitcherSizingPolicy.Auto;
 
     public SwitcherViewMode DefaultViewMode { get; init; } = SwitcherViewMode.Grid;

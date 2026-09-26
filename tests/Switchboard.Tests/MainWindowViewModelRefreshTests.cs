@@ -219,6 +219,22 @@ public sealed class MainWindowViewModelRefreshTests
     }
 
     [Fact]
+    public void App_name_length_is_loaded_from_and_saved_to_user_settings()
+    {
+        var settingsStore = new StubSettingsStore(new UserSettings { SelectedAppNameLengthPreset = AppNameLengthPreset.Seven });
+        var viewModel = CreateViewModel(
+            new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]),
+            settingsStore: settingsStore);
+
+        Assert.Equal(7, viewModel.AppNameMaxLength);
+
+        viewModel.SelectedAppNameLengthPreset = AppNameLengthPreset.Five;
+
+        Assert.Equal(5, viewModel.AppNameMaxLength);
+        Assert.Equal(AppNameLengthPreset.Five, settingsStore.CurrentSettings.SelectedAppNameLengthPreset);
+    }
+
+    [Fact]
     public void Language_is_loaded_from_and_saved_to_user_settings()
     {
         var settingsStore = new StubSettingsStore(new UserSettings { SelectedLanguage = AppLanguage.English });

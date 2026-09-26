@@ -4,13 +4,19 @@
     <!-- Keys must match Strings.ko.xaml exactly (LocalizationTests). -->
 
     <!-- Overlay -->
+    <sys:String x:Key="Main.WindowCount">{0} 个窗口</sys:String>
+    <sys:String x:Key="Main.WindowCount.Single">1 个窗口</sys:String>
+    <sys:String x:Key="Main.SearchPlaceholder">按窗口标题或应用名称搜索</sys:String>
+    <sys:String x:Key="Main.SortButton">排序：{0}</sys:String>
+    <sys:String x:Key="Appearance.AppNameLengthHeading">应用名称长度</sys:String>
+    <sys:String x:Key="Appearance.AppNameLengthDetail">窗口卡片上图标旁显示的应用名称的最大字数。若窗口标题已以应用名称开头，则不显示。</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Five">5 个字</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Six">6 个字</sys:String>
+    <sys:String x:Key="Appearance.AppNameLength.Seven">7 个字</sys:String>
     <sys:String x:Key="Main.CloseWindowTooltip">关闭窗口</sys:String>
     <sys:String x:Key="Main.View.Grid">网格</sys:String>
     <sys:String x:Key="Main.View.Compact">紧凑</sys:String>
     <sys:String x:Key="Main.View.List">列表</sys:String>
-    <sys:String x:Key="Main.Theme.Transparent">透明</sys:String>
-    <sys:String x:Key="Main.Theme.Dark">深色</sys:String>
-    <sys:String x:Key="Main.Theme.Light">浅色</sys:String>
     <sys:String x:Key="Main.SortTooltip">窗口排序</sys:String>
     <sys:String x:Key="Main.Sort.Recent">最近</sys:String>
     <sys:String x:Key="Main.Sort.App">应用</sys:String>
@@ -83,6 +89,13 @@
     <sys:String x:Key="Appearance.Theme.Light">浅色</sys:String>
 
     <!-- Behavior -->
+    <sys:String x:Key="Behavior.ElevatedHeading">在管理员窗口上也使用 Alt+Tab</sys:String>
+    <sys:String x:Key="Behavior.ElevatedAutoStart">登录时以管理员权限自动启动</sys:String>
+    <sys:String x:Key="Behavior.ElevatedDetail">当以管理员身份运行的窗口（如任务管理器）位于前台时，Windows 会阻止普通权限的应用检测 Alt+Tab。开启后将注册到 Windows 任务计划程序，开启或关闭时可能会请求一次权限确认。</sys:String>
+    <sys:String x:Key="Behavior.RunningElevated">当前以管理员权限运行</sys:String>
+    <sys:String x:Key="Behavior.RunningNormal">当前以普通权限运行</sys:String>
+    <sys:String x:Key="Behavior.RestartElevated">立即以管理员权限重新启动</sys:String>
+    <sys:String x:Key="Behavior.ElevatedChangeFailed">无法更新任务计划程序。</sys:String>
     <sys:String x:Key="Behavior.AlwaysOnTop">始终置顶</sys:String>
     <sys:String x:Key="Behavior.AlwaysOnTopDetail">切换窗口打开期间，显示在其他普通窗口之前。</sys:String>
     <sys:String x:Key="Behavior.Compact">使用紧凑视图</sys:String>

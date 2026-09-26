@@ -14,7 +14,12 @@ public sealed class LowLevelAltTabHookRegistration : IDisposable
     private const int VkMenu = 0x12;
     private const int LlkHfAltdown = 0x20;
 
+    // Windows abandons a low-level hook call after LowLevelHooksTimeout (500 ms here) and hands Alt+Tab
+    // to its own switcher, so near-miss deliveries are reported for diagnostics.
+    private const int LateDeliveryThresholdMs = 150;
+
     private readonly Action onAltTab;
+    private readonly Action<int>? onLateAltTab;
     private readonly AltTabKeyFilter keyFilter = new();
     private readonly LowLevelKeyboardProc callback;
     private readonly ManualResetEventSlim registrationCompleted = new(false);
@@ -23,14 +28,16 @@ public sealed class LowLevelAltTabHookRegistration : IDisposable
     private uint hookThreadId;
     private bool isDisposed;
 
-    private LowLevelAltTabHookRegistration(Action onAltTab)
+    private LowLevelAltTabHookRegistration(Action onAltTab, Action<int>? onLateAltTab)
     {
         this.onAltTab = onAltTab;
+        this.onLateAltTab = onLateAltTab;
         callback = HookCallback;
         hookThread = new Thread(RunHookMessageLoop)
         {
             IsBackground = true,
-            Name = "Switchboard Alt+Tab hook"
+            Name = "Switchboard Alt+Tab hook",
+            Priority = ThreadPriority.Highest
         };
     }
 
@@ -38,11 +45,11 @@ public sealed class LowLevelAltTabHookRegistration : IDisposable
 
     public bool IsRegistered => Volatile.Read(ref hookHandle) != 0;
 
-    public static LowLevelAltTabHookRegistration TryRegister(Action onAltTab)
+    public static LowLevelAltTabHookRegistration TryRegister(Action onAltTab, Action<int>? onLateAltTab = null)
     {
         ArgumentNullException.ThrowIfNull(onAltTab);
 
-        var registration = new LowLevelAltTabHookRegistration(onAltTab);
+        var registration = new LowLevelAltTabHookRegistration(onAltTab, onLateAltTab);
         registration.hookThread.Start();
 
         if (!registration.registrationCompleted.Wait(TimeSpan.FromSeconds(2)))
@@ -114,11 +121,16 @@ public sealed class LowLevelAltTabHookRegistration : IDisposable
     {
         if (code >= 0)
         {
-            var action = ClassifyAltTabKey(wParam, lParam);
+            var action = ClassifyAltTabKey(wParam, lParam, out var deliveryDelayMs);
 
             if (action == AltTabKeyAction.ToggleAndSuppress)
             {
                 onAltTab();
+
+                if (deliveryDelayMs >= LateDeliveryThresholdMs)
+                {
+                    onLateAltTab?.Invoke(deliveryDelayMs);
+                }
             }
 
             if (action != AltTabKeyAction.PassThrough)
@@ -130,19 +142,23 @@ public sealed class LowLevelAltTabHookRegistration : IDisposable
         return CallNextHookEx(Volatile.Read(ref hookHandle), code, wParam, lParam);
     }
 
-    private AltTabKeyAction ClassifyAltTabKey(nint wParam, nint lParam)
+    private AltTabKeyAction ClassifyAltTabKey(nint wParam, nint lParam, out int deliveryDelayMs)
     {
         var info = Marshal.PtrToStructure<KeyboardHookInfo>(lParam);
+        deliveryDelayMs = 0;
 
         if (info.VirtualKeyCode != VkTab)
         {
             return AltTabKeyAction.PassThrough;
         }
 
+        // Event time and TickCount share the same millisecond clock; unchecked subtraction survives wraparound.
+        deliveryDelayMs = unchecked(Environment.TickCount - info.Time);
+
         var isTabKeyDown = wParam is WmKeydown or WmSyskeydown;
         var isTabKeyUp = wParam is WmKeyup or WmSyskeyup;
         var isAltDown = (info.Flags & LlkHfAltdown) != 0 || IsKeyDown(VkMenu);
-        return keyFilter.Process(isTabKeyDown, isTabKeyUp, isAltDown);
+        return keyFilter.Process(isTabKeyDown, isTabKeyUp, isAltDown, info.Time);
     }
 
     private static bool IsKeyDown(int virtualKey) => (GetAsyncKeyState(virtualKey) & 0x8000) != 0;

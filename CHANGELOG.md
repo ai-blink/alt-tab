@@ -18,9 +18,24 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 - English, Simplified Chinese, and Japanese app UI alongside Korean, with a Language setting (Auto, 한국어, English, 简体中文, 日本語) in the Behavior tab. Auto follows the Windows display language (any Chinese variant uses Simplified Chinese) and uses English for unsupported languages; switching applies immediately without restarting.
 - Window title size setting (80/100/125/150%) that scales window titles and app labels in Grid, Compact, and List views.
 
+- Optional "Start with administrator rights at sign-in" setting (Behavior tab). Windows hides keyboard input for administrator windows such as Task Manager from standard apps, so Alt+Tab over them used to open the Windows switcher; running elevated through a Task Scheduler sign-in task keeps Switchboard in charge. Includes a "Restart as administrator now" button and a current-rights indicator.
+- App icons on window cards and list rows, with a short app name beside the icon (5, 6, or 7 characters; Appearance → App name length). The name is hidden when the window title already starts with it.
+- Search box hint text ("Search by window title or app name").
+- Alt+Tab diagnostics log at `%AppData%\Switchboard\logs\alttab-diagnostics.log` recording when the Windows switcher opened instead of Switchboard and which window was in front.
+
 ### Changed
 
 - Overlay toolbar tooltips and footer key hints are now localized instead of always showing English.
+- Switchboard now runs as a single instance per session.
+- Simpler overlay toolbar: theme buttons moved to Settings only, and sorting is a single dropdown.
+- Selected cards get a thicker highlight; the close button is larger (24 px) and appears only on the hovered or selected card.
+- The Alt+Tab hook responds faster under load (higher hook-thread priority, no power throttling, low-latency GC).
+
+### Fixed
+
+- After an Alt+Tab into an administrator window, the next Alt+Tab could be silently ignored.
+- Selected view, theme, sort, and always-on-top buttons were nearly unreadable (white text on a pale accent).
+- The window count in the overlay header is now localized.
 
 ## [0.3.1] - 2026-08-18
 
