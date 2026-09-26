@@ -44,6 +44,10 @@ public sealed class DwmThumbnailPreview : FrameworkElement
         set => SetValue(SourceHandleProperty, value);
     }
 
+    // Where DWM currently draws the live thumbnail, in window DIPs; null while hidden. DWM composites the
+    // thumbnail above this window's own WPF content, so overlays such as ThumbnailIconLayer read this rect.
+    public Rect? DisplayedBounds { get; private set; }
+
     public bool IsPreviewVisible
     {
         get => (bool)GetValue(IsPreviewVisibleProperty);
@@ -126,6 +130,7 @@ public sealed class DwmThumbnailPreview : FrameworkElement
 
         _ = DwmUnregisterThumbnail(thumbnail);
         thumbnail = 0;
+        DisplayedBounds = null;
     }
 
     private void UpdateThumbnail()
@@ -165,6 +170,11 @@ public sealed class DwmThumbnailPreview : FrameworkElement
         }
 
         var destination = CreateFittedDestinationRect(left, top, width, height);
+        DisplayedBounds = new Rect(
+            destination.Left / transform.M11,
+            destination.Top / transform.M22,
+            (destination.Right - destination.Left) / transform.M11,
+            (destination.Bottom - destination.Top) / transform.M22);
 
         var properties = new DwmThumbnailProperties
         {
@@ -197,6 +207,11 @@ public sealed class DwmThumbnailPreview : FrameworkElement
 
     private void SetThumbnailVisibility(bool isVisible)
     {
+        if (!isVisible)
+        {
+            DisplayedBounds = null;
+        }
+
         if (thumbnail == 0)
         {
             return;

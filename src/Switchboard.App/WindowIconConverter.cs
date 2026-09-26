@@ -16,9 +16,12 @@ public sealed class WindowIconConverter : IValueConverter
     private const int MaxCachedIcons = 256;
     private static readonly ConcurrentDictionary<nint, ImageSource?> Cache = new();
 
-    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+        value is nint hwnd ? GetIcon(hwnd) : null;
+
+    public static ImageSource? GetIcon(nint hwnd)
     {
-        if (value is not nint hwnd || hwnd == 0)
+        if (hwnd == 0)
         {
             return null;
         }

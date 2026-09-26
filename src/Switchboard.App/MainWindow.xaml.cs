@@ -26,6 +26,10 @@ public partial class MainWindow : Window
     private GlobalHotkeyRegistration? altTabHotkeyRegistration;
     private LowLevelAltTabHookRegistration? altTabHookRegistration;
     private AltTabMissWatcher? altTabMissWatcher;
+    private ThumbnailIconLayer? thumbnailIconLayer;
+    private static readonly TimeSpan HookReinstallCooldown = TimeSpan.FromSeconds(3);
+    private DateTimeOffset lastHookReinstall = DateTimeOffset.MinValue;
+    private DateTimeOffset? hookReinstalledAt;
     private readonly DispatcherTimer refreshTimer;
     private nint previousForegroundWindow;
     private double currentLayoutWidth = 955;
@@ -57,6 +61,11 @@ public partial class MainWindow : Window
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
+        // Created on first show: an owned window needs its owner to have been shown already.
+        thumbnailIconLayer ??= new ThumbnailIconLayer(
+            this,
+            WindowList,
+            () => viewModel.SelectedViewMode != SwitcherViewMode.List && viewModel.AreDwmThumbnailsVisible);
         RefreshWindowCatalog();
         ApplyContentSizedBounds();
         ShowInTaskbar = true;
@@ -107,6 +116,8 @@ public partial class MainWindow : Window
     {
         settingsWindow?.Close();
         settingsWindow = null;
+        thumbnailIconLayer?.Close();
+        thumbnailIconLayer = null;
         StopRefreshTimer();
         refreshTimer.Tick -= OnRefreshTimerTick;
         altTabHotkeyRegistration?.Dispose();
@@ -196,8 +207,7 @@ public partial class MainWindow : Window
         hwndSource?.AddHook(WndProc);
         RegisterAltTabHook();
         RegisterAltTabHotkeyFallback();
-        altTabMissWatcher ??= AltTabMissWatcher.Start(detail =>
-            AltTabDiagnosticsLog.Write($"windows-switcher-shown {detail}"));
+        altTabMissWatcher ??= AltTabMissWatcher.Start(OnWindowsSwitcherShown);
         RegisterGlobalHotkey();
     }
 
@@ -206,8 +216,41 @@ public partial class MainWindow : Window
         altTabHookRegistration?.Dispose();
         altTabHookRegistration = null;
         altTabHookRegistration = LowLevelAltTabHookRegistration.TryRegister(
-            () => Dispatcher.BeginInvoke(ToggleOverlay, DispatcherPriority.Input),
+            () => Dispatcher.BeginInvoke(OnHookAltTab, DispatcherPriority.Input),
             delayMs => AltTabDiagnosticsLog.Write($"late-hook-delivery delay={delayMs}ms"));
+    }
+
+    // Windows can drop a low-level hook without telling the owner (e.g. after it misses
+    // LowLevelHooksTimeout), after which every Alt+Tab opens the shell switcher. When that is
+    // observed, reinstall the hook; the next Alt+Tab that reaches the hook confirms the cause in the log.
+    private void OnWindowsSwitcherShown(string detail)
+    {
+        AltTabDiagnosticsLog.Write($"windows-switcher-shown {detail}");
+        var now = DateTimeOffset.Now;
+
+        if (now - lastHookReinstall < HookReinstallCooldown)
+        {
+            return;
+        }
+
+        lastHookReinstall = now;
+        RegisterAltTabHook();
+        RegisterAltTabHotkeyFallback();
+        hookReinstalledAt = altTabHookRegistration?.IsRegistered == true ? now : null;
+        AltTabDiagnosticsLog.Write(
+            $"hook-reinstalled registered={altTabHookRegistration?.IsRegistered == true} error={altTabHookRegistration?.ErrorCode ?? 0}");
+    }
+
+    private void OnHookAltTab()
+    {
+        if (hookReinstalledAt is { } reinstalledAt)
+        {
+            hookReinstalledAt = null;
+            AltTabDiagnosticsLog.Write(
+                $"hook-recovered first Alt+Tab after reinstall reached Switchboard {(DateTimeOffset.Now - reinstalledAt).TotalSeconds:0}s later");
+        }
+
+        ToggleOverlay();
     }
 
     private void RegisterAltTabHotkeyFallback()

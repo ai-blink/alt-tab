@@ -20,6 +20,7 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 
 - Optional "Start with administrator rights at sign-in" setting (Behavior tab). Windows hides keyboard input for administrator windows such as Task Manager from standard apps, so Alt+Tab over them used to open the Windows switcher; running elevated through a Task Scheduler sign-in task keeps Switchboard in charge. Includes a "Restart as administrator now" button and a current-rights indicator.
 - App icons on window cards and list rows, with a short app name beside the icon (5, 6, or 7 characters; Appearance → App name length). The name is hidden when the window title already starts with it.
+- A translucent large app icon on the lower-left corner of each live thumbnail in Grid and Compact views.
 - Search box hint text ("Search by window title or app name").
 - Alt+Tab diagnostics log at `%AppData%\Switchboard\logs\alttab-diagnostics.log` recording when the Windows switcher opened instead of Switchboard and which window was in front.
 
@@ -34,6 +35,7 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 
 ### Fixed
 
+- When the Windows switcher opens instead of Switchboard, Switchboard now reinstalls its keyboard hook right away so later Alt+Tab presses come back to it (Windows can drop a hook without notice).
 - After an Alt+Tab into an administrator window, the next Alt+Tab could be silently ignored.
 - Selected view, theme, sort, and always-on-top buttons were nearly unreadable (white text on a pale accent).
 - The window count in the overlay header is now localized.
