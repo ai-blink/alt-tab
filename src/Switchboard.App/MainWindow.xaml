@@ -129,14 +129,14 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                        VerticalAlignment="Center"
-                                       FontSize="10"
+                                       FontSize="{Binding DataContext.GridAppLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
                                        FontWeight="SemiBold"
                                        Foreground="#B8C2D3"
                                        Text="{Binding AppName}"
                                        TextTrimming="CharacterEllipsis" />
                             <TextBlock Grid.Column="1"
                                        VerticalAlignment="Center"
-                                       FontSize="11"
+                                       FontSize="{Binding DataContext.GridTitleLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
                                        FontWeight="SemiBold"
                                        Foreground="White"
                                        Text="{Binding Title}"
@@ -215,14 +215,14 @@
 
                             <TextBlock Grid.Column="0"
                                        VerticalAlignment="Center"
-                                       FontSize="9"
+                                       FontSize="{Binding DataContext.CompactAppLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
                                        FontWeight="SemiBold"
                                        Foreground="#B8C2D3"
                                        Text="{Binding AppName}"
                                        TextTrimming="CharacterEllipsis" />
                             <TextBlock Grid.Column="1"
                                        VerticalAlignment="Center"
-                                       FontSize="10"
+                                       FontSize="{Binding DataContext.CompactTitleLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
                                        FontWeight="SemiBold"
                                        Foreground="White"
                                        Text="{Binding Title}"
@@ -300,7 +300,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0"
                                        VerticalAlignment="Center"
-                                       FontSize="12"
+                                       FontSize="{Binding DataContext.ListAppLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
                                        FontWeight="SemiBold"
                                        Foreground="{Binding DataContext.TextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
                                        Text="{Binding AppName}"
@@ -324,7 +324,7 @@
 
                         <TextBlock Grid.Column="0"
                                    VerticalAlignment="Center"
-                                   FontSize="12"
+                                   FontSize="{Binding DataContext.ListTitleLabelFontSize, RelativeSource={RelativeSource AncestorType=Window}}"
                                    Foreground="{Binding DataContext.MutedTextBrush, RelativeSource={RelativeSource AncestorType=Window}}"
                                    Text="{Binding Title}"
                                    TextTrimming="CharacterEllipsis" />

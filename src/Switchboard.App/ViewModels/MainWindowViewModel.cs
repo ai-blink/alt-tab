@@ -151,6 +151,16 @@ public partial class MainWindowViewModel : ObservableObject
     private ThumbnailScalePreset selectedThumbnailScalePreset = ThumbnailScalePreset.Normal;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(TitleLabelScale))]
+    [NotifyPropertyChangedFor(nameof(GridTitleLabelFontSize))]
+    [NotifyPropertyChangedFor(nameof(CompactTitleLabelFontSize))]
+    [NotifyPropertyChangedFor(nameof(ListTitleLabelFontSize))]
+    [NotifyPropertyChangedFor(nameof(GridAppLabelFontSize))]
+    [NotifyPropertyChangedFor(nameof(CompactAppLabelFontSize))]
+    [NotifyPropertyChangedFor(nameof(ListAppLabelFontSize))]
+    private WindowTitleScalePreset selectedWindowTitleScalePreset = WindowTitleScalePreset.Hundred;
+
+    [ObservableProperty]
     private SwitcherSizingPolicy selectedSizingPolicy = SwitcherSizingPolicy.Auto;
 
     [ObservableProperty]
@@ -197,6 +207,26 @@ public partial class MainWindowViewModel : ObservableObject
     };
 
     public string ThumbnailScaleLabel => $"{ThumbnailScale:0.0}x";
+
+    public double TitleLabelScale => SelectedWindowTitleScalePreset switch
+    {
+        WindowTitleScalePreset.Eighty => 0.8,
+        WindowTitleScalePreset.OneTwentyFive => 1.25,
+        WindowTitleScalePreset.OneFifty => 1.5,
+        _ => 1.0
+    };
+
+    public double GridTitleLabelFontSize => 11 * TitleLabelScale;
+
+    public double CompactTitleLabelFontSize => 10 * TitleLabelScale;
+
+    public double ListTitleLabelFontSize => 12 * TitleLabelScale;
+
+    public double GridAppLabelFontSize => 10 * TitleLabelScale;
+
+    public double CompactAppLabelFontSize => 9 * TitleLabelScale;
+
+    public double ListAppLabelFontSize => 12 * TitleLabelScale;
 
     public double AppScale => SelectedOverlayScalePreset switch
     {
@@ -439,6 +469,7 @@ public partial class MainWindowViewModel : ObservableObject
             nameof(SelectedOverlayOpacityPreset) or
             nameof(SelectedOverlayScalePreset) or
             nameof(SelectedThumbnailScalePreset) or
+            nameof(SelectedWindowTitleScalePreset) or
             nameof(SelectedSizingPolicy) or
             nameof(DefaultViewMode) or
             nameof(SelectedFirstHotkeyModifier) or
@@ -457,6 +488,7 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedOverlayOpacityPreset = settings.SelectedOverlayOpacityPreset;
         SelectedOverlayScalePreset = NormalizeOverlayScalePreset(settings.SelectedOverlayScalePreset);
         SelectedThumbnailScalePreset = settings.SelectedThumbnailScalePreset;
+        SelectedWindowTitleScalePreset = settings.SelectedWindowTitleScalePreset;
         SelectedSizingPolicy = settings.SelectedSizingPolicy;
         DefaultViewMode = settings.DefaultViewMode;
         SelectedFirstHotkeyModifier = settings.SelectedFirstHotkeyModifier;
@@ -482,6 +514,7 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedOverlayOpacityPreset = SelectedOverlayOpacityPreset,
         SelectedOverlayScalePreset = SelectedOverlayScalePreset,
         SelectedThumbnailScalePreset = SelectedThumbnailScalePreset,
+        SelectedWindowTitleScalePreset = SelectedWindowTitleScalePreset,
         SelectedSizingPolicy = SelectedSizingPolicy,
         DefaultViewMode = DefaultViewMode,
         SelectedFirstHotkeyModifier = SelectedFirstHotkeyModifier,

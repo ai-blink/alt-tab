@@ -250,6 +250,15 @@
                             <RadioButton Content="조금 크게" GroupName="ThumbnailScale" IsChecked="{Binding SelectedThumbnailScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Large}" Style="{StaticResource ChoiceRadioStyle}" />
                             <RadioButton Content="크게" GroupName="ThumbnailScale" IsChecked="{Binding SelectedThumbnailScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=ExtraLarge}" Style="{StaticResource ChoiceRadioStyle}" />
                         </WrapPanel>
+                        <Separator Margin="0,14" />
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="창 제목 크기" />
+                        <TextBlock Margin="0,4,0,10" FontSize="11" Foreground="{Binding MutedTextBrush}" Text="창 카드의 제목만 작게 또는 크게 표시합니다. 모든 보기 방식에 함께 적용됩니다." TextWrapping="Wrap" />
+                        <WrapPanel>
+                            <RadioButton Content="80%" GroupName="WindowTitleScale" IsChecked="{Binding SelectedWindowTitleScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Eighty}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="100%" GroupName="WindowTitleScale" IsChecked="{Binding SelectedWindowTitleScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Hundred}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="125%" GroupName="WindowTitleScale" IsChecked="{Binding SelectedWindowTitleScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=OneTwentyFive}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="150%" GroupName="WindowTitleScale" IsChecked="{Binding SelectedWindowTitleScalePreset, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=OneFifty}" Style="{StaticResource ChoiceRadioStyle}" />
+                        </WrapPanel>
                         <TextBlock Margin="0,12,0,0" FontSize="14" FontWeight="SemiBold" Foreground="{Binding TextBrush}" Text="화면 분위기와 투명도" />
                         <WrapPanel Margin="0,10,0,0">
                             <RadioButton Content="반투명" GroupName="Appearance" IsChecked="{Binding SelectedAppearanceMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Transparent}" Style="{StaticResource ChoiceRadioStyle}" />

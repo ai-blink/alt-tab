@@ -58,4 +58,28 @@ public sealed class UserSettingsJsonTests
             File.Delete(settingsPath);
         }
     }
+
+    [Theory]
+    [InlineData(WindowTitleScalePreset.Eighty)]
+    [InlineData(WindowTitleScalePreset.Hundred)]
+    [InlineData(WindowTitleScalePreset.OneTwentyFive)]
+    [InlineData(WindowTitleScalePreset.OneFifty)]
+    public void Window_title_scale_round_trips_through_json(WindowTitleScalePreset preset)
+    {
+        var settingsPath = Path.Combine(Path.GetTempPath(), $"switchboard-settings-{Guid.NewGuid():N}.json");
+
+        try
+        {
+            var store = new JsonUserSettingsStore(settingsPath);
+            store.Save(new UserSettings { SelectedWindowTitleScalePreset = preset });
+
+            var loaded = store.Load();
+
+            Assert.Equal(preset, loaded.SelectedWindowTitleScalePreset);
+        }
+        finally
+        {
+            File.Delete(settingsPath);
+        }
+    }
 }

@@ -172,6 +172,52 @@ public sealed class MainWindowViewModelRefreshTests
         Assert.Equal(updatedPosition, settingsStore.CurrentSettings.SavedOverlayPosition);
     }
 
+    [Theory]
+    [InlineData(WindowTitleScalePreset.Eighty, 0.8, 8.8, 8.0, 9.6, 8.0, 7.2, 9.6)]
+    [InlineData(WindowTitleScalePreset.Hundred, 1.0, 11.0, 10.0, 12.0, 10.0, 9.0, 12.0)]
+    [InlineData(WindowTitleScalePreset.OneTwentyFive, 1.25, 13.75, 12.5, 15.0, 12.5, 11.25, 15.0)]
+    [InlineData(WindowTitleScalePreset.OneFifty, 1.5, 16.5, 15.0, 18.0, 15.0, 13.5, 18.0)]
+    public void Window_title_scale_applies_to_each_view_and_is_saved(
+        WindowTitleScalePreset preset,
+        double expectedScale,
+        double expectedGridFontSize,
+        double expectedCompactFontSize,
+        double expectedListFontSize,
+        double expectedGridAppFontSize,
+        double expectedCompactAppFontSize,
+        double expectedListAppFontSize)
+    {
+        var settingsStore = new StubSettingsStore();
+        var viewModel = CreateViewModel(
+            new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]),
+            settingsStore: settingsStore);
+
+        viewModel.SelectedWindowTitleScalePreset = preset;
+
+        Assert.Equal(expectedScale, viewModel.TitleLabelScale, precision: 6);
+        Assert.Equal(expectedGridFontSize, viewModel.GridTitleLabelFontSize, precision: 6);
+        Assert.Equal(expectedCompactFontSize, viewModel.CompactTitleLabelFontSize, precision: 6);
+        Assert.Equal(expectedListFontSize, viewModel.ListTitleLabelFontSize, precision: 6);
+        Assert.Equal(expectedGridAppFontSize, viewModel.GridAppLabelFontSize, precision: 6);
+        Assert.Equal(expectedCompactAppFontSize, viewModel.CompactAppLabelFontSize, precision: 6);
+        Assert.Equal(expectedListAppFontSize, viewModel.ListAppLabelFontSize, precision: 6);
+        Assert.Equal(preset, settingsStore.CurrentSettings.SelectedWindowTitleScalePreset);
+    }
+
+    [Fact]
+    public void Window_title_scale_is_loaded_from_user_settings()
+    {
+        var viewModel = CreateViewModel(
+            new StubWindowCatalog([CreateWindow("Project", DateTimeOffset.UtcNow)]),
+            settingsStore: new StubSettingsStore(new UserSettings
+            {
+                SelectedWindowTitleScalePreset = WindowTitleScalePreset.OneTwentyFive
+            }));
+
+        Assert.Equal(WindowTitleScalePreset.OneTwentyFive, viewModel.SelectedWindowTitleScalePreset);
+        Assert.Equal(13.75, viewModel.GridTitleLabelFontSize);
+    }
+
     private static MainWindowViewModel CreateViewModel(
         IWindowCatalog catalog,
         IWindowCloser? closer = null,

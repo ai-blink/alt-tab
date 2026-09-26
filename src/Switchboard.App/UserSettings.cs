@@ -17,6 +17,8 @@ public sealed record UserSettings
 
     public ThumbnailScalePreset SelectedThumbnailScalePreset { get; init; } = ThumbnailScalePreset.Normal;
 
+    public WindowTitleScalePreset SelectedWindowTitleScalePreset { get; init; } = WindowTitleScalePreset.Hundred;
+
     public SwitcherSizingPolicy SelectedSizingPolicy { get; init; } = SwitcherSizingPolicy.Auto;
 
     public SwitcherViewMode DefaultViewMode { get; init; } = SwitcherViewMode.Grid;
