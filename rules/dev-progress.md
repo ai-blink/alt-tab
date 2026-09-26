@@ -2,6 +2,7 @@
 
 ## Current
 
+- 2026-09-27: Added Simplified Chinese (`Strings.zh-Hans.xaml`) and Japanese (`Strings.ja.xaml`) UI dictionaries and Language choices (简体中文/日本語). Auto maps any Chinese display language to Simplified Chinese. Windows get `xml:lang` for the active language so Chinese and Japanese Han glyphs render correctly.
 - 2026-09-27: Added Korean/English app UI. All `MainWindow`/`SettingsWindow` strings (including the previously English-only toolbar tooltips and footer hints) and the saved-position label now come from `Localization/Strings.{ko,en}.xaml` via `DynamicResource`. A Behavior-tab Language setting (Auto/한국어/English) persists as `SelectedLanguage`; Auto follows the Windows display language and falls back to English.
 - 2026-09-27: Committed the window title label scale preset (80/100/125/150%) as `048d7fc` before starting localization.
 - 2026-08-19: Synchronized canonical, user, live-status, historical, reference, and template docs with the `v0.3.1` code/release baseline.
@@ -11,6 +12,7 @@
 
 ## Verification
 
+- 2026-09-27 zh-Hans/ja: Debug build 0 warnings/errors, 87/87 tests pass (four-way key parity). With `SelectedLanguage` set to Japanese and then SimplifiedChinese, the app starts, stays alive, and keeps the value (settings file restored afterwards). Screens remain `NEEDS_USER_UI_CHECK`.
 - 2026-09-27 localization: Debug build 0 warnings/errors, 81/81 tests pass (key parity between ko/en dictionaries, every referenced key defined, language resolution, JSON/ViewModel persistence). The new build starts and stays alive; the overlay and settings window are `NEEDS_USER_UI_CHECK`.
 - 2026-08-19 documentation closeout: `git diff --check`, Debug build with 0 warnings/errors, and 57/57 tests passed.
 - `dotnet build Switchboard.slnx -c Release --nologo`: passed for the `v0.3.1` patch, 0 warnings, 0 errors.
@@ -31,7 +33,7 @@
 
 ## Follow-Up
 
-- FOLLOW_UP: Add `Strings.zh.xaml`/`Strings.ja.xaml` plus Language choices and Auto mapping to fulfil the README EN/KO/ZH/JA promise; `LocalizationTests` enforces key parity.
+- FOLLOW_UP: zh-Hans/ja strings were machine-authored; get native-speaker review before release.
 - FOLLOW_UP: Tray menu (`Open Switchboard`/`Exit`) and `AutomationProperties.Name` values remain English-only.
 - FOLLOW_UP: Add a visible opt-out for low-level Alt+Tab capture before treating it as a normal default.
 - FOLLOW_UP: Add elevated/security-desktop foreground failure UX.

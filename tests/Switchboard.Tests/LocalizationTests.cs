@@ -10,7 +10,7 @@ namespace Switchboard.Tests;
 public sealed class LocalizationTests
 {
     private static readonly XNamespace Xaml = "http://schemas.microsoft.com/winfx/2006/xaml";
-    private static readonly string[] Languages = ["ko", "en"];
+    private static readonly string[] Languages = ["ko", "en", "zh-Hans", "ja"];
 
     [Fact]
     public void Every_language_dictionary_defines_the_same_keys()
@@ -40,10 +40,14 @@ public sealed class LocalizationTests
     [Theory]
     [InlineData(AppLanguage.Auto, "ko-KR", "ko")]
     [InlineData(AppLanguage.Auto, "en-US", "en")]
-    [InlineData(AppLanguage.Auto, "ja-JP", "en")]
-    [InlineData(AppLanguage.Auto, "zh-CN", "en")]
+    [InlineData(AppLanguage.Auto, "ja-JP", "ja")]
+    [InlineData(AppLanguage.Auto, "zh-CN", "zh-Hans")]
+    [InlineData(AppLanguage.Auto, "zh-TW", "zh-Hans")]
+    [InlineData(AppLanguage.Auto, "fr-FR", "en")]
     [InlineData(AppLanguage.Korean, "en-US", "ko")]
     [InlineData(AppLanguage.English, "ko-KR", "en")]
+    [InlineData(AppLanguage.SimplifiedChinese, "ko-KR", "zh-Hans")]
+    [InlineData(AppLanguage.Japanese, "en-US", "ja")]
     public void Language_resolves_from_setting_then_windows_display_language(
         AppLanguage language,
         string uiCulture,

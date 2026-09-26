@@ -1,0 +1,102 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <!-- Keys must match Strings.ko.xaml exactly (LocalizationTests). -->
+
+    <!-- Overlay -->
+    <sys:String x:Key="Main.CloseWindowTooltip">关闭窗口</sys:String>
+    <sys:String x:Key="Main.View.Grid">网格</sys:String>
+    <sys:String x:Key="Main.View.Compact">紧凑</sys:String>
+    <sys:String x:Key="Main.View.List">列表</sys:String>
+    <sys:String x:Key="Main.Theme.Transparent">透明</sys:String>
+    <sys:String x:Key="Main.Theme.Dark">深色</sys:String>
+    <sys:String x:Key="Main.Theme.Light">浅色</sys:String>
+    <sys:String x:Key="Main.SortTooltip">窗口排序</sys:String>
+    <sys:String x:Key="Main.Sort.Recent">最近</sys:String>
+    <sys:String x:Key="Main.Sort.App">应用</sys:String>
+    <sys:String x:Key="Main.Sort.Monitor">显示器</sys:String>
+    <sys:String x:Key="Main.Sort.Title">标题</sys:String>
+    <sys:String x:Key="Main.Sort.Favorites">收藏</sys:String>
+    <sys:String x:Key="Main.SettingsTooltip">设置</sys:String>
+    <sys:String x:Key="Main.AlwaysOnTopTooltip">置顶</sys:String>
+    <sys:String x:Key="Main.RefreshTooltip">刷新</sys:String>
+    <sys:String x:Key="Main.CloseTooltip">关闭</sys:String>
+    <sys:String x:Key="Main.ListHeader.App1">应用 1</sys:String>
+    <sys:String x:Key="Main.ListHeader.Title1">窗口标题 1</sys:String>
+    <sys:String x:Key="Main.ListHeader.App2">应用 2</sys:String>
+    <sys:String x:Key="Main.ListHeader.Title2">窗口标题 2</sys:String>
+    <sys:String x:Key="Main.Hint.Tab">Tab 循环</sys:String>
+    <sys:String x:Key="Main.Hint.Enter">Enter 切换</sys:String>
+    <sys:String x:Key="Main.Hint.Esc">Esc 关闭</sys:String>
+
+    <!-- Settings shell -->
+    <sys:String x:Key="Settings.WindowTitle">Switchboard 设置</sys:String>
+    <sys:String x:Key="Settings.Heading">设置</sys:String>
+    <sys:String x:Key="Settings.Tagline">让 Switchboard 适应你的工作方式</sys:String>
+    <sys:String x:Key="Settings.SavedStatus">● 更改已保存</sys:String>
+    <sys:String x:Key="Settings.SavedStatusDetail">所做的更改在下次启动时仍会保留。</sys:String>
+    <sys:String x:Key="Settings.Tab.Position">⌖  位置与移动</sys:String>
+    <sys:String x:Key="Settings.Tab.Appearance">◐  外观与大小</sys:String>
+    <sys:String x:Key="Settings.Tab.Behavior">⌨  基本行为</sys:String>
+    <sys:String x:Key="Settings.CloseTooltip">关闭设置</sys:String>
+    <sys:String x:Key="Settings.Subtitle">分别管理显示位置、界面大小和基本行为。</sys:String>
+
+    <!-- Position & Move -->
+    <sys:String x:Key="Position.HowItWorksLabel" xml:space="preserve">工作方式：</sys:String>
+    <sys:String x:Key="Position.HowItWorks">拖动切换窗口的空白区域即可立即保存位置。下方的遥控器只移动一次。</sys:String>
+    <sys:String x:Key="Position.SavedHeading">我保存的位置</sys:String>
+    <sys:String x:Key="Position.SavedDetail">即使窗口大小或视图模式改变，也会以最近的角落或边缘为基准保持位置。</sys:String>
+    <sys:String x:Key="Position.RemoteHeading">位置遥控器</sys:String>
+    <sys:String x:Key="Position.RemoteDetail">单次移动 · 不会更改已保存的位置</sys:String>
+    <sys:String x:Key="Position.Remote.TopLeft">左上</sys:String>
+    <sys:String x:Key="Position.Remote.TopCenter">上方</sys:String>
+    <sys:String x:Key="Position.Remote.TopRight">右上</sys:String>
+    <sys:String x:Key="Position.Remote.MiddleLeft">左侧</sys:String>
+    <sys:String x:Key="Position.Remote.Center">中央</sys:String>
+    <sys:String x:Key="Position.Remote.MiddleRight">右侧</sys:String>
+    <sys:String x:Key="Position.Remote.BottomLeft">左下</sys:String>
+    <sys:String x:Key="Position.Remote.BottomCenter">下方</sys:String>
+    <sys:String x:Key="Position.Remote.BottomRight">右下</sys:String>
+    <sys:String x:Key="Position.ReturnSaved">返回已保存的位置</sys:String>
+    <sys:String x:Key="Position.Anchor.TopLeft">左上角</sys:String>
+    <sys:String x:Key="Position.Anchor.TopCenter">顶部中央</sys:String>
+    <sys:String x:Key="Position.Anchor.TopRight">右上角</sys:String>
+    <sys:String x:Key="Position.Anchor.MiddleLeft">左侧中央</sys:String>
+    <sys:String x:Key="Position.Anchor.MiddleRight">右侧中央</sys:String>
+    <sys:String x:Key="Position.Anchor.BottomLeft">左下角</sys:String>
+    <sys:String x:Key="Position.Anchor.BottomCenter">底部中央</sys:String>
+    <sys:String x:Key="Position.Anchor.BottomRight">右下角</sys:String>
+    <sys:String x:Key="Position.Anchor.Center">屏幕中央</sys:String>
+
+    <!-- Appearance & Size -->
+    <sys:String x:Key="Appearance.ScaleHeading">整体缩放</sys:String>
+    <sys:String x:Key="Appearance.ScaleDetail">同时放大或缩小文字、卡片和间距。</sys:String>
+    <sys:String x:Key="Appearance.ThumbnailHeading">预览大小</sys:String>
+    <sys:String x:Key="Appearance.Thumbnail.Normal">默认</sys:String>
+    <sys:String x:Key="Appearance.Thumbnail.Large">稍大</sys:String>
+    <sys:String x:Key="Appearance.Thumbnail.ExtraLarge">大</sys:String>
+    <sys:String x:Key="Appearance.TitleScaleHeading">窗口标题大小</sys:String>
+    <sys:String x:Key="Appearance.TitleScaleDetail">仅缩小或放大窗口卡片上的标题，适用于所有视图。</sys:String>
+    <sys:String x:Key="Appearance.ThemeHeading">外观与透明度</sys:String>
+    <sys:String x:Key="Appearance.Theme.Transparent">半透明</sys:String>
+    <sys:String x:Key="Appearance.Theme.Dark">深色</sys:String>
+    <sys:String x:Key="Appearance.Theme.Light">浅色</sys:String>
+
+    <!-- Behavior -->
+    <sys:String x:Key="Behavior.AlwaysOnTop">始终置顶</sys:String>
+    <sys:String x:Key="Behavior.AlwaysOnTopDetail">切换窗口打开期间，显示在其他普通窗口之前。</sys:String>
+    <sys:String x:Key="Behavior.Compact">使用紧凑视图</sys:String>
+    <sys:String x:Key="Behavior.CompactDetail">占用较小的屏幕工作区域，以更紧凑的方式显示。</sys:String>
+    <sys:String x:Key="Behavior.SizingHeading">大小策略</sys:String>
+    <sys:String x:Key="Behavior.Sizing.Auto">自动</sys:String>
+    <sys:String x:Key="Behavior.Sizing.Dense">密集</sys:String>
+    <sys:String x:Key="Behavior.DefaultViewHeading">默认视图</sys:String>
+    <sys:String x:Key="Behavior.HotkeyHeading">快捷键</sys:String>
+    <sys:String x:Key="Behavior.LanguageHeading">语言</sys:String>
+    <sys:String x:Key="Behavior.LanguageDetail">“自动”会跟随 Windows 显示语言；不支持的语言将以英语显示。</sys:String>
+    <sys:String x:Key="Behavior.Language.Auto">自动</sys:String>
+    <sys:String x:Key="Behavior.Language.Korean">한국어</sys:String>
+    <sys:String x:Key="Behavior.Language.English">English</sys:String>
+    <sys:String x:Key="Behavior.Language.SimplifiedChinese">简体中文</sys:String>
+    <sys:String x:Key="Behavior.Language.Japanese">日本語</sys:String>
+</ResourceDictionary>

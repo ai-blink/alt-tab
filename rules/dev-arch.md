@@ -15,7 +15,7 @@
 - Core position/layout services calculate in logical coordinates; Native returns Win32 work areas, and App owns physical-pixel-to-WPF-DIP conversion.
 - Persistent `Topmost` state comes from the WPF setting; native presentation may change z-order only transiently and must leave the configured state intact.
 - Low-level hook callbacks stay off the WPF UI thread and dispatch only bounded overlay actions.
-- User-visible XAML text uses `{DynamicResource <Area>.<Name>}` keys from `App/Localization/Strings.{ko,en}.xaml`; C# text goes through `AppLocalizer.Get`. Every dictionary must define the same keys. Language resolution (`AppLanguageResolver`) stays in Core.
+- User-visible XAML text uses `{DynamicResource <Area>.<Name>}` keys from `App/Localization/Strings.{ko,en,zh-Hans,ja}.xaml`; C# text goes through `AppLocalizer.Get`. Every dictionary must define the same keys. Language resolution (`AppLanguageResolver`) stays in Core.
 
 ## Verification
 

@@ -291,6 +291,8 @@
                             <RadioButton Content="{DynamicResource Behavior.Language.Auto}" GroupName="Language" IsChecked="{Binding SelectedLanguage, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Auto}" Style="{StaticResource ChoiceRadioStyle}" />
                             <RadioButton Content="{DynamicResource Behavior.Language.Korean}" GroupName="Language" IsChecked="{Binding SelectedLanguage, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Korean}" Style="{StaticResource ChoiceRadioStyle}" />
                             <RadioButton Content="{DynamicResource Behavior.Language.English}" GroupName="Language" IsChecked="{Binding SelectedLanguage, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=English}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Behavior.Language.SimplifiedChinese}" GroupName="Language" IsChecked="{Binding SelectedLanguage, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=SimplifiedChinese}" Style="{StaticResource ChoiceRadioStyle}" />
+                            <RadioButton Content="{DynamicResource Behavior.Language.Japanese}" GroupName="Language" IsChecked="{Binding SelectedLanguage, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Japanese}" Style="{StaticResource ChoiceRadioStyle}" />
                         </WrapPanel>
                     </StackPanel>
                 </Grid>

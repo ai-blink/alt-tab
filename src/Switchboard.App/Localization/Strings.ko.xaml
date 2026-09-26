@@ -97,4 +97,6 @@
     <sys:String x:Key="Behavior.Language.Auto">자동</sys:String>
     <sys:String x:Key="Behavior.Language.Korean">한국어</sys:String>
     <sys:String x:Key="Behavior.Language.English">English</sys:String>
+    <sys:String x:Key="Behavior.Language.SimplifiedChinese">简体中文</sys:String>
+    <sys:String x:Key="Behavior.Language.Japanese">日本語</sys:String>
 </ResourceDictionary>

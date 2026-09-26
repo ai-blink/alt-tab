@@ -15,7 +15,7 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 
 ### Added
 
-- English app UI alongside Korean, with a Language setting (Auto, 한국어, English) in the Behavior tab. Auto follows the Windows display language and uses English for unsupported languages; switching applies immediately without restarting.
+- English, Simplified Chinese, and Japanese app UI alongside Korean, with a Language setting (Auto, 한국어, English, 简体中文, 日本語) in the Behavior tab. Auto follows the Windows display language (any Chinese variant uses Simplified Chinese) and uses English for unsupported languages; switching applies immediately without restarting.
 - Window title size setting (80/100/125/150%) that scales window titles and app labels in Grid, Compact, and List views.
 
 ### Changed

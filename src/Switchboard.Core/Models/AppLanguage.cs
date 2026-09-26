@@ -4,5 +4,7 @@ public enum AppLanguage
 {
     Auto,
     Korean,
-    English
+    English,
+    SimplifiedChinese,
+    Japanese
 }

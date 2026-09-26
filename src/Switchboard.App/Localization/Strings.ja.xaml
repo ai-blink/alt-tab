@@ -1,0 +1,102 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <!-- Keys must match Strings.ko.xaml exactly (LocalizationTests). -->
+
+    <!-- Overlay -->
+    <sys:String x:Key="Main.CloseWindowTooltip">ウィンドウを閉じる</sys:String>
+    <sys:String x:Key="Main.View.Grid">グリッド</sys:String>
+    <sys:String x:Key="Main.View.Compact">コンパクト</sys:String>
+    <sys:String x:Key="Main.View.List">リスト</sys:String>
+    <sys:String x:Key="Main.Theme.Transparent">透明</sys:String>
+    <sys:String x:Key="Main.Theme.Dark">ダーク</sys:String>
+    <sys:String x:Key="Main.Theme.Light">ライト</sys:String>
+    <sys:String x:Key="Main.SortTooltip">ウィンドウの並べ替え</sys:String>
+    <sys:String x:Key="Main.Sort.Recent">最近</sys:String>
+    <sys:String x:Key="Main.Sort.App">アプリ</sys:String>
+    <sys:String x:Key="Main.Sort.Monitor">モニター</sys:String>
+    <sys:String x:Key="Main.Sort.Title">タイトル</sys:String>
+    <sys:String x:Key="Main.Sort.Favorites">お気に入り</sys:String>
+    <sys:String x:Key="Main.SettingsTooltip">設定</sys:String>
+    <sys:String x:Key="Main.AlwaysOnTopTooltip">常に手前に表示</sys:String>
+    <sys:String x:Key="Main.RefreshTooltip">更新</sys:String>
+    <sys:String x:Key="Main.CloseTooltip">閉じる</sys:String>
+    <sys:String x:Key="Main.ListHeader.App1">アプリ 1</sys:String>
+    <sys:String x:Key="Main.ListHeader.Title1">ウィンドウタイトル 1</sys:String>
+    <sys:String x:Key="Main.ListHeader.App2">アプリ 2</sys:String>
+    <sys:String x:Key="Main.ListHeader.Title2">ウィンドウタイトル 2</sys:String>
+    <sys:String x:Key="Main.Hint.Tab">Tab 順に移動</sys:String>
+    <sys:String x:Key="Main.Hint.Enter">Enter 切り替え</sys:String>
+    <sys:String x:Key="Main.Hint.Esc">Esc 閉じる</sys:String>
+
+    <!-- Settings shell -->
+    <sys:String x:Key="Settings.WindowTitle">Switchboard の設定</sys:String>
+    <sys:String x:Key="Settings.Heading">設定</sys:String>
+    <sys:String x:Key="Settings.Tagline">Switchboard を自分の作業スタイルに合わせます</sys:String>
+    <sys:String x:Key="Settings.SavedStatus">● 変更を保存しました</sys:String>
+    <sys:String x:Key="Settings.SavedStatusDetail">変更した内容は次回の起動時にも保持されます。</sys:String>
+    <sys:String x:Key="Settings.Tab.Position">⌖  位置と移動</sys:String>
+    <sys:String x:Key="Settings.Tab.Appearance">◐  外観とサイズ</sys:String>
+    <sys:String x:Key="Settings.Tab.Behavior">⌨  基本動作</sys:String>
+    <sys:String x:Key="Settings.CloseTooltip">設定を閉じる</sys:String>
+    <sys:String x:Key="Settings.Subtitle">表示位置、画面サイズ、基本動作を分けて管理します。</sys:String>
+
+    <!-- Position & Move -->
+    <sys:String x:Key="Position.HowItWorksLabel" xml:space="preserve">基本の仕組み：</sys:String>
+    <sys:String x:Key="Position.HowItWorks">切り替え画面の空いている部分をドラッグすると、位置がすぐに保存されます。下のリモコンは一度だけ移動するためのものです。</sys:String>
+    <sys:String x:Key="Position.SavedHeading">保存した位置</sys:String>
+    <sys:String x:Key="Position.SavedDetail">ウィンドウサイズや表示モードが変わっても、最も近い角や端を基準に位置を保ちます。</sys:String>
+    <sys:String x:Key="Position.RemoteHeading">位置リモコン</sys:String>
+    <sys:String x:Key="Position.RemoteDetail">一度だけ移動 · 保存した位置は変わりません</sys:String>
+    <sys:String x:Key="Position.Remote.TopLeft">左上</sys:String>
+    <sys:String x:Key="Position.Remote.TopCenter">上</sys:String>
+    <sys:String x:Key="Position.Remote.TopRight">右上</sys:String>
+    <sys:String x:Key="Position.Remote.MiddleLeft">左</sys:String>
+    <sys:String x:Key="Position.Remote.Center">中央</sys:String>
+    <sys:String x:Key="Position.Remote.MiddleRight">右</sys:String>
+    <sys:String x:Key="Position.Remote.BottomLeft">左下</sys:String>
+    <sys:String x:Key="Position.Remote.BottomCenter">下</sys:String>
+    <sys:String x:Key="Position.Remote.BottomRight">右下</sys:String>
+    <sys:String x:Key="Position.ReturnSaved">保存した位置に戻る</sys:String>
+    <sys:String x:Key="Position.Anchor.TopLeft">左上</sys:String>
+    <sys:String x:Key="Position.Anchor.TopCenter">上中央</sys:String>
+    <sys:String x:Key="Position.Anchor.TopRight">右上</sys:String>
+    <sys:String x:Key="Position.Anchor.MiddleLeft">左中央</sys:String>
+    <sys:String x:Key="Position.Anchor.MiddleRight">右中央</sys:String>
+    <sys:String x:Key="Position.Anchor.BottomLeft">左下</sys:String>
+    <sys:String x:Key="Position.Anchor.BottomCenter">下中央</sys:String>
+    <sys:String x:Key="Position.Anchor.BottomRight">右下</sys:String>
+    <sys:String x:Key="Position.Anchor.Center">画面中央</sys:String>
+
+    <!-- Appearance & Size -->
+    <sys:String x:Key="Appearance.ScaleHeading">全体の倍率</sys:String>
+    <sys:String x:Key="Appearance.ScaleDetail">文字、カード、間隔をまとめて拡大・縮小します。</sys:String>
+    <sys:String x:Key="Appearance.ThumbnailHeading">プレビューのサイズ</sys:String>
+    <sys:String x:Key="Appearance.Thumbnail.Normal">標準</sys:String>
+    <sys:String x:Key="Appearance.Thumbnail.Large">やや大きく</sys:String>
+    <sys:String x:Key="Appearance.Thumbnail.ExtraLarge">大きく</sys:String>
+    <sys:String x:Key="Appearance.TitleScaleHeading">ウィンドウタイトルのサイズ</sys:String>
+    <sys:String x:Key="Appearance.TitleScaleDetail">ウィンドウカードのタイトルだけを小さく、または大きく表示します。すべての表示方式に適用されます。</sys:String>
+    <sys:String x:Key="Appearance.ThemeHeading">外観と透明度</sys:String>
+    <sys:String x:Key="Appearance.Theme.Transparent">半透明</sys:String>
+    <sys:String x:Key="Appearance.Theme.Dark">ダーク</sys:String>
+    <sys:String x:Key="Appearance.Theme.Light">ライト</sys:String>
+
+    <!-- Behavior -->
+    <sys:String x:Key="Behavior.AlwaysOnTop">常に手前に表示</sys:String>
+    <sys:String x:Key="Behavior.AlwaysOnTopDetail">切り替え画面を開いている間、ほかの通常のウィンドウより手前に表示します。</sys:String>
+    <sys:String x:Key="Behavior.Compact">コンパクト表示を使う</sys:String>
+    <sys:String x:Key="Behavior.CompactDetail">画面の作業領域を小さく使い、詰めて表示します。</sys:String>
+    <sys:String x:Key="Behavior.SizingHeading">サイズの調整方法</sys:String>
+    <sys:String x:Key="Behavior.Sizing.Auto">自動</sys:String>
+    <sys:String x:Key="Behavior.Sizing.Dense">高密度</sys:String>
+    <sys:String x:Key="Behavior.DefaultViewHeading">既定の表示</sys:String>
+    <sys:String x:Key="Behavior.HotkeyHeading">ショートカットキー</sys:String>
+    <sys:String x:Key="Behavior.LanguageHeading">言語</sys:String>
+    <sys:String x:Key="Behavior.LanguageDetail">「自動」は Windows の表示言語に従います。対応していない言語の場合は英語で表示します。</sys:String>
+    <sys:String x:Key="Behavior.Language.Auto">自動</sys:String>
+    <sys:String x:Key="Behavior.Language.Korean">한국어</sys:String>
+    <sys:String x:Key="Behavior.Language.English">English</sys:String>
+    <sys:String x:Key="Behavior.Language.SimplifiedChinese">简体中文</sys:String>
+    <sys:String x:Key="Behavior.Language.Japanese">日本語</sys:String>
+</ResourceDictionary>

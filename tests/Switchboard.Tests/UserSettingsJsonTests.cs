@@ -87,6 +87,8 @@ public sealed class UserSettingsJsonTests
     [InlineData(AppLanguage.Auto)]
     [InlineData(AppLanguage.Korean)]
     [InlineData(AppLanguage.English)]
+    [InlineData(AppLanguage.SimplifiedChinese)]
+    [InlineData(AppLanguage.Japanese)]
     public void Language_round_trips_through_json(AppLanguage language)
     {
         var settingsPath = Path.Combine(Path.GetTempPath(), $"switchboard-settings-{Guid.NewGuid():N}.json");
