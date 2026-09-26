@@ -28,6 +28,7 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 - Overlay toolbar tooltips and footer key hints are now localized instead of always showing English.
 - Switchboard now runs as a single instance per session.
 - Simpler overlay toolbar: theme buttons moved to Settings only, and sorting is a single dropdown.
+- Larger overlay toolbar (about 1.3x): taller header, search box, view buttons, sort dropdown, and icon buttons.
 - Selected cards get a thicker highlight; the close button is larger (24 px) and appears only on the hovered or selected card.
 - The Alt+Tab hook responds faster under load (higher hook-thread priority, no power throttling, low-latency GC).
 

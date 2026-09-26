@@ -14,6 +14,7 @@ updated: 2026-09-27
 - **화면 캡처는 DPI 인식 상태로**: DPI 비인식 PowerShell의 `CopyFromScreen`은 3840×2160 화면에서 왼쪽 위 2394×1346만 잘라 와서, 멀쩡한 오버레이를 "화면 밖으로 잘림" 버그로 오진했다. 캡처 전에 `SetProcessDPIAware()`를 호출한다.
 - **관리자 권한 판정은 `OpenProcessToken`으로**: `$p.Handle` 접근 성공 여부로는 상승 프로세스를 못 가린다(0개로 오판 → 실제 5개). `uac-verify` token-probe를 쓴다.
 - **SendInput 프로브는 전면 창 권한부터 확인**: 관리자 권한 창이 앞에 있으면 UIPI가 입력을 조용히 버려 "아무 반응 없음"이 나온다. x64 `INPUT` 구조체는 40바이트다(32바이트면 SendInput이 전부 거부).
+- **가려진 오버레이는 `PrintWindow`(PW_RENDERFULLCONTENT=2)로 캡처**: "항상 위에 표시"가 꺼져 있으면 오버레이가 포그라운드여도 항상 위 창(WinMux 등)에 가려져 화면 캡처엔 뒤 창만 찍힌다. 앱을 막 띄운 직후의 오버레이도 뒤에 깔린다.
 - **프로브에서 Esc 등 키를 전면 창에 보내지 말 것**: 전면이 WinMux(Claude 세션)면 작업을 중단시킨다. 오버레이는 자체 Alt+Tab 토글로만 닫는다.
 - **인계 파일 수치를 그대로 믿지 말 것**: "XAML 47줄/16줄"은 파일 길이가 아니라 한글 포함 줄 수였고, "`.cs` 한글 0건"은 `MainWindowViewModel.cs`의 위치 라벨 9개를 놓쳤다. 착수 전 `grep`으로 대조한다.
 - **실행 중인 `Switchboard.App.exe`가 `bin/Debug` 출력을 잠근다**: 빌드 전 프로세스를 종료하고, 끝나면 새 빌드로 다시 실행한다.
