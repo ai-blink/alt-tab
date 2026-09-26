@@ -7,7 +7,8 @@ public static class SwitcherLayoutCalculator
     private const double OuterMargin = 18;
     private const double ContentHorizontalMargin = 28;
     private const double ContentVerticalMargin = 20;
-    private const double HeaderHeight = 52;
+    // Matches the overlay header row in MainWindow.xaml.
+    private const double HeaderHeight = 64;
     private const double FooterHeight = 30;
     private const double ListDetailsHeaderHeight = 30;
     private const double ItemHorizontalGap = 6;

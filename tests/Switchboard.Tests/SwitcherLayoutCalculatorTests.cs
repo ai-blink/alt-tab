@@ -64,8 +64,8 @@ public sealed class SwitcherLayoutCalculatorTests
             minimumLogicalHeight,
             appScale: 2.0);
 
-        Assert.Equal(398, minimumLogicalHeight);
-        Assert.Equal(760, minimumPhysicalHeight);
+        Assert.Equal(410, minimumLogicalHeight);
+        Assert.Equal(784, minimumPhysicalHeight);
         Assert.True(minimumPhysicalHeight > 816 * 0.65);
         Assert.True(minimumPhysicalHeight <= 816);
     }

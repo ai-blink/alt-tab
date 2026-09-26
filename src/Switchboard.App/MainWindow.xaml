@@ -463,15 +463,15 @@
         </Style>
 
         <Style x:Key="ChromeButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="30" />
-            <Setter Property="Height" Value="30" />
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderBrush" Value="{Binding BorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Foreground" Value="{Binding MutedTextBrush}" />
             <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
-            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontSize" Value="16" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -497,15 +497,15 @@
         </Style>
 
         <Style x:Key="ChromeToggleButtonStyle" TargetType="ToggleButton">
-            <Setter Property="Width" Value="30" />
-            <Setter Property="Height" Value="30" />
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderBrush" Value="{Binding BorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Foreground" Value="{Binding MutedTextBrush}" />
             <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
-            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontSize" Value="16" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
@@ -536,12 +536,12 @@
         </Style>
 
         <Style x:Key="SortMenuButtonStyle" TargetType="Button">
-            <Setter Property="Padding" Value="11,0" />
+            <Setter Property="Padding" Value="14,0" />
             <Setter Property="Background" Value="{Binding SegmentBackground}" />
             <Setter Property="BorderBrush" Value="{Binding BorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Foreground" Value="{Binding TextBrush}" />
-            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontSize" Value="13" />
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -565,13 +565,13 @@
         </Style>
 
         <Style x:Key="ModeRadioStyle" TargetType="RadioButton">
-            <Setter Property="Height" Value="26" />
-            <Setter Property="MinWidth" Value="44" />
-            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="Height" Value="34" />
+            <Setter Property="MinWidth" Value="56" />
+            <Setter Property="Padding" Value="14,0" />
             <Setter Property="Margin" Value="2" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{Binding MutedTextBrush}" />
-            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontSize" Value="13" />
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -656,7 +656,7 @@
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="52" />
+                    <RowDefinition Height="64" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="30" />
                 </Grid.RowDefinitions>
@@ -665,51 +665,51 @@
                         Background="{Binding HeaderBackground}"
                         BorderBrush="{Binding BorderBrush}"
                         BorderThickness="0,0,0,1"
-                        Padding="14,10">
+                        Padding="16,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="128" />
+                            <ColumnDefinition Width="150" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0"
                                     VerticalAlignment="Center">
-                            <TextBlock FontSize="16"
+                            <TextBlock FontSize="19"
                                        FontWeight="SemiBold"
                                        Foreground="{Binding TextBrush}"
                                        Text="Switchboard" />
                             <TextBlock FontFamily="Cascadia Mono, Consolas"
-                                       FontSize="10"
+                                       FontSize="12"
                                        Foreground="{Binding MutedTextBrush}"
                                        Text="{Binding WindowCountLabel}" />
                         </StackPanel>
 
                         <Border Grid.Column="1"
-                                Height="32"
-                                Margin="0,0,12,0"
+                                Height="40"
+                                Margin="0,0,14,0"
                                 VerticalAlignment="Center"
                                 Background="{Binding SearchBackground}"
                                 BorderBrush="{Binding BorderBrush}"
                                 BorderThickness="1"
-                                CornerRadius="7"
-                                Padding="10,0">
+                                CornerRadius="8"
+                                Padding="12,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="22" />
+                                    <ColumnDefinition Width="26" />
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="58" />
+                                    <ColumnDefinition Width="70" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0"
                                            VerticalAlignment="Center"
                                            FontFamily="Segoe MDL2 Assets"
-                                           FontSize="12"
+                                           FontSize="15"
                                            Foreground="{Binding MutedTextBrush}"
                                            Text="&#xE721;" />
                                 <TextBlock Grid.Column="1"
                                            Margin="3,0,0,0"
                                            VerticalAlignment="Center"
-                                           FontSize="13"
+                                           FontSize="15"
                                            Foreground="{Binding MutedTextBrush}"
                                            IsHitTestVisible="False"
                                            Text="{DynamicResource Main.SearchPlaceholder}">
@@ -731,12 +731,12 @@
                                          VerticalContentAlignment="Center"
                                          Background="Transparent"
                                          BorderThickness="0"
-                                         FontSize="13"
+                                         FontSize="15"
                                          Foreground="{Binding TextBrush}"
                                          CaretBrush="{Binding AccentBrush}"
                                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                                 <Border Grid.Column="2"
-                                        Height="20"
+                                        Height="24"
                                         VerticalAlignment="Center"
                                         Background="{Binding SegmentBackground}"
                                         CornerRadius="4"
@@ -744,7 +744,7 @@
                                     <TextBlock HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                FontFamily="Cascadia Mono, Consolas"
-                                               FontSize="10"
+                                               FontSize="12"
                                                Foreground="{Binding MutedTextBrush}"
                                                Text="Ctrl+K" />
                                 </Border>
@@ -754,8 +754,8 @@
                         <StackPanel Grid.Column="2"
                                     Orientation="Horizontal"
                                     VerticalAlignment="Center">
-                            <Border Height="30"
-                                    Margin="0,0,8,0"
+                            <Border Height="40"
+                                    Margin="0,0,10,0"
                                     Background="{Binding SegmentBackground}"
                                     BorderBrush="{Binding BorderBrush}"
                                     BorderThickness="1"
@@ -779,15 +779,15 @@
 
 
                             <Button x:Name="SortMenuButton"
-                                    Height="30"
-                                    Margin="0,0,8,0"
+                                    Height="40"
+                                    Margin="0,0,10,0"
                                     AutomationProperties.Name="Sort windows"
                                     Click="OnSortMenuButtonClick"
                                     Style="{StaticResource SortMenuButtonStyle}"
                                     ToolTip="{DynamicResource Main.SortTooltip}">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock VerticalAlignment="Center" Text="{Binding SortModeLabel}" />
-                                    <TextBlock Margin="7,1,0,0" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" FontSize="9" Text="&#xE70D;" />
+                                    <TextBlock Margin="7,1,0,0" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" FontSize="11" Text="&#xE70D;" />
                                 </StackPanel>
                                 <Button.ContextMenu>
                                     <ContextMenu Placement="Bottom">
@@ -804,18 +804,18 @@
                                     Content="&#xE713;"
                                     AutomationProperties.Name="Settings"
                                     Click="OnSettingsButtonClick"
-                                    Margin="0,0,8,0"
+                                    Margin="0,0,10,0"
                                     Style="{StaticResource ChromeButtonStyle}"
                                     ToolTip="{DynamicResource Main.SettingsTooltip}" />
                             <ToggleButton Content="&#xE718;"
                                           AutomationProperties.Name="Always on top"
                                           IsChecked="{Binding IsAlwaysOnTop}"
-                                          Margin="0,0,8,0"
+                                          Margin="0,0,10,0"
                                           Style="{StaticResource ChromeToggleButtonStyle}"
                                           ToolTip="{DynamicResource Main.AlwaysOnTopTooltip}" />
                             <Button Content="&#xE72C;"
                                     Command="{Binding RefreshCommand}"
-                                    Margin="0,0,8,0"
+                                    Margin="0,0,10,0"
                                     Style="{StaticResource ChromeButtonStyle}"
                                     ToolTip="{DynamicResource Main.RefreshTooltip}" />
                             <Button Content="&#xE8BB;"
