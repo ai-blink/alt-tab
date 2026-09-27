@@ -11,13 +11,14 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 - **Security notices, data-loss risks, breaking changes, installation changes, and required user actions:** provide the complete information in all four languages.
 - **Internal refactors, test-only work, and developer-tooling changes:** may remain in the English changelog when they do not affect users.
 
-## [Unreleased]
+## [0.4.0] - 2026-09-27
+
+A feature release that makes the app multilingual, keeps Alt+Tab on Switchboard more reliably, and refreshes the overlay cards and toolbar.
 
 ### Added
 
 - English, Simplified Chinese, and Japanese app UI alongside Korean, with a Language setting (Auto, 한국어, English, 简体中文, 日本語) in the Behavior tab. Auto follows the Windows display language (any Chinese variant uses Simplified Chinese) and uses English for unsupported languages; switching applies immediately without restarting.
 - Window title size setting (80/100/125/150%) that scales window titles and app labels in Grid, Compact, and List views.
-
 - Optional "Start with administrator rights at sign-in" setting (Behavior tab). Windows hides keyboard input for administrator windows such as Task Manager from standard apps, so Alt+Tab over them used to open the Windows switcher; running elevated through a Task Scheduler sign-in task keeps Switchboard in charge. Includes a "Restart as administrator now" button and a current-rights indicator.
 - App icons on window cards and list rows, with a short app name beside the icon (5, 6, or 7 characters; Appearance → App name length). The name is hidden when the window title already starts with it.
 - A large app icon on the lower-left corner of each live thumbnail in Grid and Compact views; click it to switch to that window.
@@ -40,6 +41,12 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 - After an Alt+Tab into an administrator window, the next Alt+Tab could be silently ignored.
 - Selected view, theme, sort, and always-on-top buttons were nearly unreadable (white text on a pale accent).
 - The window count in the overlay header is now localized.
+
+### Verification
+
+- Release build: 0 warnings, 0 errors
+- Tests: 110/110 passed
+- Verified the self-contained Windows 11 x64 single-file package
 
 ## [0.3.1] - 2026-08-18
 
