@@ -2,6 +2,7 @@
 
 | Status | Milestone | Evidence |
 |---|---|---|
+| released — UI check pending | `v0.4.0` Portable: multilingual UI, Alt+Tab reliability (elevated sign-in task, hook self-healing), app icons and thumbnail icons, simplified toolbar. | GitHub Release `v0.4.0`; 110 Release tests; asset SHA-256 matches |
 | done — sign-in check pending | Keep Alt+Tab on Switchboard over elevated windows and during brief stalls (elevated sign-in task, single instance, hook responsiveness, diagnostics log, lost key-up recovery). | 2026-09-27 94 tests; elevated vs standard probe; task-verify register/delete |
 | done — UI check pending | Overlay UX from mocks: app icons + 5/6/7-char app names (duplicates hidden), simplified toolbar (2A), stronger selection with hover/selected 24px close (3A). | 2026-09-27 110 tests; Grid capture; `notes/mocks/2026-09-27_overlay-ux/` |
 | done — UI check pending | Localize the app UI into Korean, English, Simplified Chinese, and Japanese with a live Language setting. | 2026-09-27 build 0 warnings/errors, 87 tests incl. four-way `LocalizationTests` key parity; ja/zh-Hans startup smoke |

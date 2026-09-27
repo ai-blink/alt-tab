@@ -1,7 +1,7 @@
 # Dev Context
 
 - Date: 2026-09-27
-- Current slice: Alt+Tab reliability (elevated sign-in task, single instance, hook responsiveness, diagnostics) plus UI review fixes and the chosen overlay UX (icons + short app names, toolbar 2A, cards 3A). Previous: four-language UI localization (UI check pending).
+- Current slice: released `v0.4.0` (2026-09-27); next is user UI acceptance and reading the Alt+Tab diagnostics log. Before: Alt+Tab reliability (elevated sign-in task, single instance, hook responsiveness, diagnostics) plus UI review fixes and the chosen overlay UX (icons + short app names, toolbar 2A, cards 3A). Previous: four-language UI localization (UI check pending).
 - Decision: UI strings live in per-language `ResourceDictionary` files (`src/Switchboard.App/Localization/Strings.{ko,en,zh-Hans,ja}.xaml`) read through `DynamicResource`; `AppLocalizer` owns the single merged string dictionary and swaps it at runtime, so language changes apply without restart.
 - Decision: `AppLanguage.Auto` (default) follows the Windows display language; every Chinese variant (including Traditional) uses Simplified Chinese; unsupported languages fall back to English. `AppLocalizer` also sets each window's `xml:lang` so Han characters render with Chinese or Japanese glyphs.
 - Decision: Alt+Tab over elevated windows is solved by an optional Task Scheduler sign-in task (`HighestAvailable`), not uiAccess, to keep Portable distribution; Switchboard is single-instance per session.
