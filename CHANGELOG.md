@@ -20,7 +20,7 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 
 - Optional "Start with administrator rights at sign-in" setting (Behavior tab). Windows hides keyboard input for administrator windows such as Task Manager from standard apps, so Alt+Tab over them used to open the Windows switcher; running elevated through a Task Scheduler sign-in task keeps Switchboard in charge. Includes a "Restart as administrator now" button and a current-rights indicator.
 - App icons on window cards and list rows, with a short app name beside the icon (5, 6, or 7 characters; Appearance → App name length). The name is hidden when the window title already starts with it.
-- A translucent large app icon on the lower-left corner of each live thumbnail in Grid and Compact views.
+- A large app icon on the lower-left corner of each live thumbnail in Grid and Compact views; click it to switch to that window.
 - Search box hint text ("Search by window title or app name").
 - Alt+Tab diagnostics log at `%AppData%\Switchboard\logs\alttab-diagnostics.log` recording when the Windows switcher opened instead of Switchboard and which window was in front.
 
@@ -30,7 +30,8 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 - Switchboard now runs as a single instance per session.
 - Simpler overlay toolbar: theme buttons moved to Settings only, and sorting is a single dropdown.
 - Larger overlay toolbar (about 1.3x): taller header, search box, view buttons, sort dropdown, and icon buttons.
-- Selected cards get a thicker highlight; the close button is larger (24 px) and appears only on the hovered or selected card.
+- Selected cards get a thicker highlight; the close button is larger (30 px) and appears only on the hovered or selected card.
+- Alt+Tab while the overlay is open but covered or unfocused brings it to the front instead of closing it.
 - The Alt+Tab hook responds faster under load (higher hook-thread priority, no power throttling, low-latency GC).
 
 ### Fixed

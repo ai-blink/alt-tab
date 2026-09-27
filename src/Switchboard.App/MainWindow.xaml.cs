@@ -65,7 +65,8 @@ public partial class MainWindow : Window
         thumbnailIconLayer ??= new ThumbnailIconLayer(
             this,
             WindowList,
-            () => viewModel.SelectedViewMode != SwitcherViewMode.List && viewModel.AreDwmThumbnailsVisible);
+            () => viewModel.SelectedViewMode != SwitcherViewMode.List && viewModel.AreDwmThumbnailsVisible,
+            ActivateWindowFromIcon);
         RefreshWindowCatalog();
         ApplyContentSizedBounds();
         ShowInTaskbar = true;
@@ -320,15 +321,28 @@ public partial class MainWindow : Window
         return 0;
     }
 
+    // Alt+Tab while open closes only an overlay the user is looking at; a covered or unfocused
+    // overlay (possible when "always on top" is off) is brought forward instead of vanishing.
     private void ToggleOverlay()
     {
-        if (IsVisible)
+        if (IsVisible && IsActive)
         {
             HideOverlay(restorePreviousWindow: true);
             return;
         }
 
         ShowOverlay();
+    }
+
+    private void ActivateWindowFromIcon(nint handle)
+    {
+        if (viewModel.VisibleWindows.FirstOrDefault(window => window.Handle == handle) is not { } window)
+        {
+            return;
+        }
+
+        WindowList.SelectedItem = window;
+        ActivateSelectedWindowAndClose();
     }
 
     private void HideOverlay(bool restorePreviousWindow)

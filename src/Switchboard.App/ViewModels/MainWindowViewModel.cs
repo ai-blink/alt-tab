@@ -25,8 +25,8 @@ public partial class MainWindowViewModel : ObservableObject
 {
     private const double BaseGridCardWidth = 274;
     private const double BaseGridPreviewHeight = 160;
-    // Matches the caption row in GridWindowTemplate; sized for the 24px close button.
-    private const double GridCaptionHeight = 32;
+    // Matches the caption row in GridWindowTemplate; sized for the 30px close button.
+    private const double GridCaptionHeight = 36;
     private const double BaseCompactCardWidth = 224;
     private const double BaseCompactCardHeight = 96;
     private const double BaseListWidth = 600;

@@ -27,10 +27,10 @@
         <app:AppNameLabelConverter x:Key="AppNameLabelConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
-        <!-- 24px target shown only on the hovered or selected card; hidden (not collapsed) so the title does not re-trim on hover. -->
+        <!-- 30px target shown only on the hovered or selected card; hidden (not collapsed) so the title does not re-trim on hover. -->
         <Style x:Key="WindowCloseButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="24" />
-            <Setter Property="Height" Value="24" />
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
             <Setter Property="Visibility" Value="Hidden" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Background" Value="#CC252B35" />
@@ -38,7 +38,7 @@
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Foreground" Value="#DDE4EE" />
             <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
-            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontSize" Value="13" />
             <Setter Property="Content" Value="&#xE8BB;" />
             <Setter Property="ToolTip" Value="{DynamicResource Main.CloseWindowTooltip}" />
             <Setter Property="Template">
@@ -86,7 +86,7 @@
                 <Grid Background="{Binding ThumbnailBrush}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="32" />
+                        <RowDefinition Height="36" />
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0"
@@ -224,7 +224,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="30" />
+                        <RowDefinition Height="34" />
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0"
