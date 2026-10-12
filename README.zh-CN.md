@@ -4,13 +4,14 @@
 
 Switchboard 是一款 Windows 11 桌面叠加层，可让窗口切换更清晰、更可靠。它以易读的标题和不裁切的预览显示已打开的窗口，并根据窗口数量和可用屏幕空间调整布局。
 
-**当前版本：** [v0.4.1](https://github.com/ai-blink/alt-tab/releases/tag/v0.4.1) · **发布形式：** Windows 11 x64 Portable
+**当前版本：** [v0.4.2](https://github.com/ai-blink/alt-tab/releases/tag/v0.4.2) · **发布形式：** Windows 11 x64 Portable
 
 > 这是免安装的便携预览版：解压后即可运行。未进行代码签名的构建可能会触发 Windows SmartScreen 警告。
 
 ## 功能
 
 - 按一次 Alt+Tab 即可显示或隐藏 Switchboard
+- 防止排队的 Alt+Tab 请求反复打开和关闭窗口；从托盘打开时取消旧的待处理切换
 - 显示完整源窗口的 DWM 预览
 - 为超过 25 个窗口提供响应式行列布局和滚动
 - 网格、紧凑和列表视图
@@ -24,7 +25,7 @@ Switchboard 是一款 Windows 11 桌面叠加层，可让窗口切换更清晰�
 
 ## 安装与运行
 
-1. 将 Switchboard-v0.4.1-win-x64-Portable.zip 解压到一个新文件夹。
+1. 将 Switchboard-v0.4.2-win-x64-Portable.zip 解压到一个新文件夹。
 2. 运行 Switchboard.App.exe。
 3. 如果出现 SmartScreen，请确认来源后选择 **更多信息 → 仍要运行**。
 4. 如需退出，在任务栏通知区域中右键 Switchboard 图标，然后选择 **Exit**。
@@ -59,7 +60,7 @@ Switchboard 是一款 Windows 11 桌面叠加层，可让窗口切换更清晰�
 
 ## 已知限制
 
-- 偶发的 Alt+Tab 无响应和整个桌面无法点击的问题仍在调查中。v0.4.1 修复了排序菜单清理遗漏并增加输入状态日志。再次发生时，请先尝试 Esc，并记录是否恢复。
+- 偶发的 Alt+Tab 无响应和整个桌面无法点击的问题仍在调查中。v0.4.2 修复了排序菜单清理遗漏并增加输入状态日志。再次发生时，请先尝试 Esc，并记录是否恢复。
 
 - 由于 Windows 的焦点限制，激活以管理员权限运行的窗口或安全桌面上的窗口可能会失败。
 - 当前发布包没有数字代码签名，因此可能出现 SmartScreen。

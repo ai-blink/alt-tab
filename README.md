@@ -4,13 +4,14 @@
 
 Switchboard is a Windows 11 desktop overlay that makes switching between windows clearer and more dependable. It shows open windows with readable titles and uncropped previews, then adapts its layout to the number of windows and the available screen space.
 
-**Current version:** [v0.4.1](https://github.com/ai-blink/alt-tab/releases/tag/v0.4.1) · **Distribution:** Windows 11 x64 Portable
+**Current version:** [v0.4.2](https://github.com/ai-blink/alt-tab/releases/tag/v0.4.2) · **Distribution:** Windows 11 x64 Portable
 
 > This is a portable preview: extract the archive and run it without an installer. Builds without code signing may trigger a Windows SmartScreen warning.
 
 ## Features
 
 - Toggle Switchboard with one Alt+Tab press
+- Prevent queued Alt+Tab gestures from replaying as repeated open/close flicker; explicit tray opening cancels older pending toggles.
 - DWM previews that show each source window in full
 - Responsive rows, columns, and scrolling for more than 25 windows
 - Grid, compact, and list views
@@ -24,7 +25,7 @@ Switchboard is a Windows 11 desktop overlay that makes switching between windows
 
 ## Install and run
 
-1. Extract Switchboard-v0.4.1-win-x64-Portable.zip into a new folder.
+1. Extract Switchboard-v0.4.2-win-x64-Portable.zip into a new folder.
 2. Run Switchboard.App.exe.
 3. If SmartScreen appears, verify the source, then choose **More info → Run anyway**.
 4. To exit, right-click the Switchboard icon in the taskbar notification area and choose **Exit**.
@@ -62,7 +63,7 @@ To restore defaults, exit Switchboard, delete that file, and start Switchboard a
 - Activating administrator-elevated windows or windows on the secure desktop can fail because of Windows focus restrictions.
 - The current distribution is not digitally code-signed, so SmartScreen may appear.
 - There is currently no setting to disable the Alt+Tab hook. Exit Switchboard to use the default Windows Alt+Tab behavior.
-- Intermittent Alt+Tab freezes and desktop-wide click blocking remain under investigation. v0.4.1 fixes sorting-menu cleanup and adds input-state diagnostics; if the problem recurs, try Esc before force-quitting and note whether it helps.
+- Intermittent Alt+Tab freezes and desktop-wide click blocking remain under investigation. v0.4.2 fixes sorting-menu cleanup and adds input-state diagnostics; if the problem recurs, try Esc before force-quitting and note whether it helps.
 - Virtual-desktop management, automatic window placement, and timeline features are outside V1 scope.
 
 ## Development

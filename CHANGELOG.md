@@ -11,6 +11,28 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 - **Security notices, data-loss risks, breaking changes, installation changes, and required user actions:** provide the complete information in all four languages.
 - **Internal refactors, test-only work, and developer-tooling changes:** may remain in the English changelog when they do not affect users.
 
+## [0.4.2] - 2026-10-12
+
+A patch release for delayed Alt+Tab processing and repeated overlay flicker after opening Switchboard from the tray.
+
+### Fixed
+
+- Dispatch hook requests at Normal priority so pending native input does not defer them through WPF's Input-priority background-processing path.
+- Keep only one pending Alt+Tab gesture while the UI is waiting, instead of replaying a backlog of open/close toggles.
+- Cancel older pending toggles when explicitly showing or hiding the overlay, so a tray or secondary-hotkey request is not undone by a delayed shortcut.
+- Cancel requests from the old keyboard hook after disposing it during hook re-registration.
+
+### Added
+
+- Diagnostic entries for UI dispatch wait time and superseded Alt+Tab requests in the existing diagnostics log.
+
+### Verification and limitations
+
+- Release build: 0 warnings, 0 errors; 117/117 tests passed.
+- The user confirmed normal immediate Alt+Tab/tray response in the deployed fix. Existing native foreground activation is unchanged.
+- Long-term recurrence of intermittent freezes or desktop-wide click blocking remains unverified; this release does not claim every input-stall cause is resolved.
+- Exit Switchboard before replacing the executable. Existing settings are preserved; re-register elevated sign-in startup if the executable location changes.
+
 ## [0.4.1] - 2026-10-12
 
 A patch release that cleans up overlay input state when hiding Switchboard and adds diagnostics for intermittent input problems.

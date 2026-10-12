@@ -2,6 +2,7 @@
 
 | Status | Milestone | Evidence |
 |---|---|---|
+| done — long-term recurrence check pending | v0.4.2: Normal-priority Alt+Tab dispatch, one pending gesture, stale-request cancellation for explicit show/hide. | 117 tests; user confirmed immediate Alt+Tab/tray response |
 | done — recurrence check pending | v0.4.1: sorting-menu/capture cleanup before hiding, immediate icon-layer hide, input-state diagnostics; existing native activation retained. | 112 tests; user confirmed window switching; intermittent global input stalls remain unconfirmed |
 | released — UI check pending | `v0.4.0` Portable: multilingual UI, Alt+Tab reliability (elevated sign-in task, hook self-healing), app icons and thumbnail icons, simplified toolbar. | GitHub Release `v0.4.0`; 110 Release tests; asset SHA-256 matches |
 | done — sign-in check pending | Keep Alt+Tab on Switchboard over elevated windows and during brief stalls (elevated sign-in task, single instance, hook responsiveness, diagnostics log, lost key-up recovery). | 2026-09-27 94 tests; elevated vs standard probe; task-verify register/delete |
