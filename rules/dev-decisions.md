@@ -20,6 +20,7 @@
 - D-011: Persist overlay position only after direct drag, using the nearest 3×3 work-area anchor plus offset. The picture remote performs one-shot movement and never replaces the saved position.
 - D-012: Replace the anchored settings popup with an owner-modal settings window whose left sidebar switches Position & Move, Appearance & Size, and Behavior content.
 - D-013: Apply the configurable scale to the overlay only; keep the fixed-size settings modal untransformed so its content cannot outgrow its window frame.
+- D-014: Before hiding the overlay, explicitly close its sorting menu and release only its own mouse capture. Preserve the existing native activation path: removing activation calls without real-HWND acceptance caused a regression during the 2026-10-12 investigation and was reverted. A passing menu-state test does not prove desktop-wide click blocking is resolved.
 
 ## Workflow
 

@@ -11,6 +11,27 @@ This file is the canonical, detailed English changelog. For every GitHub Release
 - **Security notices, data-loss risks, breaking changes, installation changes, and required user actions:** provide the complete information in all four languages.
 - **Internal refactors, test-only work, and developer-tooling changes:** may remain in the English changelog when they do not affect users.
 
+## [0.4.1] - 2026-10-12
+
+A patch release that cleans up overlay input state when hiding Switchboard and adds diagnostics for intermittent input problems.
+
+### Fixed
+
+- Close the sorting menu before hiding its overlay owner; hiding the owner alone can leave the menu open.
+- Release mouse capture owned by the overlay or its thumbnail-icon layer before hiding.
+- Hide the clickable thumbnail-icon layer immediately rather than waiting for a queued layout refresh.
+
+### Added
+
+- Record menu, mouse capture, modifier-key, overlay, settings-window, and icon-layer state around Alt+Tab, hiding, and dragging in the existing Alt+Tab diagnostics log.
+
+### Verification and limitations
+
+- Release build: 0 warnings, 0 errors; 112/112 tests passed.
+- The existing native foreground activation behavior is retained, and the user confirmed normal window switching in the deployed build.
+- The intermittent Alt+Tab freeze and desktop-wide mouse-click blocking have not been conclusively reproduced or resolved. This release fixes the reproduced menu-state cleanup gap; it does not claim to resolve every reported input stall.
+- Existing settings are preserved. Exit Switchboard before replacing the executable; if its location changes, disable and re-enable the elevated sign-in option.
+
 ## [0.4.0] - 2026-09-27
 
 A feature release that makes the app multilingual, keeps Alt+Tab on Switchboard more reliably, and refreshes the overlay cards and toolbar.

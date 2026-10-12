@@ -4,7 +4,7 @@
 
 Switchboard는 Windows 11에서 창 전환을 더 선명하고 안정적으로 만드는 데스크톱 오버레이입니다. 열려 있는 창을 읽기 쉬운 제목과 잘리지 않는 미리보기로 표시하고, 창 개수와 화면 공간에 맞춰 레이아웃을 조절합니다.
 
-**현재 버전:** [v0.3.1](https://github.com/ai-blink/alt-tab/releases/tag/v0.3.1) · **배포 형식:** Windows 11 x64 Portable
+**현재 버전:** [v0.4.1](https://github.com/ai-blink/alt-tab/releases/tag/v0.4.1) · **배포 형식:** Windows 11 x64 Portable
 
 > 설치 프로그램 없이 압축을 풀어 실행하는 포터블 프리뷰입니다. 코드 서명이 적용되지 않은 빌드에서는 Windows SmartScreen 경고가 표시될 수 있습니다.
 
@@ -24,7 +24,7 @@ Switchboard는 Windows 11에서 창 전환을 더 선명하고 안정적으로 �
 
 ## 설치 및 실행
 
-1. Switchboard-v0.3.1-win-x64-Portable.zip의 압축을 새 폴더에 풉니다.
+1. Switchboard-v0.4.1-win-x64-Portable.zip의 압축을 새 폴더에 풉니다.
 2. Switchboard.App.exe를 실행합니다.
 3. SmartScreen 경고가 나오면 출처를 확인한 뒤 **추가 정보 → 실행**을 선택합니다.
 4. 종료하려면 작업 표시줄 알림 영역의 Switchboard 아이콘을 우클릭하고 **Exit**를 선택합니다.
@@ -58,6 +58,8 @@ Switchboard는 Windows 11에서 창 전환을 더 선명하고 안정적으로 �
 기본값으로 초기화하려면 Switchboard를 종료하고 위 파일을 삭제한 뒤 다시 실행하세요.
 
 ## 알려진 제한 사항
+
+- 간헐적 Alt+Tab 먹통과 바탕화면까지 클릭이 막히는 문제는 조사 중입니다. v0.4.1은 정렬 메뉴 정리 누락을 수정하고 입력 상태 로그를 추가합니다. 재발하면 강제 종료 전에 Esc로 풀리는지 확인해 주세요.
 
 - 관리자 권한 창과 보안 데스크톱의 창은 Windows 포커스 제한 때문에 활성화에 실패할 수 있습니다.
 - 현재 배포 파일에는 디지털 코드 서명이 없어 SmartScreen 경고가 표시될 수 있습니다.

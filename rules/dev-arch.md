@@ -15,6 +15,7 @@
 - Core position/layout services calculate in logical coordinates; Native returns Win32 work areas, and App owns physical-pixel-to-WPF-DIP conversion.
 - Persistent `Topmost` state comes from the WPF setting; native presentation may change z-order only transiently and must leave the configured state intact.
 - Low-level hook callbacks stay off the WPF UI thread and dispatch only bounded overlay actions.
+- App's `OverlayInputCleanup` closes the sorting popup, releases only overlay-owned mouse capture, and hides the icon layer before the overlay owner is hidden. Input-state diagnostics are written at Alt+Tab, hide, and drag boundaries. Native foreground activation retains the v0.4.0 implementation.
 - User-visible XAML text uses `{DynamicResource <Area>.<Name>}` keys from `App/Localization/Strings.{ko,en,zh-Hans,ja}.xaml`; C# text goes through `AppLocalizer.Get`. Every dictionary must define the same keys. Language resolution (`AppLanguageResolver`) stays in Core.
 
 ## Verification

@@ -244,6 +244,7 @@ public partial class MainWindow : Window
 
     private void OnHookAltTab()
     {
+        WriteOverlayInputState("alt-tab");
         if (hookReinstalledAt is { } reinstalledAt)
         {
             hookReinstalledAt = null;
@@ -347,11 +348,14 @@ public partial class MainWindow : Window
 
     private void HideOverlay(bool restorePreviousWindow)
     {
+        WriteOverlayInputState("hide-before");
+        OverlayInputCleanup.BeforeHide(this, SortMenuButton.ContextMenu, thumbnailIconLayer);
         temporaryOverlayPosition = null;
         temporaryOverlayWorkArea = null;
         ShowInTaskbar = false;
         StopRefreshTimer();
         Hide();
+        WriteOverlayInputState("hide-after");
 
         if (restorePreviousWindow)
         {
@@ -360,6 +364,14 @@ public partial class MainWindow : Window
             RestoreForegroundWindowAfterInput(hwnd);
         }
     }
+
+    private void WriteOverlayInputState(string stage) =>
+        AltTabDiagnosticsLog.Write(
+            $"overlay-input stage={stage} visible={IsVisible} active={IsActive} enabled={IsEnabled} " +
+            $"menu={SortMenuButton.ContextMenu?.IsOpen == true} " +
+            $"capture={Mouse.Captured?.GetType().Name ?? "none"} " +
+            $"leftButton={Mouse.LeftButton} modifiers={Keyboard.Modifiers} " +
+            $"iconVisible={thumbnailIconLayer?.IsVisible == true} settingsVisible={settingsWindow?.IsVisible == true}");
 
     private void RestoreForegroundWindowAfterInput(nint hwnd)
     {
@@ -666,12 +678,17 @@ public partial class MainWindow : Window
 
         try
         {
+            WriteOverlayInputState("drag-before");
             DragMove();
             SaveDraggedOverlayPosition();
         }
         catch (InvalidOperationException)
         {
             // WPF can cancel DragMove when the pointer is released before it starts.
+        }
+        finally
+        {
+            WriteOverlayInputState("drag-after");
         }
     }
 
