@@ -21,6 +21,7 @@ public partial class MainWindow : Window
     private const double CompactWorkAreaRatio = 0.65;
     private readonly MainWindowViewModel viewModel;
     private readonly IWorkAreaProvider workAreaProvider;
+    private readonly OverlayToggleRequestGate altTabRequestGate = new();
     private HwndSource? hwndSource;
     private GlobalHotkeyRegistration? hotkeyRegistration;
     private GlobalHotkeyRegistration? altTabHotkeyRegistration;
@@ -85,6 +86,7 @@ public partial class MainWindow : Window
 
     public void ShowOverlay()
     {
+        altTabRequestGate.CancelPending();
         if (!IsVisible)
         {
             RememberForegroundWindow();
@@ -216,9 +218,34 @@ public partial class MainWindow : Window
     {
         altTabHookRegistration?.Dispose();
         altTabHookRegistration = null;
+        altTabRequestGate.CancelPending();
         altTabHookRegistration = LowLevelAltTabHookRegistration.TryRegister(
-            () => Dispatcher.BeginInvoke(OnHookAltTab, DispatcherPriority.Input),
+            QueueHookAltTab,
             delayMs => AltTabDiagnosticsLog.Write($"late-hook-delivery delay={delayMs}ms"));
+    }
+
+    private void QueueHookAltTab()
+    {
+        if (!altTabRequestGate.TryQueue(out var ticket))
+        {
+            return;
+        }
+
+        var receivedAt = Environment.TickCount64;
+        // Input priority is deferred while native input is pending. Normal
+        // wakes the dispatcher even in that state; the hook itself never waits.
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            if (!altTabRequestGate.TryConsume(ticket))
+            {
+                AltTabDiagnosticsLog.Write($"alt-tab-dispatch superseded ticket={ticket}");
+                return;
+            }
+
+            AltTabDiagnosticsLog.Write(
+                $"alt-tab-dispatch ticket={ticket} wait={Environment.TickCount64 - receivedAt}ms");
+            OnHookAltTab();
+        }), DispatcherPriority.Normal);
     }
 
     // Windows can drop a low-level hook without telling the owner (e.g. after it misses
@@ -348,6 +375,7 @@ public partial class MainWindow : Window
 
     private void HideOverlay(bool restorePreviousWindow)
     {
+        altTabRequestGate.CancelPending();
         WriteOverlayInputState("hide-before");
         OverlayInputCleanup.BeforeHide(this, SortMenuButton.ContextMenu, thumbnailIconLayer);
         temporaryOverlayPosition = null;
