@@ -118,3 +118,11 @@ dotnet publish src/Switchboard.App/Switchboard.App.csproj `
 - tests/Switchboard.Tests: Core、入力、更新動作のテスト
 
 不具合は、再現手順と Windows バージョンを添えて [GitHub Issues](https://github.com/ai-blink/alt-tab/issues) に報告してください。
+
+## ライセンス
+
+**個人利用は無料です。** 個人が非商用目的で使用する場合は無料です。
+
+企業・団体・依頼業務での使用、商用利用、再配布・販売、改変物の作成・公開には作者の許可が必要です。[ikseon@blinklabs.co.kr](mailto:ikseon@blinklabs.co.kr) までメールでご相談ください。ソースコードは参考のために閲覧できます。
+
+Copyright © 2026 Ikseon Jang (BlinkLabs). All rights reserved. 詳細は [LICENSE](LICENSE)(英語の原文が優先)を参照してください。
